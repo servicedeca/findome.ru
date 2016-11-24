@@ -1,0 +1,955 @@
+<?php
+
+/*
+ * implement hook_menu.
+ */
+function realty_data_export_menu() {
+
+  $item['NrPf5oKl0w51vd7K.xml'] = array(
+    'page callback' => 'realty_data_export_apartments_xml',
+    'access callback' => TRUE,
+  );
+
+  $item['summary_info.xls'] = array(
+    'page callback' => 'realty_data_export_summary_info_xls',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['average_price.xls'] = array(
+    'page callback' => 'realty_data_export_average_price_xls',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['summary_info.pdf'] = array(
+    'page callback' => 'realty_data_export_summary_info_pdf',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  return $item;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function realty_data_export_theme() {
+
+  $base = array(
+    'file' => 'theme.inc',
+    'path' => drupal_get_path('module', 'realty_data_export') . '/theme',
+  );
+
+  $items['realty_data_export_apartments_xml_yandex'] = $base + array(
+      'template' => 'realty-data-export-apartments-xml-yandex',
+      'variables' => array(
+        'apartments' => NULL,
+        'complexes' => NULL,
+      ),
+    );
+
+  return $items;
+}
+
+/*
+ * Page callback to /apartments.xml.
+ */
+function realty_data_export_apartments_xml() {
+
+  // Генерация xml со списком всех квартир
+  $xml = realty_data_export_get_apartments();
+
+  drupal_add_http_header('Content-Type', 'application/xml; charset=utf-8');
+
+  print $xml;
+}
+
+/*
+ * Page callback to /summary_info.pdf.
+ */
+function realty_data_export_summary_info_pdf() {
+
+  // Генерация pdf
+  $pdf_filename = realty_data_export_get_summary_info_pdf();
+
+  // Формируем заголовки, для того, чтобы сразу же скачать созданный файл.
+  $http_headers = array(
+    'Content-Type' => 'application/vnd.ms-excel',
+    'Content-Disposition' => 'attachment; filename="' . drupal_basename($pdf_filename) . '"',
+    'Content-Length' => filesize($pdf_filename),
+  );
+
+  if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+    $http_headers['Cache-Control'] = 'must-revalidate, post-check=0, pre-check=0';
+    $http_headers['Pragma'] = 'public';
+  }
+  else {
+    $http_headers['Pragma'] = 'no-cache';
+  }
+
+  // Открываем диалог для скачивания файла.
+  file_transfer($pdf_filename, $http_headers);
+}
+
+/**
+ *
+ */
+function realty_data_export_get_average_price_xls() {
+  // Пытаемся создать директорию, в которую будем сохранять файл
+  $directory = 'public://summary_info';
+  if (!file_prepare_directory($directory, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY)) {
+    drupal_set_message(t('Failed to create %directory.', array('%directory' => $directory)), 'error');
+    return FALSE;
+  }
+
+  // Подключение PHPExcel
+  $path = libraries_get_path('PHPExcel');
+  require_once DRUPAL_ROOT . '/' . $path . '/Classes/PHPExcel.php';
+
+  // Инициализация xls файла
+  $PHPExcel = new PHPExcel();
+
+  // Если сводная информация имеется в кеше
+  if(cache_get('realty_admin_average_price')) {
+
+    $average_price = cache_get('realty_admin_average_price')->data;
+
+    // Авторазмер колонок
+    $PHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+
+    // Выравнивание по центру
+    $style = array(
+      'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+      )
+    );
+    $PHPExcel->getActiveSheet()->getStyle('E1')->applyFromArray($style);
+
+
+    /*** Формиирование заголовков таблицы ***/
+    $PHPExcel->getActiveSheet()->setCellValue("A1", 'Застройщик');
+    $PHPExcel->getActiveSheet()->setCellValue("B1", 'Жилой комплекс');
+    $PHPExcel->getActiveSheet()->setCellValue("C1", 'Всего');
+    $PHPExcel->getActiveSheet()->setCellValue("D1", '1');
+    $PHPExcel->getActiveSheet()->setCellValue("E1", '1c');
+    $PHPExcel->getActiveSheet()->setCellValue("F1", '2');
+    $PHPExcel->getActiveSheet()->setCellValue("G1", '2c');
+    $PHPExcel->getActiveSheet()->setCellValue("H1", '3');
+    $PHPExcel->getActiveSheet()->setCellValue("I1", '3c');
+    $PHPExcel->getActiveSheet()->setCellValue("J1", '4');
+
+    $apartment_types = realty_get_types_apartment();
+
+    /*** Экспорт инфорации из массивов данных ***/
+    $row_id = 3;
+    foreach ($average_price['city'] as $city) {
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex(2) . 2;
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, $city['apartments']['all']);
+      $row_type = 3;
+
+      foreach ($apartment_types as $type) {
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($row_type) . 2;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $city['apartments'][$type]);
+        $row_type++;
+      }
+    }
+
+    // Перебор Застройщиков
+    foreach ($average_price['developers'] as $developer_name => $developer) {
+
+      // Название Застройщика
+      $PHPExcel->getActiveSheet()->setCellValue('A' . $row_id, $developer_name);
+
+      // Всего квартир у застройщика
+      $columnString = PHPExcel_Cell::stringFromColumnIndex(2) . $row_id;
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartments']['all']);
+      $row_type = 3;
+
+      foreach ($apartment_types as $type) {
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($row_type) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartments'][$type['type']]);
+        $row_type++;
+      }
+
+      $row_id++;
+
+      // Жилые комплексы застройщика
+      foreach ($average_price['complexes'] as $complex_name => $complex) {
+        if ($developer['tid'] == $complex['developer_tid']) {
+        // Название Жилого комплекса
+        $PHPExcel->getActiveSheet()->setCellValue('B' . $row_id, $complex_name);
+
+        // Всего квартир у ЖК
+        $columnString = PHPExcel_Cell::stringFromColumnIndex(2) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartments']['all']);
+
+        $row_type = 3;
+        foreach ($apartment_types as $type) {
+
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($row_type) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartments'][$type['type']]);
+
+          $row_type++;
+        }
+
+        $row_id++;
+        }
+      }
+    }
+  }
+  // Изменяем название активного листа в excel файле
+  $PHPExcel->getActiveSheet()->setTitle('Сводная информация');
+
+  // Делаем активным первый лист, для того, чтобы при открытии файла был открыт первый лист.
+  $PHPExcel->setActiveSheetIndex(0);
+
+  // Формируем имя файла.
+  $filename = 'summary_info_' . REQUEST_TIME . '.xls';
+
+  // Формируем полный путь для будущего сохранения файла.
+  $path = file_create_filename($filename, 'public://summary_info');
+
+  // Создаем excel файл.
+  $objWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel5');
+
+  // Сохраняем excel файл.
+  $objWriter->save($path);
+
+  return $path;
+}
+
+/**
+ * Page callback to /average_price.xls
+ */
+function realty_data_export_average_price_xls() {
+  // Генерация xls
+  $xls_filename = realty_data_export_get_average_price_xls();
+
+  // Формируем заголовки, для того, чтобы сразу же скачать созданный файл.
+  $http_headers = array(
+    'Content-Type' => 'application/vnd.ms-excel',
+    'Content-Disposition' => 'attachment; filename="' . drupal_basename($xls_filename) . '"',
+    'Content-Length' => filesize($xls_filename),
+  );
+
+  if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+    $http_headers['Cache-Control'] = 'must-revalidate, post-check=0, pre-check=0';
+    $http_headers['Pragma'] = 'public';
+  }
+  else {
+    $http_headers['Pragma'] = 'no-cache';
+  }
+
+  // Открываем диалог для скачивания файла.
+  file_transfer($xls_filename, $http_headers);
+}
+
+/*
+ * Page callback to /summary_info.xls.
+ */
+function realty_data_export_summary_info_xls() {
+
+  // Генерация xls
+  $xls_filename = realty_data_export_get_summary_info_xls();
+
+  // Формируем заголовки, для того, чтобы сразу же скачать созданный файл.
+  $http_headers = array(
+    'Content-Type' => 'application/vnd.ms-excel',
+    'Content-Disposition' => 'attachment; filename="' . drupal_basename($xls_filename) . '"',
+    'Content-Length' => filesize($xls_filename),
+  );
+
+  if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+    $http_headers['Cache-Control'] = 'must-revalidate, post-check=0, pre-check=0';
+    $http_headers['Pragma'] = 'public';
+  }
+  else {
+    $http_headers['Pragma'] = 'no-cache';
+  }
+
+  // Открываем диалог для скачивания файла.
+  file_transfer($xls_filename, $http_headers);
+}
+
+function realty_data_export_get_summary_info_pdf() {
+
+  // Извлекаем html-таблицу из кеша
+  if(cache_get('realty_admin_summary_info_html')) {
+
+    $summary_info = cache_get('realty_admin_summary_info_html')->data;
+
+    $summary_info_prefix = '<!DOCTYPE html><html><head>
+                              <meta charset="UTF-8" />
+                              <title>PDF квартиры</title>
+                            </head>';
+    $summary_info_postfix = '</html>';
+
+    // Очистка таблицы от кнопок экспорта
+    $summary_info = $summary_info_prefix . substr($summary_info, 415) . $summary_info_postfix;
+
+    // Если библеотека удачно загружена
+    if (($library = libraries_load('phpwkhtmltopdf')) && !empty($library['loaded'])) {
+      $pdf = new WkHtmlToPdf;
+      $pdf->setOptions(array(
+        'page-width' => 400
+      ));
+
+      // Формируем имя файла.
+      $pdf_file_name = 'summary_info_' . REQUEST_TIME . '.pdf';
+      $html_file_name = 'summary_info_' . REQUEST_TIME . '.html';
+
+      // Формируем полный путь для будущего сохранения файла.
+      $pdf_file_path = DRUPAL_ROOT . '/sites/default/files/pdf/' . $pdf_file_name;
+      $html_file_path = DRUPAL_ROOT . '/sites/default/files/pdf/' . $html_file_name;
+
+      $response_pdf_file_name = file_create_filename($pdf_file_name, 'public://pdf');
+
+      // Если сохранение html фйала прошло успешно
+      if (file_put_contents($html_file_path, $summary_info)) {
+
+        // Запись содержимого html-файла в pdf-файл
+        $pdf->addPage($html_file_path);
+
+        // Если сохранение pdf-файла прошло не успешно
+        if (!$pdf->saveAs($pdf_file_path)) {
+          return FALSE;
+        }
+
+        // Полное имя файла для загрузки
+        return $response_pdf_file_name;
+      }
+      // Если html-сохранение файла прошло не успешно
+      else {
+        return FALSE;
+      }
+    }
+    // Если библеотека не удачно загружена
+    else {
+      return FALSE;
+    }
+  }
+}
+
+function realty_data_export_get_summary_info_xls() {
+
+  // Пытаемся создать директорию, в которую будем сохранять файл
+  $directory = 'public://summary_info';
+  if (!file_prepare_directory($directory, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY)) {
+    drupal_set_message(t('Failed to create %directory.', array('%directory' => $directory)), 'error');
+    return FALSE;
+  }
+
+  // Подключение PHPExcel
+  $path = libraries_get_path('PHPExcel');
+  require_once DRUPAL_ROOT . '/' . $path . '/Classes/PHPExcel.php';
+
+  // Инициализация xls файла
+  $PHPExcel = new PHPExcel();
+
+  // Если сводная информация имеется в кеше
+  if(cache_get('realty_admin_summary_info')) {
+
+    $summary_info = cache_get('realty_admin_summary_info')->data;
+
+    // Авторазмер колонок
+    $PHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+    $PHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+
+    // Выравнивание по центру
+    $style = array(
+      'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+      )
+    );
+    $PHPExcel->getActiveSheet()->getStyle('E1')->applyFromArray($style);
+
+
+    /*** Формиирование заголовков таблицы ***/
+    $PHPExcel->getActiveSheet()->setCellValue("A1", 'Застройщик');
+    $PHPExcel->getActiveSheet()->setCellValue("B1", 'Жилой комплекс');
+    $PHPExcel->getActiveSheet()->setCellValue("C1", 'Дом');
+    $PHPExcel->getActiveSheet()->setCellValue("D1", 'Секция');
+    $PHPExcel->getActiveSheet()->setCellValue("E1", 'Всего квартир');
+
+    $startAllAptsColumn = 4;
+    $endAllAptsColumn = 7;
+
+    $startColumnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn) . '1';
+    $endColumnString = PHPExcel_Cell::stringFromColumnIndex($endAllAptsColumn) . '1';
+
+    // Объединение ячеек
+    $PHPExcel->getActiveSheet()->mergeCells($startColumnString . ':' . $endColumnString);
+
+    $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn) . '2';
+    $PHPExcel->getActiveSheet()->setCellValue($columnString, 'В продаже');
+
+    $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 1) . '2';
+    $PHPExcel->getActiveSheet()->setCellValue($columnString, 'Забронированные');
+
+    $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 2) . '2';
+    $PHPExcel->getActiveSheet()->setCellValue($columnString, 'На сайте');
+
+    $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 3) . '2';
+    $PHPExcel->getActiveSheet()->setCellValue($columnString, 'Всего');
+
+    foreach ($summary_info['apartment_types'] as $key => $type) {
+
+      // Вычисление координаты ячейки
+      $startColumn = $key * 4 + 8;
+      $endColumn = $startColumn + 3;
+
+      // Авторазмер колонки
+      $columntString = PHPExcel_Cell::stringFromColumnIndex($startColumn);
+      $PHPExcel->getActiveSheet()->getColumnDimension($columntString)->setAutoSize(true);
+
+      $apartment_types[$key] = array (
+        'type' => $type,
+        'start_column' => $startColumn,
+        'end_column' => $endColumn,
+      );
+
+      $startColumnString = PHPExcel_Cell::stringFromColumnIndex($startColumn) . '1';
+      $endColumnString = PHPExcel_Cell::stringFromColumnIndex($endColumn) . '1';
+
+      // Выравнивание по центру
+      $PHPExcel->getActiveSheet()->getStyle($startColumnString)->applyFromArray($style);
+
+      // Вставка текста
+      $PHPExcel->getActiveSheet()->setCellValue($startColumnString, $type. '-к квартир');
+      // Объединение ячеек
+      $PHPExcel->getActiveSheet()->mergeCells($startColumnString . ':' . $endColumnString);
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startColumn) . '2';
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, 'В продаже');
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startColumn + 1) . '2';
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, 'Забронированные');
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startColumn + 2) . '2';
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, 'На сайте');
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startColumn + 3) . '2';
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, 'Всего');
+    }
+
+    /*** Экспорт инфорации из массивов данных ***/
+    $row_id = 3;
+
+    // Перебор Застройщиков
+    foreach ($summary_info['developers'] as $developer_name => $developer) {
+
+      // Название Застройщика
+      $PHPExcel->getActiveSheet()->setCellValue('A' . $row_id, $developer_name);
+
+      // Всего квартир у застройщика
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn) . $row_id;
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_active']['all']);
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 1) . $row_id;
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_booking']['all']);
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 2) . $row_id;
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_base']['all']);
+
+      $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 3) . $row_id;
+      $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_all']['all']);
+
+
+      foreach ($apartment_types as $type) {
+
+        // Квартиры на сайте
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column']) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_active'][$type['type']]);
+
+        // Квартиры забронированные
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 1) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_booking'][$type['type']]);
+
+        // Квартиры забронированные
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 2) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_booking'][$type['type']]);
+
+        // Всего квартир
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 3) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $developer['apartment_all'][$type['type']]);
+      }
+
+      $row_id++;
+
+      // Жилые комплексы застройщика
+      foreach ($summary_info['complexes'][$developer_name] as $complex_name => $complex) {
+
+        // Название Жилого комплекса
+        $PHPExcel->getActiveSheet()->setCellValue('B' . $row_id, $complex_name);
+
+        // Всего квартир у ЖК
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_active']['all']);
+
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 1) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_booking']['all']);
+
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 2) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_base']['all']);
+
+        $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 3) . $row_id;
+        $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_all']['all']);
+
+        foreach ($apartment_types as $type) {
+
+          // Квартиры на сайте
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column']) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_active'][$type['type']]);
+
+          // Квартиры забронированные
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 1) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_booking'][$type['type']]);
+
+          // Квартиры забронированные
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 2) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_booking'][$type['type']]);
+
+          // Всего квартир
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 3) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $complex['apartment_all'][$type['type']]);
+        }
+
+        $row_id++;
+
+        // Дома жилого комплекса
+        foreach ($summary_info['complexes_home'][$developer_name][$complex_name] as $home_name => $home) {
+
+          // Название Дома
+          $PHPExcel->getActiveSheet()->setCellValue('C' . $row_id, $home_name);
+
+          // Всего квартир в Доме
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_active']['all']);
+
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 1) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_booking']['all']);
+
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 2) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_base']['all']);
+
+          $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 3) . $row_id;
+          $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_all']['all']);
+
+          foreach ($apartment_types as $type) {
+
+            // Квартиры на сайте
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column']) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_active'][$type['type']]);
+
+            // Квартиры забронированные
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 1) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_booking'][$type['type']]);
+
+            // Квартиры забронированные
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 2) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_booking'][$type['type']]);
+
+            // Всего квартир
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 3) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $home['apartment_all'][$type['type']]);
+          }
+
+          $row_id++;
+
+          foreach ($summary_info['home_section'][$home_name] as $section_number => $section) {
+
+            // Номер секции
+            $PHPExcel->getActiveSheet()->setCellValue('D' . $row_id, $section_number);
+
+            // Всего квартир в Секции
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $section['apartment_active']['all']);
+
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 1) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $section['apartment_booking']['all']);
+
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 2) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $section['apartment_base']['all']);
+
+            $columnString = PHPExcel_Cell::stringFromColumnIndex($startAllAptsColumn + 3) . $row_id;
+            $PHPExcel->getActiveSheet()->setCellValue($columnString, $section['apartment_all']['all']);
+
+            foreach ($apartment_types as $type) {
+
+              // Квартиры на сайте
+              $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column']) . $row_id;
+              $PHPExcel->getActiveSheet()
+                ->setCellValue($columnString, $section['apartment_active'][$type['type']]);
+
+              // Квартиры забронированные
+              $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 1) . $row_id;
+              $PHPExcel->getActiveSheet()
+                ->setCellValue($columnString, $section['apartment_booking'][$type['type']]);
+
+              // Квартиры забронированные
+              $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 2) . $row_id;
+              $PHPExcel->getActiveSheet()
+                ->setCellValue($columnString, $section['apartment_booking'][$type['type']]);
+
+              // Всего квартир
+              $columnString = PHPExcel_Cell::stringFromColumnIndex($type['start_column'] + 3) . $row_id;
+              $PHPExcel->getActiveSheet()
+                ->setCellValue($columnString, $section['apartment_all'][$type['type']]);
+            }
+
+            $row_id++;
+          }
+        }
+      }
+    }
+  }
+  // Если сводной инфорации в кеше нет
+  else {
+
+  }
+
+  // Изменяем название активного листа в excel файле
+  $PHPExcel->getActiveSheet()->setTitle('Сводная информация');
+
+  // Делаем активным первый лист, для того, чтобы при открытии файла был открыт первый лист.
+  $PHPExcel->setActiveSheetIndex(0);
+
+  // Формируем имя файла.
+  $filename = 'summary_info_' . REQUEST_TIME . '.xls';
+
+  // Формируем полный путь для будущего сохранения файла.
+  $path = file_create_filename($filename, 'public://summary_info');
+
+  // Создаем excel файл.
+  $objWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel5');
+
+  // Сохраняем excel файл.
+  $objWriter->save($path);
+
+  return $path;
+}
+
+function realty_data_export_get_apartments() {
+
+  // Если в кеше есть ранее сформированный список квартир
+  if(cache_get('realty_cache_apartments')) {
+    $cache_apartments = cache_get('realty_cache_apartments')->data;
+
+    // Поиск квартир только за период времени прошедший после последнего экспорта
+    $query_apartments_conditions = ' AND node.changed > :timestamp';
+    $args[':timestamp'] = $cache_apartments['generate_date'];
+  }
+  else {
+    $cache_apartments = array();
+  }
+
+  $timestamp = REQUEST_TIME;
+  $cache_apartments['generate_date'] = $timestamp;
+
+  // Обертка для xml-документа
+  $xml_prefix = '<?xml version="1.0" encoding="utf-8"?>
+                 <realty-feed xmlns="http://webmaster.yandex.ru/schemas/feed/realty/2010-06">';
+
+  $xml_prefix .= "<generation-date>" . format_date($timestamp, 'custom', 'Y-m-d\TH:i:sP') . "</generation-date>";
+  $xml_postfix = '</realty-feed>';
+
+  // Список всех квартир
+  $query_apartments = "SELECT # Уровень квартиры
+                          node.nid AS apartment_nid, node.created AS apartment_created, node.title AS apartment_title,
+                          field_data_field_apartment_floor.field_apartment_floor_value AS apartment_floor,
+                          field_data_field_number_rooms.field_number_rooms_value AS apartment_rooms,
+                          field_data_field_full_cost.field_full_cost_value AS apartment_cost,
+                          field_data_field_price.field_price_value AS apartment_price,
+                          field_data_field_balcony.field_balcony_value AS apartment_balcony,
+                          field_data_field_loggia.field_loggia_value AS apartment_loggia,
+                          field_data_field_gross_area.field_gross_area_value AS apartment_gross_area,
+                          field_data_field_living_space.field_living_space_value AS apartment_living_space,
+                          field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value AS apartment_ceiling_height,
+                          field_data_field_plan_apartment.field_plan_apartment_fid AS apartment_plan,
+                          realty_data_update_files.date AS file_update,
+                          # Уровень дома
+                          taxonomy_term_data.name AS home_title,
+                          field_data_field_address_house.field_address_house_value AS home_address,
+                          field_data_field_number_floor.field_number_floor_value AS home_floor,
+                          taxonomy_term_data2_material.name AS home_material,
+                          field_data_field_deadline.field_deadline_value AS home_deadline,
+                          field_data_field_parking.field_parking_value AS home_parking,
+                          field_data_field_home_complex.field_home_complex_target_id AS home_complex
+                        FROM node
+                          # Уровень квартиры
+                          LEFT JOIN field_data_field_apartament_home ON field_data_field_apartament_home.entity_id = node.nid
+                          LEFT JOIN field_data_field_apartment_floor ON field_data_field_apartment_floor.entity_id = node.nid
+                          LEFT JOIN field_data_field_number_rooms ON field_data_field_number_rooms.entity_id = node.nid
+                          LEFT JOIN field_data_field_full_cost ON field_data_field_full_cost.entity_id = node.nid
+                          LEFT JOIN field_data_field_price ON field_data_field_price.entity_id = node.nid
+                          LEFT JOIN field_data_field_balcony ON field_data_field_balcony.entity_id = node.nid
+                          LEFT JOIN field_data_field_loggia ON field_data_field_loggia.entity_id = node.nid
+                          LEFT JOIN field_data_field_gross_area ON field_data_field_gross_area.entity_id = node.nid
+                          LEFT JOIN field_data_field_living_space ON field_data_field_living_space.entity_id = node.nid
+                          LEFT JOIN field_data_field_apartment_ceiling_height ON field_data_field_apartment_ceiling_height.entity_id = node.nid
+                          LEFT JOIN field_data_field_plan_apartment ON field_data_field_plan_apartment.entity_id = node.nid
+                          LEFT JOIN field_data_field_status ON field_data_field_status.entity_id = node.nid
+                          # Уровень дома
+                          LEFT JOIN taxonomy_term_data ON taxonomy_term_data.tid = field_data_field_apartament_home.field_apartament_home_tid
+                          LEFT JOIN field_data_field_address_house ON field_data_field_address_house.entity_id = taxonomy_term_data.tid
+                          LEFT JOIN field_data_field_number_floor ON field_data_field_number_floor.entity_id = taxonomy_term_data.tid
+                          LEFT JOIN field_data_field_material ON field_data_field_material.entity_id = taxonomy_term_data.tid
+                          LEFT JOIN taxonomy_term_data taxonomy_term_data2_material ON taxonomy_term_data2_material.tid = field_data_field_material.field_material_tid
+                          LEFT JOIN field_data_field_deadline ON field_data_field_deadline.entity_id = taxonomy_term_data.tid
+                          LEFT JOIN field_data_field_parking ON field_data_field_parking.entity_id = taxonomy_term_data.tid
+                          LEFT JOIN field_data_field_home_complex ON field_data_field_home_complex.entity_id = taxonomy_term_data.tid
+                          # Уровень Жилого комплекса
+                          LEFT JOIN node node2_complex ON node2_complex.nid = field_data_field_home_complex.field_home_complex_target_id
+                          LEFT JOIN field_data_field_complex_developer ON field_data_field_complex_developer.entity_id = node2_complex.nid
+                          # Уровень застройщика
+                          LEFT JOIN realty_data_update_files ON realty_data_update_files.tid_developer = field_data_field_complex_developer.field_complex_developer_tid
+                        WHERE node.type = 'apartament'
+                              AND node.status = 1
+                              AND field_data_field_status.field_status_value = 1
+                              AND field_data_field_complex_developer.field_complex_developer_tid = 71" . $query_apartments_conditions;
+
+  $query_apartments = db_query($query_apartments, isset($args) ? $args : array())->fetchAll();
+
+  // Если есть квартиры с обновленной информацией
+  if ($query_apartments) {
+
+    // Список всех Жилых комплексов
+    $query_complexes = "SELECT  # Уровень Жилого комплекса
+                              node.nid AS complex_nid, node.title AS complex_title,
+                              taxonomy_term_data.name AS complex_metro,
+                              field_data_field_visualization.field_visualization_fid AS complex_visualization,
+                              # Уровень Застройщика
+                              taxonomy_term_data2_developer.name AS developer_name,
+                              # Уровень Города
+                              taxonomy_term_data2_city.name AS developer_city
+                        FROM node
+                               # Уровень Жилого комплекса
+                              LEFT JOIN field_data_field_complex_metro ON field_data_field_complex_metro.entity_id = node.nid
+                              LEFT JOIN taxonomy_term_data ON taxonomy_term_data.tid = field_data_field_complex_metro.field_complex_metro_tid
+                              LEFT JOIN field_data_field_visualization ON field_data_field_visualization.entity_id = node.nid
+                              LEFT JOIN field_data_field_complex_developer ON field_data_field_complex_developer.entity_id = node.nid
+                               # Уровень Застройщика
+                              LEFT JOIN taxonomy_term_data taxonomy_term_data2_developer ON taxonomy_term_data2_developer.tid = field_data_field_complex_developer.field_complex_developer_tid
+                              LEFT JOIN field_data_field_city ON field_data_field_city.entity_id = taxonomy_term_data2_developer.tid
+                               # Уровень Города
+                              LEFT JOIN taxonomy_term_data taxonomy_term_data2_city ON taxonomy_term_data2_city.tid = field_data_field_city.field_city_tid
+                        WHERE node.type = 'complex'";
+
+    $query_complexes = db_query($query_complexes)->fetchAll();
+
+    // Формирование массива Жилых комплексов
+    foreach ($query_complexes as $query_complex) {
+      $complexes[$query_complex->complex_nid]['complex_title'] = $query_complex->complex_title;
+      $complexes[$query_complex->complex_nid]['developer_city'] = '<locality-name>' . $query_complex->developer_city . '</locality-name>';
+      $complexes[$query_complex->complex_nid]['developer_name'] = $query_complex->developer_name;
+
+      if ($query_complex->complex_visualization != null) {
+        $complex_visualization = file_load($query_complex->complex_visualization);
+        $complexes[$query_complex->complex_nid]['complex_visualization'] .= '<image>' . file_create_url($complex_visualization->uri) . '</image>';
+      }
+
+      if ($query_complex->complex_metro!= null) {
+        $complexes[$query_complex->complex_nid]['complex_metro'] = '<metro><name>' . $query_complex->complex_metro . '</name></metro>';
+      }
+    }
+
+    // Формирование xml-объекта квартиры
+    foreach ($query_apartments as $query_apartment) {
+
+      // Обертка для xml-объекта квартиры
+      $prefix = "<offer internal-id=\"".$query_apartment->apartment_nid."\">";
+      $postfix = "</offer>";
+
+      $offer = "<type>продажа</type>
+              <property-type>жилая</property-type>
+              <category>квартира</category>";
+      ;
+      $offer .= "<url>" . url('/node/' . $query_apartment->apartment_nid, array('absolute' => TRUE)) . "</url>";
+      $offer .= "<creation-date>" . format_date($query_apartment->apartment_created, 'custom', 'Y-m-d\TH:i:s', 'UTC') . "+06:00</creation-date>";
+
+      if ($query_apartment->file_update != null) {
+        $offer .= "<last-update-date>" . format_date($query_apartment->file_update, 'custom', 'Y-m-d\TH:i:s', 'UTC') . "+06:00</last-update-date>";
+      }
+      else {
+        $offer .= "<last-update-date>" . format_date($timestamp - 86000, 'custom', 'Y-m-d\TH:i:s', 'UTC') . "+06:00</last-update-date>";
+      }
+
+      if (isset($complexes[$query_apartment->home_complex]['complex_metro'])) {
+        $metro = $complexes[$query_apartment->home_complex]['complex_metro'];
+      }
+      else {
+        $metro = '';
+      }
+
+      $offer .= "<location>
+                    <country>Россия</country>" . $complexes[$query_apartment->home_complex]['developer_city'] . "
+                    <address>" . $query_apartment->home_address . "</address>" . $metro . "</location>";
+      $offer .= "<sales-agent>
+                    <phone>+7(383)354-14-33</phone>
+                    <email>support@findome.ru</email>
+                    <photo>" . url(REALTY_FRONT_THEME_PATH . '/images/logotip.svg', array('absolute' => TRUE)) . "</photo>
+                    <organization>Findome</organization>
+                    <url>" . url('/', array('absolute' => TRUE)) . "</url>
+                </sales-agent>";
+      $offer .= "<price>
+                    <value>" . $query_apartment->apartment_cost . "</value>
+                    <currency>RUR</currency>
+                </price>
+                <price>
+                    <value>" . $query_apartment->apartment_price . "</value>
+                    <currency>RUR</currency>
+                    <unit>кв.м</unit>
+                </price>";
+      $offer .= "<description>Квартиры в новостройках от застройщика " .
+        $complexes[$query_apartment->home_complex]['developer_name'] . ", " .
+        $complexes[$query_apartment->home_complex]['complex_title'] .
+        "</description>";
+
+      // Тип квартиры
+      if ($query_apartment->apartment_rooms != null) {
+        if (strripos('c', $query_apartment->apartment_rooms) != FALSE) {
+          $offer .= "<rooms-type>студия</rooms-type>";
+        }
+        else {
+          $offer .= "<rooms-type>раздельные</rooms-type>";
+        }
+      }
+
+      // Балкон
+      if ($query_apartment->apartment_balcony) {
+        $offer .= "<balcony>Балкон</balcony>";
+        if ($query_apartment->apartment_loggia) {
+          $offer .= "<balcony>Балкон и лоджия</balcony>";
+        }
+      } else if ($query_apartment->apartment_loggia) {
+        $offer .= "<balcony>Лоджия</balcony>";
+      }
+
+      $offer .= " <mortgage>1</mortgage>
+                <new-flat>1</new-flat>";
+
+      // Этаж
+      if ($query_apartment->apartment_floor != null) {
+        $offer .= "<floor>" . $query_apartment->apartment_floor . "</floor>";
+      }
+
+      if ($query_apartment->apartment_rooms) {
+        $rooms = str_replace('c', '', $query_apartment->apartment_rooms);
+        //$rooms = str_replace('с', '', $rooms);
+        $offer .= "<rooms>" . $rooms . "</rooms>";
+      }
+
+      if ($query_apartment->home_floor != null) {
+        $offer .= "<floors-total>" . $query_apartment->home_floor . "</floors-total>";
+      }
+
+      if (isset($complexes[$query_apartment->home_complex]['complex_title'])) {
+        $offer .= "<building-name>" . $complexes[$query_apartment->home_complex]['complex_title'] . "</building-name>";
+      }
+
+      if (isset($query_apartment->home_material)) {
+        $offer .= "<building-type>" . $query_apartment->home_material . "</building-type>";
+      }
+
+      if (isset($query_apartment->home_deadline)) {
+        $deadline_year = intval($query_apartment->home_deadline / 10);
+        $deadline_quearter = $query_apartment->home_deadline % 10;
+
+        $offer .= "<built-year>20" . $deadline_year . "</built-year>
+                 <ready-quarter>" . $deadline_quearter . "</ready-quarter>";
+      }
+
+      if ($query_apartment->home_parking != null) {
+        $offer .= "<parking>" . $query_apartment->home_parking . "</parking>";
+      }
+
+      $offer .= "<ceiling-height>" . $query_apartment->apartment_ceiling_height . "</ceiling-height>";
+
+      if ($query_apartment->apartment_plan != null) {
+        $apartment_plan = file_load($query_apartment->apartment_plan);
+        if ($apartment_plan) {
+          $apartment_plan = image_style_url('apartment_plan_770x520', $apartment_plan->uri);
+
+          // Если файл не создан
+          if (!file_exists($apartment_plan)) {
+            image_style_create_derivative(image_style_load('apartment_plan_770x520'), $apartment_plan->uri, $apartment_plan);
+          }
+
+          $apartment_plan  = "<image>" . file_create_url($apartment_plan) . "</image>";
+        }
+        $offer .= $apartment_plan;
+      }
+
+
+      $offer .= $complexes[$query_apartment->home_complex]['complex_visualization'];
+      $offer .= "<area>
+                    <value>" . $query_apartment->apartment_gross_area . "</value>
+                    <unit>кв.м</unit>
+                </area>";
+      if ($query_apartment->apartment_living_space != null) {
+        $offer .= "<living-space>
+                    <value>" . $query_apartment->apartment_living_space . "</value>
+                    <unit>кв.м</unit>
+                </living-space>";
+      }
+
+      $offer = $prefix . $offer . $postfix;
+
+      $cache_apartments['apartments'][$query_apartment->apartment_nid] = $offer;
+    }
+
+    $apartments_changed = TRUE;
+  }
+  // Если квартир с измененной инфорацией нет и в кеше есть сформированный ренее список квартир
+  else if (isset($args)) {
+
+    $nodes_nid = array_keys($cache_apartments['apartments']);
+    $args[':nodes_nid'] = $nodes_nid;
+
+    // Получение списка забронированных квартир
+    $query_booking_apartments = "SELECT node.nid AS apartment_nid
+                                FROM node
+                                      LEFT JOIN field_data_field_status ON field_data_field_status.entity_id = node.nid
+                                WHERE node.type = 'apartament'
+                                      AND node.status = 1
+                                      AND node.nid IN (:nodes_nid)
+                                      AND field_data_field_status.field_status_value = 0" . $query_apartments_conditions;;
+
+    $query_booking_apartments = db_query($query_booking_apartments, $args)->fetchAll();
+
+    // Удаления забронированных квартир из списка в кеше
+    if ($query_booking_apartments) {
+      foreach ($query_booking_apartments as $query_booking_apartment) {
+        unset($cache_apartments['apartments'][$query_booking_apartment->apartment_nid]);
+      }
+      $apartments_changed = TRUE;
+    }
+  }
+
+
+  // Если массив квартир изменился
+  if ($apartments_changed) {
+
+    // Кеширование списка квартир
+    cache_set('realty_cache_apartments', $cache_apartments);
+  }
+
+  // Объединение квартир (элементов массива) в xml-файл
+  $xml = $xml_prefix . implode($cache_apartments['apartments']) . $xml_postfix;
+
+  return $xml;
+}

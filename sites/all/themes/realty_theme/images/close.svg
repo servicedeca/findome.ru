@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="38.031px" height="38.031px" viewBox="0 0 38.031 38.031" enable-background="new 0 0 38.031 38.031" xml:space="preserve">
+<symbol  id="Arrow" viewBox="-11.455 -20.081 22.909 40.161">
+	<g>
+		<polygon fill="#606060" points="8.626,-20.081 -11.455,0 8.626,20.081 11.454,17.252 -5.797,0 11.454,-17.252 		"/>
+	</g>
+</symbol>
+<symbol  id="FD_x5F_HELP" viewBox="-92.445 -142.265 184.89 284.529">
+	<g>
+		<path fill="#939393" d="M-9.87-62.37c-5.818,0-11.664,0.495-17.382,1.477l5.569,32.486c3.883-0.664,7.858-1.002,11.813-1.002
+			c38.244,0,69.354,31.114,69.354,69.358s-31.11,69.354-69.354,69.354c-22.021,0-42.951-10.622-55.988-28.418l-26.588,19.482
+			c19.217,26.234,50.089,41.897,82.575,41.897c56.418,0,102.315-45.897,102.315-102.315S46.549-62.37-9.87-62.37z"/>
+	</g>
+	<g>
+		<path fill="#939393" d="M8.59-123.806c0-10.194-8.264-18.459-18.459-18.459s-18.459,8.264-18.459,18.459
+			s8.264,18.459,18.459,18.459S8.59-113.612,8.59-123.806z"/>
+	</g>
+</symbol>
+<symbol  id="FD_x5F_LOGIN" viewBox="-91.954 -123.12 183.908 246.24">
+	<path fill="#939393" d="M49.991-45.977C75.229-29.566,91.954-1.119,91.954,31.165C91.954,81.87,50.705,123.12,0,123.12
+		S-91.954,81.87-91.954,31.165c0-32.285,16.725-60.732,41.964-77.143c-25.238-16.411-41.964-44.858-41.964-77.143h29.623
+		c0,34.371,27.96,62.331,62.331,62.331s62.331-27.96,62.331-62.331h29.623C91.954-90.835,75.229-62.388,49.991-45.977z
+		 M-62.331,31.165c0,34.371,27.96,62.331,62.331,62.331s62.331-27.96,62.331-62.331c0-34.371-27.96-62.331-62.331-62.331
+		S-62.331-3.206-62.331,31.165z"/>
+</symbol>
+<symbol  id="FIND_x5F_logo" viewBox="-140.507 -26.713 281.015 61.86">
+	<path fill="#00B8E4" d="M140.508-15.411h-28.153v50.557h27.073v-9.272h-16.499V14.627h15.353V5.39h-15.353V-6.174h17.579V-15.411z"
+		/>
+	<path fill="#0090B0" d="M-112.411,25.874h-16.857v-12.41h14.048V4.227h-14.048v-19.637h-11.238v50.557h28.096V25.874z"/>
+	<path fill="#0090B0" d="M-98.364-15.411h-11.238v50.557h11.238V-15.411z"/>
+	<path fill="#0090B0" d="M-50.636-15.411h-11.342l-22.929,35.686v-35.686h-10.612v50.557h12.108l19.797-30.778
+		c0.905-1.387,1.74-2.762,2.505-4.125h0.139c-0.186,1.175-0.278,3.49-0.278,6.946v27.958h10.612V-15.411z"/>
+	<g>
+		<path fill="#00B8E4" d="M109.545-15.411H98.282v32.402l-13.43-32.402h-9.755l-13.29,32.402v-32.402H50.544v50.557h15.08
+			l14.42-36.041l14.468,36.041h15.033V-15.411z"/>
+	</g>
+	<path fill="#00B8E4" d="M41.295,28.235c-4.295,4.554-9.922,6.831-16.879,6.831c-7.366,0-13.282-2.379-17.747-7.136
+		c-4.465-4.758-6.697-10.988-6.697-18.69c0-0.75,0.036-1.513,0.092-2.281l5.527-5.527v5.619H8.4v-8.429l13.953-13.953
+		c0.42,0,0.846,0.001,1.28,0.001c7.162,0,12.97,2.345,17.424,7.034c4.453,4.69,6.68,10.863,6.68,18.52
+		C47.737,17.678,45.59,23.682,41.295,28.235z M32.847-1.754c-2.221-2.73-5.224-4.095-9.009-4.095c-3.672,0-6.641,1.404-8.907,4.214
+		c-2.267,2.809-3.4,6.627-3.4,11.452c0,4.757,1.133,8.58,3.4,11.469c2.266,2.889,5.326,4.333,9.179,4.333
+		c3.74,0,6.686-1.405,8.839-4.214c2.153-2.809,3.23-6.74,3.23-11.792C36.178,4.765,35.068,0.976,32.847-1.754z"/>
+	<path fill="#0090B0" d="M-2.834,10.503c0,16.429-9.001,24.644-27.003,24.644h-17.955v-50.557h17.955c0.607,0,1.177,0,1.729,0.001
+		L-2.845,9.853C-2.841,10.07-2.834,10.284-2.834,10.503z M-19.074-1.731c-2.816-2.962-6.698-4.442-11.646-4.442h-5.655v32.048h5.584
+		c5.042,0,8.96-1.381,11.752-4.143c2.792-2.762,4.188-6.552,4.188-11.37C-14.85,5.261-16.259,1.23-19.074-1.731z"/>
+	<polygon fill="#0090B0" points="8.262,-20.058 -0.028,-12.366 -0.028,-23.675 2.51,-21.531 4.761,-26.713 5.368,-26.447 
+		5.368,-26.447 7.232,-25.635 4.963,-20.46 	"/>
+</symbol>
+<symbol  id="New_Symbol" viewBox="-8.5 -8.5 17 17">
+	<polygon fill="none" stroke="#00B8E4" stroke-width="2" stroke-miterlimit="10" points="7.5,0.4 0.4,0.4 0.4,7.5 -0.4,7.5 
+		-0.4,0.4 -7.5,0.4 -7.5,-0.4 -0.4,-0.4 -0.4,-7.5 0.4,-7.5 0.4,-0.4 7.5,-0.4 	"/>
+</symbol>
+<g>
+	<g>
+		<defs>
+			<rect id="SVGID_1_" x="-3009.479" y="85.647" width="2560" height="1330.938"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  overflow="visible"/>
+		</clipPath>
+		<g transform="matrix(1 0 0 1 0 -1.525879e-005)" clip-path="url(#SVGID_2_)">
+			
+				<image overflow="visible" width="1200" height="848" xlink:href="../../../Dropbox/FINDOME/3139_LebenAmOstpark_Muenchen_Aussen_K08_220313.jpg"  transform="matrix(2.1333 0 0 2.1336 -3009.4788 -138.9312)">
+			</image>
+		</g>
+	</g>
+	<g>
+		<g>
+			<defs>
+				<rect id="SVGID_3_" x="-1730.478" y="1416.803" width="1280" height="890.125"/>
+			</defs>
+			<clipPath id="SVGID_4_">
+				<use xlink:href="#SVGID_3_"  overflow="visible"/>
+			</clipPath>
+			<g clip-path="url(#SVGID_4_)">
+				
+					<image overflow="visible" width="1200" height="848" xlink:href="../../../Dropbox/FINDOME/3139_LebenAmOstpark_Muenchen_Aussen_K12_220313.jpg"  transform="matrix(1.0667 0 0 1.0667 -1730.478 1416.8032)">
+				</image>
+			</g>
+		</g>
+	</g>
+	<rect x="-3010.478" y="-359.134" fill="#FFFFFF" width="2560" height="445"/>
+	<rect id="LC_x5F_block_x5F_descr" x="-2370.478" y="1416.866" fill="#EFEFEF" width="640" height="890.063"/>
+	<g>
+		<defs>
+			<rect id="SVGID_5_" x="-3010.478" y="1861.928" width="640" height="445"/>
+		</defs>
+		<clipPath id="SVGID_6_">
+			<use xlink:href="#SVGID_5_"  overflow="visible"/>
+		</clipPath>
+		<g clip-path="url(#SVGID_6_)">
+			
+				<image overflow="visible" width="1200" height="848" xlink:href="../../../Dropbox/FINDOME/3139_LebenAmOstpark_Muenchen_Aussen_K04_220313.jpg"  transform="matrix(0.5333 0 0 0.5333 -3010.478 1854.6615)">
+			</image>
+		</g>
+	</g>
+	<rect x="-3010.478" y="-359.134" fill="#FFFFFF" width="2560" height="445"/>
+	
+		<use xlink:href="#FIND_x5F_logo"  width="281.015" height="61.86" id="XMLID_1_" x="-140.507" y="-26.713" transform="matrix(0.8352 0 0 -0.8352 -2363.478 -126.3013)" overflow="visible"/>
+	<text transform="matrix(1 0 0 1 -1313.7983 -142.6343)"><tspan x="0" y="0" fill="#4D4D4D" font-family="'SegoeUI-Semibold'" font-size="21">Поиск и бронирование квартир в новостройках РФ</tspan><tspan x="0" y="26" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="15">Предложения напрямую от застройщиков. Акутальный текущий статус квартиры</tspan></text>
+	<line fill="none" stroke="#4D4D4D" stroke-miterlimit="10" x1="-1730.478" y1="-180.162" x2="-1730.478" y2="-91.162"/>
+	<rect id="LC_x5F_title" x="-3010.478" y="1416.866" fill="#00B8E4" width="640" height="445"/>
+	<text transform="matrix(1 0 0 1 -2702.2395 1738.6798)"><tspan x="0" y="0" fill="#D3D3D3" font-family="'SegoeUI-Bold'" font-size="27">ЖИЛЫЕ</tspan><tspan x="109.184" y="0" fill="#FFFFFF" font-family="'SegoeUI-Bold'" font-size="27">КОМПЛЕКСЫ</tspan></text>
+	<text transform="matrix(1 0 0 1 -2222.6733 2001.1843)" fill="#4D4D4D" font-family="'SegoeUI-Semibold'" font-size="21">Новотихвинский Жилой Комплекс</text>
+	<g>
+		<rect x="-2222.673" y="2101.678" fill="none" width="401.597" height="70.5"/>
+		<text transform="matrix(1 0 0 1 -2222.6736 2112.7786)"><tspan x="0" y="0" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="15">Элитный ЖК находится в центре столицы, недалеко от </tspan><tspan x="0" y="24" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="15">метро «Менделеевская» и «Новослободская». В </tspan><tspan x="0" y="48" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="15">кирпично-монолитной 17-этажной новостройке...</tspan></text>
+	</g>
+	
+		<use xlink:href="#Arrow"  width="22.909" height="40.161" id="XMLID_2_" x="-11.455" y="-20.081" transform="matrix(1 0 0 -1 -2269.7734 1861.9282)" overflow="visible"/>
+	
+		<use xlink:href="#Arrow"  width="22.909" height="40.161" id="XMLID_3_" x="-11.455" y="-20.081" transform="matrix(-1 0 0 -1 -1830.9326 1861.9282)" overflow="visible"/>
+	<line fill="none" stroke="#939393" stroke-miterlimit="10" x1="-2150.466" y1="1861.866" x2="-1950.491" y2="1861.866"/>
+	
+		<use xlink:href="#FD_x5F_HELP"  width="184.89" height="284.529" id="XMLID_7_" x="-92.445" y="-142.265" transform="matrix(0.1295 0 0 -0.1295 -592.8049 130.4542)" overflow="visible"/>
+	
+		<use xlink:href="#FD_x5F_LOGIN"  width="183.908" height="246.24" x="-91.954" y="-123.12" transform="matrix(0.1538 0 0 -0.1538 -507.2805 130.9743)" overflow="visible"/>
+	<text transform="matrix(1 0 0 1 -2710.7007 1817.0132)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="15">перейти к списку всех жилых комплексов</text>
+	<rect x="-3009.479" y="-138.931" fill="none" width="2560" height="1331.281"/>
+	<g opacity="0.7">
+		<rect x="-2369.479" y="526.709" fill="#939393" width="1920" height="890.156"/>
+	</g>
+	<line fill="none" stroke="#D3D3D3" stroke-miterlimit="10" x1="-449.479" y1="971.709" x2="-3009.479" y2="971.709"/>
+	<rect x="-1730.541" y="971.928" opacity="0.8" fill="#939393" width="1281.062" height="444.719"/>
+	<g opacity="0.9">
+		<rect id="LC_x5F_title_10_" x="-1090.478" y="526.928" fill="#00B8E4" width="641" height="444.781"/>
+	</g>
+	<g>
+		<g>
+			<text transform="matrix(1 0 0 1 -1707.6522 1163.9052)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="21">ПЛОЩАДЬ</text>
+		</g>
+	</g>
+	<g>
+		<g>
+			<text transform="matrix(1 0 0 1 -1707.6528 1273.5597)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="21">ЦЕНА за м2</text>
+		</g>
+	</g>
+	<g>
+		<g>
+			<text transform="matrix(1 0 0 1 -1707.6522 1385.238)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="21">СТОИМОСТЬ</text>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="860.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 957.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">КАТЕГОРИЯ</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_50_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 914.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 907.5635)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">ЭКОНОМ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="749.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 846.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">ЭТАЖ</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_49_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 803.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 793.9282)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">1 - 6</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="638.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 735.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">ЖИЛОЙ КОМПЛЕКС</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_48_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 692.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 685.3433)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">ART , ЕВРБЕР , МАРС , СТАТ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="527.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 624.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">РАЙОН</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_46_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 581.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 577.928)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">ЛЕН , ЦЕН , ОКТ , ПЕР</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-2369.728" y="1304.928" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2346.9023 1401.9297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">ПАРКОВКА</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_53_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.1284 1359.4281)" overflow="visible"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2346.9028 1336.8433)" fill="#D3D3D3" font-family="'SegoeUI-Semilight'" font-size="20.6216">ЛЕН , ЦЕН , ОКТ , ПЕР</text>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="1193.928" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 1290.9297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">ПАРКОВКА</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_52_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 1248.4281)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 1245.3219)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">ПОДЗЕМН</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="1082.928" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 1179.9297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">БАЛКОН</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_51_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 1137.4281)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 1134.7301)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">ЛОДЖИЯ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-2370.478" y="971.928" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -2347.6523 1068.9297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">МЕТРО</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_38_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1807.8785 1026.4281)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -2347.6528 1021.0632)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">ОКТЯБРЬСКАЯ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-1730.478" y="860.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -1707.6523 957.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">СРОК СДАЧИ</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_45_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1167.8784 914.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -1707.6539 906.6898)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">1 кв 2015 , 2 кв 2015</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-1730.478" y="749.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -1707.6523 846.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">МАТЕРИАЛ СТЕН</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_44_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1167.8784 803.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -1707.6528 793.9282)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">КИРПИЧ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-1730.478" y="638.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -1707.6523 735.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">КОЛИЧЕСТВО КОМНАТ</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_43_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1167.8784 692.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -1707.6528 685.3433)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">1 , 2</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<rect x="-1730.478" y="527.428" opacity="0.9" fill="#EFEFEF" width="638.5" height="109"/>
+		<g>
+			
+				<text transform="matrix(1.0184 0 0 1 -1707.6523 624.4297)" fill="#4D4D4D" font-family="'SegoeUI-Semilight'" font-size="20.6216">ЗАСТРОЙЩИК</text>
+		</g>
+		
+			<use xlink:href="#New_Symbol"  width="17" height="17" id="XMLID_41_" x="-8.5" y="-8.5" transform="matrix(1 0 0 -0.982 -1167.8784 581.928)" overflow="visible"/>
+		<g>
+			<g>
+				
+					<text transform="matrix(1.0184 0 0 1 -1707.6528 577.928)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="32.7929">СИБАК , МЕТАП , ЛИДЕР</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<g>
+				<text transform="matrix(1 0 0 1 -567.6523 1180.9557)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">200</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -805.6522 1180.9557)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">150</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1043.6522 1180.9557)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">100</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1281.6522 1180.9557)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">50</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1357.6522 1114.8434)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">35</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -898.6522 1114.8434)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">130</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1519.6522 1180.9557)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">0</text>
+			</g>
+		</g>
+		<g>
+			
+				<line fill="none" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="-1519.652" y1="1137.428" x2="-527.448" y2="1137.428"/>
+			
+				<line fill="none" stroke="#00B8E4" stroke-width="4" stroke-miterlimit="10" x1="-1348.299" y1="1137.428" x2="-884.728" y2="1137.428"/>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1299.478" y1="1166.678" x2="-1299.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1323.478" y1="1166.678" x2="-1323.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1347.478" y1="1166.678" x2="-1347.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1371.478" y1="1166.678" x2="-1371.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1395.478" y1="1166.678" x2="-1395.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1419.478" y1="1166.678" x2="-1419.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1443.478" y1="1166.678" x2="-1443.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1467.478" y1="1166.678" x2="-1467.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1491.478" y1="1166.678" x2="-1491.478" y2="1176.678"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1054.811" y1="1166.678" x2="-1054.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1078.811" y1="1166.678" x2="-1078.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1102.811" y1="1166.678" x2="-1102.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1126.811" y1="1166.678" x2="-1126.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1150.811" y1="1166.678" x2="-1150.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1174.811" y1="1166.678" x2="-1174.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1198.811" y1="1166.678" x2="-1198.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1222.811" y1="1166.678" x2="-1222.811" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1246.811" y1="1166.678" x2="-1246.811" y2="1176.678"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-813.478" y1="1166.678" x2="-813.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-837.478" y1="1166.678" x2="-837.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-861.478" y1="1166.678" x2="-861.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-885.478" y1="1166.678" x2="-885.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-909.478" y1="1166.678" x2="-909.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-933.478" y1="1166.678" x2="-933.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-957.478" y1="1166.678" x2="-957.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-981.478" y1="1166.678" x2="-981.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1005.478" y1="1166.678" x2="-1005.478" y2="1176.678"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-578.478" y1="1166.678" x2="-578.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-602.478" y1="1166.678" x2="-602.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-626.478" y1="1166.678" x2="-626.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-650.478" y1="1166.678" x2="-650.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-674.478" y1="1166.678" x2="-674.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-698.478" y1="1166.678" x2="-698.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-722.478" y1="1166.678" x2="-722.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-746.478" y1="1166.678" x2="-746.478" y2="1176.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-770.478" y1="1166.678" x2="-770.478" y2="1176.678"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<g>
+				<text transform="matrix(1 0 0 1 -567.6523 1288.8494)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">200</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -805.6522 1288.8494)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">150</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1043.6522 1288.8494)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">100</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1281.6522 1288.8494)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">50</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1357.6522 1222.7371)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">35</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -898.6522 1222.7371)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">130</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1519.6522 1288.8494)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">0</text>
+			</g>
+		</g>
+		<g>
+			
+				<line fill="none" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="-1519.652" y1="1245.322" x2="-527.448" y2="1245.322"/>
+			
+				<line fill="none" stroke="#00B8E4" stroke-width="4" stroke-miterlimit="10" x1="-1348.299" y1="1245.322" x2="-884.728" y2="1245.322"/>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1299.478" y1="1274.572" x2="-1299.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1323.478" y1="1274.572" x2="-1323.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1347.478" y1="1274.572" x2="-1347.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1371.478" y1="1274.572" x2="-1371.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1395.478" y1="1274.572" x2="-1395.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1419.478" y1="1274.572" x2="-1419.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1443.478" y1="1274.572" x2="-1443.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1467.478" y1="1274.572" x2="-1467.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1491.478" y1="1274.572" x2="-1491.478" y2="1284.572"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1054.811" y1="1274.572" x2="-1054.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1078.811" y1="1274.572" x2="-1078.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1102.811" y1="1274.572" x2="-1102.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1126.811" y1="1274.572" x2="-1126.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1150.811" y1="1274.572" x2="-1150.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1174.811" y1="1274.572" x2="-1174.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1198.811" y1="1274.572" x2="-1198.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1222.811" y1="1274.572" x2="-1222.811" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1246.811" y1="1274.572" x2="-1246.811" y2="1284.572"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-813.478" y1="1274.572" x2="-813.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-837.478" y1="1274.572" x2="-837.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-861.478" y1="1274.572" x2="-861.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-885.478" y1="1274.572" x2="-885.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-909.478" y1="1274.572" x2="-909.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-933.478" y1="1274.572" x2="-933.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-957.478" y1="1274.572" x2="-957.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-981.478" y1="1274.572" x2="-981.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1005.478" y1="1274.572" x2="-1005.478" y2="1284.572"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-578.478" y1="1274.572" x2="-578.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-602.478" y1="1274.572" x2="-602.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-626.478" y1="1274.572" x2="-626.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-650.478" y1="1274.572" x2="-650.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-674.478" y1="1274.572" x2="-674.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-698.478" y1="1274.572" x2="-698.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-722.478" y1="1274.572" x2="-722.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-746.478" y1="1274.572" x2="-746.478" y2="1284.572"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-770.478" y1="1274.572" x2="-770.478" y2="1284.572"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<g>
+				<text transform="matrix(1 0 0 1 -567.6523 1402.9558)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">200</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -805.6522 1402.9558)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">150</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1043.6522 1402.9558)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">100</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1281.6522 1402.9558)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">50</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1357.6522 1336.8435)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">35</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -898.6522 1336.8435)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">130</text>
+			</g>
+			<g>
+				<text transform="matrix(1 0 0 1 -1519.6522 1402.9558)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="15">0</text>
+			</g>
+		</g>
+		<g>
+			
+				<line fill="none" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="-1519.652" y1="1359.428" x2="-527.448" y2="1359.428"/>
+			
+				<line fill="none" stroke="#00B8E4" stroke-width="4" stroke-miterlimit="10" x1="-1348.299" y1="1359.428" x2="-884.728" y2="1359.428"/>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1299.478" y1="1388.678" x2="-1299.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1323.478" y1="1388.678" x2="-1323.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1347.478" y1="1388.678" x2="-1347.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1371.478" y1="1388.678" x2="-1371.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1395.478" y1="1388.678" x2="-1395.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1419.478" y1="1388.678" x2="-1419.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1443.478" y1="1388.678" x2="-1443.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1467.478" y1="1388.678" x2="-1467.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1491.478" y1="1388.678" x2="-1491.478" y2="1398.678"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1054.811" y1="1388.678" x2="-1054.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1078.811" y1="1388.678" x2="-1078.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1102.811" y1="1388.678" x2="-1102.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1126.811" y1="1388.678" x2="-1126.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1150.811" y1="1388.678" x2="-1150.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1174.811" y1="1388.678" x2="-1174.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1198.811" y1="1388.678" x2="-1198.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1222.811" y1="1388.678" x2="-1222.811" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1246.811" y1="1388.678" x2="-1246.811" y2="1398.678"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-813.478" y1="1388.678" x2="-813.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-837.478" y1="1388.678" x2="-837.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-861.478" y1="1388.678" x2="-861.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-885.478" y1="1388.678" x2="-885.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-909.478" y1="1388.678" x2="-909.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-933.478" y1="1388.678" x2="-933.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-957.478" y1="1388.678" x2="-957.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-981.478" y1="1388.678" x2="-981.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-1005.478" y1="1388.678" x2="-1005.478" y2="1398.678"/>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-578.478" y1="1388.678" x2="-578.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-602.478" y1="1388.678" x2="-602.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-626.478" y1="1388.678" x2="-626.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-650.478" y1="1388.678" x2="-650.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-674.478" y1="1388.678" x2="-674.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-698.478" y1="1388.678" x2="-698.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-722.478" y1="1388.678" x2="-722.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-746.478" y1="1388.678" x2="-746.478" y2="1398.678"/>
+			</g>
+			<g>
+				<line fill="none" stroke="#EFEFEF" stroke-miterlimit="10" x1="-770.478" y1="1388.678" x2="-770.478" y2="1398.678"/>
+			</g>
+		</g>
+	</g>
+	<rect x="-1730.541" y="971.928" fill="#FFFFFF" width="1280.063" height="109"/>
+	<g>
+		<g>
+			<g>
+				<text transform="matrix(1 0 0 1 -629.6582 1035.7932)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="21">ОЧИСТИТЬ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<g>
+				<text transform="matrix(1 0 0 1 -613.6587 764.5814)" fill="#EFEFEF" font-family="'SegoeUI-Semilight'" font-size="21">НАЙТИ</text>
+			</g>
+		</g>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 -1277.6522 1033.4595)" fill="#939393" font-family="'SegoeUI-Semilight'" font-size="21">НОВОСИБИРСК</text>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 -1707.6525 1036.4595)"><tspan x="0" y="0" fill="#4D4D4D" font-family="'SegoeUI-Bold'" font-size="27">ПОИСК</tspan><tspan x="99.547" y="0" fill="#939393" font-family="'SegoeUI-Bold'" font-size="27">ПО ПАРАМЕТРАМ</tspan></text>
+	</g>
+	<g>
+		<path fill="#D3D3D3" d="M-719.774,823.761l-26.138-38.484c9.853-8.871,16.111-22.004,16.111-36.645
+			c0-26.653-20.711-48.338-46.165-48.338c-25.454,0-46.163,21.685-46.163,48.338s20.708,48.338,46.163,48.338
+			c8.453,0,16.377-2.403,23.199-6.574l26.131,38.475L-719.774,823.761z M-813.71,748.631c0-21.792,16.933-39.522,37.744-39.522
+			c20.813,0,37.746,17.73,37.746,39.522s-16.933,39.522-37.746,39.522C-796.777,788.153-813.71,770.423-813.71,748.631z"/>
+	</g>
+</g>
+<rect x="-2370.478" y="270.737" opacity="0.5" fill="#1A1A1A" width="1279.969" height="1904"/>
+<rect x="-3010.478" y="-359.134" opacity="0.6" fill="#1A1A1A" width="2560" height="2666.063"/>
+<rect x="-4901.228" y="468.845" fill="none" stroke="#F2F2F2" stroke-miterlimit="10" width="1283.5" height="1322.438"/>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -2222.6733 526.7884)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ЛЕНИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -2222.6733 623.2314)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">КАЛИНИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1815.3781 526.7884)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ЛЕНИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1815.3781 623.2314)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">КАЛИНИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1815.3781 719.6744)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ДЗЕРЖИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1815.3781 816.1174)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ЦЕНТРАЛЬНЫЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1432.2271 526.7884)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ЛЕНИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1432.2271 623.2314)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">КАЛИНИНСКИЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1432.2271 816.1174)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ЦЕНТРАЛЬНЫЙ</text>
+	</g>
+</g>
+<text transform="matrix(1 0 0 1 -2269.7739 407.172)" fill="#EFEFEF" font-family="'SegoeUI-Bold'" font-size="73.0845" letter-spacing="1">РАЙОН</text>
+<path fill="none" stroke="#FFFFFF" stroke-width="3" stroke-miterlimit="10" d="M-1934.467,1012.964l44.755-2.455l89.509-20.017
+	l16.618-30.969h7.554l2.266,4.154l-7.176,7.931l3.021,3.777l1.511-3.777l6.42,0.378l2.644-2.266l1.888,0.378l-1.888,3.399
+	l1.888,10.953l-4.532,9.442l7.176,5.287l5.287-0.755l5.665-20.017l3.399-0.378l2.644,4.532h-3.021l-1.511,3.682h9.064v8.781
+	l-2.266,3.399l2.266,1.888l-3.777,4.154v4.154l3.777,2.644l9.82-4.514l6.421,3.004v4.91l47.965,23.41l4.532,4.083l16.618-12.009
+	l-5.287-6.151l5.287-3.669l5.287,3.669l10.575,1.996l10.953-3.777l-1.888-3.777l-6.893-2.36l1.416-5.948l-1.7-3.381h-8.214
+	l1.416-7.382l22.661-20.395l12.463-0.85l7.365,31.725l-15.579,56.935l9.348,2.833l8.498-31.542l6.515-3.299l6.798,3.299
+	l-1.416,9.164l1.416,9.932l-4.815,16.978l13.88,12.733v2.421l3.399,1.133l11.614,17.42l3.399,1.416l3.116,5.24l-5.099,4.815
+	l7.223,7.223l5.523,1.385l9.914,4.847v5.665c0,0,2.408,1.558,2.549,1.983c0.142,0.425,9.914,1.275,9.914,1.275l8.923,5.524
+	l3.682,4.107l6.798,1.416l29.742,17.703l-6.515,31.442l-2.549,2.833l3.399,3.399l-2.408,4.391l4.107,6.515l-0.142,5.523h-5.948
+	l-2.408,35.974l1.416,7.365l-0.142,18.412l-10.622,68.973h8.356l1.699,3.824h-11.472l-2.549,3.824l2.833,2.266l6.373,0.991
+	l2.266,2.974l8.214-1.416l2.124,11.047l6.232,15.013l14.021,3.541l8.214,9.347l2.691,8.781l10.197,10.339l2.266,7.931l6.232,6.515
+	l14.729,0.708l9.489-2.549l7.365-3.824l8.923,2.124l7.506,5.948l4.532,8.639l2.549,8.498l1.983,6.09l-4.107,6.657l-8.073,9.914
+	l-35.124,0.708l-1.983,17.279l13.313,2.691l6.515,4.391l23.652-2.408l0.85,17.42l-0.142,10.197l-5.099,18.129l23.369,30.875v11.614
+	l-32.999,33.708l-0.85,18.695l11.897,14.305v4.815l-21.952,17.845l0.142,26.909l-14.588,11.33l2.549,5.665l-4.249,4.532l7.506,13.03
+	l1.558,45.604h17.42l7.081,9.772l-3.824,2.691l5.807,6.515l-1.841,5.099l-9.631,1.416l0.708,3.966l-10.197,14.163l24.218,14.304
+	l0.708,13.455l-11.472,4.957l1.275,6.09l-4.532,11.047l-0.991,5.665l-7.931,5.807l-2.549,5.665l-26.06,7.648l-14.588-2.974
+	l1.7-18.695l-24.219-3.257l-3.966,16.571l-7.931-3.682l5.807-20.536v-13.171l-4.674-12.18l-0.708-14.163l-6.515-14.588l-7.931-6.09
+	l-14.446,0.425l-9.347,5.665l-5.524,1.275l-9.914-13.88l-4.815-1.275l2.691-1.558l4.249-4.107l8.214-9.914l-2.549-3.682
+	l-2.691-1.841l-16.854,1.841l-0.708,5.666l3.966,17.845l-2.266,1.7l-4.674-16.146l-5.948-5.24l-15.013,0.85l-25.351,1.699
+	l-12.463-4.815l-13.03-10.197l-21.386-17.137l-13.738,13.03l-5.099,0.708l-2.549,3.824l-0.425,5.807l-8.356,1.558l-18.412,14.588
+	l-0.142,3.257l-3.399,0.142l-0.85,2.691l-3.257,0.85l-6.656,2.833l-27.476,10.339l-10.905,1.983l-5.24-2.408l4.391-6.09l0.425-5.948
+	l3.966-2.974l0.991-12.746l-5.382-3.825l7.365-5.665l1.416-6.656l2.691-0.85l0.85-11.189l1.841-1.841l2.266-37.248l2.974-6.656
+	l6.94-1.983l1.558-11.189l12.18-1.699l77.046-0.142l1.7-2.408l11.614-0.425l9.064-17.562l12.322,3.541l11.472-23.085l15.296-54.527
+	l13.313-36.257l5.807-23.51l-3.257-14.446l-4.532-21.386l-10.622-0.283l-37.673,7.223l-10.197,0.567l-3.116-1.699l-94.466,6.373
+	l-1.983,10.622l12.18,10.764l-0.708,2.408l-13.171-0.142l-0.991-6.94l-3.541,0.85l-16.287,10.905l-4.957-0.283l-7.365-7.506
+	l-25.493-3.399l-3.399,3.399l-4.343-1.133l-3.21-4.91l-23.982-3.777l-2.644-2.266h-4.721l-6.043,15.674l-14.163-2.833l-6.043-14.541
+	l-15.674-0.944l-1.7-15.107l-6.043-7.365l-9.442,6.043l-7.553-5.099l-22.283,18.695l-2.833-0.944l3.021-4.721l-12.652-13.219
+	l-4.343,1.888l-6.609-6.987l-5.665,3.777l-5.854-17.562l2.833-0.755l12.275,1.511l-3.399-8.875l10.764-6.798l-6.043-8.309
+	l-2.644,1.888l-10.575-12.275l-9.82,7.554l-3.021-4.532l7.176-8.309l-29.459-30.81l5.099-7.146l-1.7-7.365l-27.948-16.429
+	l-13.596-14.163v-5.099l8.875-3.21l-0.944-6.798l8.875-2.077l-1.133-4.532l-33.424,6.043l-0.944-9.595l22.283-2.491l5.099,1.133
+	l2.455-14.352l14.163-10.953l12.841-8.12l4.154-12.652l-16.429-7.742l3.777-17.751l-2.266-3.966l9.253-8.875l-0.378-5.287
+	l-6.421-3.21l3.966-3.777l-0.378-9.442l4.721-1.7l4.91,8.12l1.888,4.91l15.674,12.275l3.966-0.944l2.266-3.588l27.004-14.918
+	l12.463,14.541l7.554-4.343l-1.7-2.833l-4.343,1.133l-4.343-2.455l2.644-3.588l-10.575-5.665l16.051-12.086l-15.862-10.764
+	l-7.176-11.519l0.755-4.154l-3.21-0.755l-25.115-28.137l-15.296-24.738l-4.343-31.158l4.721-15.296l-6.798-50.024l1.511-26.266
+	l6.232-11.519l23.416-4.154l5.099,7.931L-1934.467,1012.964z"/>
+<polygon fill="none" stroke="#00B8E4" stroke-width="4" stroke-miterlimit="10" points="-1706.99,1199.167 -1675.807,1175.434 
+	-1685.189,1161.498 -1681.326,1159.038 -1680.636,1155.979 -1676.911,1155.979 -1678.428,1153.357 -1681.05,1153.357 
+	-1681.464,1152.391 -1671.805,1145.906 -1670.839,1147.01 -1652.488,1133.212 -1649.453,1128.935 -1642.278,1133.902 
+	-1639.932,1137.765 -1638.69,1133.488 -1636.482,1128.935 -1618.407,1066.705 -1612.474,1067.947 -1583.912,1090.852 
+	-1583.912,1092.37 -1578.807,1098.027 -1575.633,1096.785 -1571.356,1100.649 -1573.149,1106.03 -1569.286,1107.548 
+	-1563.491,1103.408 -1554.66,1114.723 -1562.111,1119.414 -1562.111,1122.174 -1557.696,1127.417 -1551.348,1127.831 
+	-1540.448,1131.832 -1523.338,1143.147 -1516.025,1151.425 -1512.024,1153.357 -1506.643,1153.771 -1490.085,1164.672 
+	-1476.149,1170.881 -1482.772,1199.995 -1497.95,1213.931 -1535.343,1225.383 -1586.257,1241.251 -1609.852,1248.564 
+	-1620.339,1254.083 -1624.478,1257.394 -1630.549,1241.251 -1634.965,1242.906 -1645.865,1252.151 -1657.179,1241.113 
+	-1665.458,1236.973 -1674.703,1234.214 -1675.393,1236.697 -1681.602,1238.905 -1681.602,1241.251 -1688.501,1242.768 
+	-1695.814,1247.322 -1699.264,1245.804 -1703.679,1221.933 -1701.885,1221.795 -1702.713,1211.309 -1705.611,1211.447 "/>
+<polygon fill="#EFEFEF" points="-1156.362,337.655 -1157.869,336.148 -1175.378,353.656 -1192.887,336.148 -1194.394,337.655 
+	-1176.885,355.163 -1194.394,372.672 -1192.887,374.179 -1175.378,356.67 -1157.869,374.179 -1156.362,372.672 -1173.871,355.163 
+	"/>
+<polygon fill="#EFEFEF" points="38.031,1.507 36.524,0 19.016,17.509 1.507,0 0,1.507 17.509,19.016 0,36.524 1.507,38.031 
+	19.016,20.523 36.524,38.031 38.031,36.524 20.523,19.016 "/>
+<rect x="-2306.978" y="668.39" fill="#00B8E4" width="394.667" height="89"/>
+<rect x="-2306.978" y="760.39" fill="#00B8E4" width="394.667" height="89"/>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -2222.6733 719.6744)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ДЗЕРЖИНСКИЙ</text>
+	</g>
+</g>
+<polygon fill="#FFFFFF" points="-1943.478,702.539 -1944.185,701.832 -1952.399,710.046 -1960.614,701.832 -1961.321,702.539 
+	-1953.106,710.753 -1961.321,718.967 -1960.614,719.674 -1952.399,711.46 -1944.185,719.674 -1943.478,718.967 -1951.692,710.753 
+	"/>
+<rect x="-1519.652" y="668.39" fill="#00B8E4" width="394.667" height="89"/>
+<polygon fill="#FFFFFF" points="-1156.152,702.539 -1156.859,701.832 -1165.073,710.046 -1173.287,701.832 -1173.995,702.539 
+	-1165.78,710.753 -1173.995,718.967 -1173.287,719.674 -1165.073,711.46 -1156.859,719.674 -1156.152,718.967 -1164.366,710.753 "/>
+<polygon fill="#FFFFFF" points="-1943.478,794.635 -1944.185,793.928 -1952.399,802.142 -1960.614,793.928 -1961.321,794.635 
+	-1953.106,802.849 -1961.321,811.063 -1960.614,811.771 -1952.399,803.556 -1944.185,811.771 -1943.478,811.063 -1951.692,802.849 
+	"/>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -2222.6733 811.2933)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ЦЕНТРАЛЬНЫЙ</text>
+	</g>
+</g>
+<g>
+	<g>
+		<text transform="matrix(1.0184 0 0 1 -1432.2271 719.6744)" fill="#FFFFFF" font-family="'SegoeUI-Semilight'" font-size="21">ДЗЕРЖИНСКИЙ</text>
+	</g>
+</g>
+</svg>

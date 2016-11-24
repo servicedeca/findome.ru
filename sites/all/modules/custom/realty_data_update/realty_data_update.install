@@ -1,0 +1,158 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+function realty_data_update_schema() {
+
+  // Таблица для логирования новых квартир
+  $schema['realty_data_update_new_apartments'] = array(
+    'description' => 'List new apartments',
+    'fields' => array(
+      'id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+      'number_apartment' => array(
+        'description' => 'number_apartment.',
+        'type' => 'varchar',
+        'length' => 14,
+      ),
+      'complex' => array(
+        'description' => 'The complex name.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'developer' => array(
+        'description' => 'The developer name.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'street' => array(
+        'description' => 'The name street.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'number_home_street' => array(
+        'description' => 'The number hom in street.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'number_home_complex' => array(
+        'description' => 'The number hom in complex.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'status' => array(
+        'description' => 'The status.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'coast' => array(
+        'description' => 'The coast.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  // Таблица для логирования обновлений квартир
+  $schema['realty_data_update_logs'] = array (
+    'description' => 'List updated apartments',
+    'fields' => array(
+      'id' => array (
+        'description' => 'The primary indentified for update apartments',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'tid_developer' => array (
+        'description' => 'Taxonomy term id of developer',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'nid_complex' => array (
+        'description' => 'Node id of complex',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'tid_home' => array (
+        'description' => 'Taxonomy term id of home',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'nid_apartment' => array (
+        'description' => 'Node id of apartment',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'old_status' => array (
+        'description' => 'Old status of apartment',
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'new_status' => array (
+        'description' => 'New status of apartment',
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'old_cost' => array (
+        'description' => 'Old cost of apartment',
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'new_cost' => array (
+        'description' => 'New cost of apartment',
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'start_time' => array (
+        'description' => 'Start time updates',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  // Таблица для логирования изменений файлов застройщиков
+  $schema['realty_data_update_files'] = array (
+    'description' => 'List updated files of developers',
+    'fields' => array(
+      'id' => array (
+        'description' => 'The primary indentified for update',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'tid_developer' => array (
+        'description' => 'Taxonomy term id of developer',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'file' => array (
+        'description' => 'File name',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'size' => array (
+        'description' => 'Size of file',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'date' => array (
+        'description' => 'Date of update file',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}

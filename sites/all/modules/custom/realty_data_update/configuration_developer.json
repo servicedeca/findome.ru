@@ -1,0 +1,76 @@
+[
+  {
+    "name": ["ХК ГК Стрижи"],
+    "tid_developer": ["71"],
+    "method": "FTP",
+    "format": "XML",
+    "ftp_dir": "/user003/files",
+    "config_dir": "/user003/config",
+    "unsold_apartments": false
+  },
+
+  {
+    "name": ["ЗАО Береговое"],
+    "tid_developer": ["74"],
+    "method": "FTP",
+    "format": "XML",
+    "ftp_dir": "/user004/files",
+    "config_dir": "/user004/config",
+    "unsold_apartments": true
+  },
+
+  {
+    "name": ["ООО АКВА СИТИ"],
+    "tid_developer": ["72"],
+    "complex": ["ЖК Ясный Берег"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user005/files",
+    "config_dir": "/user005/config",
+    "unsold_apartments": false
+  },
+
+  {
+    "name": ["СП ОOО «Сибакадемстрой»"],
+    "tid_developer": ["144"],
+    "complex": ["Микрорайон «Европейский берег»"],
+    "method": "FTP",
+    "format": "XML",
+    "ftp_dir": "/user006/files",
+    "config_dir": "/user006/config",
+    "unsold_apartments": false
+  },
+
+  {
+    "name": ["ООО Новый Мир Химметалл"],
+    "tid_developer": ["177"],
+    "complex": ["ЖК КРОПОТКИНСКИЙ"],
+    "method": "FTP",
+    "format": "XML",
+    "ftp_dir": "/user007/files",
+    "config_dir": "/user007/config",
+    "unsold_apartments": false
+  },
+
+  {
+    "name": ["ООО Оловозаводская"],
+    "tid_developer": ["188"],
+    "complex": ["ЖК ЧЕРЕМУШКИ"],
+    "method": "FTP",
+    "format": "XML",
+    "ftp_dir": "/user008/files",
+    "config_dir": "/user008/config",
+    "unsold_apartments": false
+  },
+
+  {
+    "name": ["ООО Сибирь Девелопмент"],
+    "tid_developer": ["187"],
+    "complex": ["ЖК Заельцовский"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user009/files",
+    "config_dir": "/user009/config",
+    "unsold_apartments": false
+  }
+]

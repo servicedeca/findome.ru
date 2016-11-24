@@ -1,0 +1,14 @@
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+sites/*/files
+sites/*/private
+
+# Ignore idea files
+.idea/*
+.idea/workspace.xml
+
+# Ingore forum symlinks
+sites/forum.findome.dev
+sites/forum.findome.ru

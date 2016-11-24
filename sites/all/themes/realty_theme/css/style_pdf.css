@@ -1,0 +1,73 @@
+@font-face {
+  font-family: "Segoe";
+  font-style: normal;
+  font-weight: normal;
+}
+/* font-family: "SegoeBold"; */
+@font-face {
+  font-family: "SegoeBold";
+  font-style: normal;
+  font-weight: normal;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body *{
+  font-family: 'Segoe';
+  line-height: 1.42857143;
+  color: #333;
+}
+
+
+
+#pdf-page{
+  background: #282828;
+}
+
+.a4{width:840px;height:1188px;margin: 0 auto;padding-left:35px;padding-right:35px;position: relative;}
+
+.pdf-head{border-bottom:1px solid #fff;height:100px;padding:0}
+
+.pdf-head h1{text-transform:uppercase;font-size:35px;color:#939393;line-height:135px;font-family:Arial; font-weight: 700; margin: 0px;}
+
+.pdf-head h1 span{color:#fff;font-family:Arial; font-weight: 700;}
+
+
+.pdf-head img{
+  height: 30px;
+  margin-left: 630px;
+  margin-top: -80px;
+  position: absolute;
+}
+
+
+.pdf-plane-block{height:570px;padding:0;margin-top:15px}.pdf-plane-block label{color:#939393;position:absolute;top:0;left:0;text-transform:uppercase;font-size:16px;font-family:Arial; font-weight: 700;}.pdf-plane-block img{margin-top:50px;margin-left:30px;width:80%}.pdf-plane-info{margin-top:15px;padding:35px 0 0}.pdf-plane-info div{padding:0 0 0 35px}.pdf-plane-info div label{font-size:11px}.pdf-plane-info div h2{font-size:16px;margin-top: 25px;}.pdf-plane-info div h1{font-size:22px;margin-bottom:0;color:#fff}.pdf-plane-info label{color:#939393;position:absolute;top:0;left:0;text-transform:uppercase;font-size:16px;font-family:SegoeBold}.pdf-places-block{height:350px;padding:0}.pdf-places-block label{color:#939393;position:absolute;top:0;left:0;text-transform:uppercase;font-size:16px;font-family:Arial; font-weight: 700;}.pdf-places-block div{height:350px;padding:15px;text-align:center}.pdf-places-block div label{color:#939393;text-transform:none;font-size:16px;font-weight:300;font-family:Arial;position:relative;margin-top:-10px}.pdf-places-block div svg{width:100%;height:100%}
+
+.pdf-footer{position: absolute; bottom: 50px; border-top:1px solid #939393; height: 100px; margin-top:35px;padding:0}
+
+.pdf-footer p{font-size:14px;margin:10px 0 0;color:#939393}
+
+.about-inner-item{margin-bottom:10px}.about-inner-item lebel{color:#939393;text-transform:uppercase;font-size:13px;position:absolute;text-align:left;left:15px; margin-top: -20px;}.about-inner-item span{color:#fff;margin-top:20px;font-size:28px;font-weight:300;position:relative}.about-inner-item h2{color:#fff;margin-bottom:5px;margin-top:20px;font-family:Arial;font-size:18px;font-weight:300;position:relative;text-align:right}.about-inner-item h1{color:#00a5d1;margin-bottom:5px;margin-top:15px;font-family:SegoeBold;font-size:30px;font-weight:300;position:relative;text-align:right}.about-inner-item h3{color:#fff;margin-bottom:5px;margin-top:20px;font-family:Arial; font-weight: 700;font-size:22px;font-weight:300;position:relative;text-align:right}
+
+
+.cxs-8, .cxs-4, cxs-12{
+  position: relative;
+  min-height: 1px;
+  float: left;
+}
+
+.cxs-12{
+  width: 100%;
+}
+
+.cxs-4 {
+  width: 33.33333333%;
+}
+
+.cxs-8 {
+  width: 66.66666667%;
+}

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+function realty_plan_schema() {
+
+// Таблица для планировок квартир
+  $schema['realty_plan_plan_apartments'] = array(
+    'description' => 'List plan apartments',
+    'fields' => array(
+      'id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+      'form_id' => array(
+        'description' => 'form_id.',
+        'type' => 'varchar',
+        'length' => 14,
+      ),
+      'path_file' => array(
+        'description' => 'Path file',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'apartments' => array(
+        'description' => 'The number apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'home_id' => array(
+        'description' => 'The home id.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}

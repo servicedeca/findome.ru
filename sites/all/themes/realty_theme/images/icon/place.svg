@@ -1,0 +1,44 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="35px" height="36px"  viewBox="0 0 23.119 23.718" enable-background="new 0 0 23.119 23.718" xml:space="preserve">
+		<style type="text/css">
+		.icon{
+			transition: all 200ms linear;
+			-moz-transition: all 200ms linear;
+			-webkit-transition: all 200ms linear;
+			-o-transition: all 200ms linear;
+		}
+		
+		.icon:hover {
+			fill: #00b7e4;
+			transition: all 200ms linear;
+			-moz-transition: all 200ms linear;
+			-webkit-transition: all 200ms linear;
+			-o-transition: all 200ms linear;
+		}
+	</style>
+<g id="Layer_10">
+</g>
+<g id="Layer_11">
+</g>
+<g id="Main">
+	<g id="Arrow_4_">
+	</g>
+	<g id="Arrow_1_">
+	</g>
+	<g id="Arrow">
+	</g>
+	<g id="Arrow_3_">
+	</g>
+	<g id="Search_x5F_block_x5F_wt">
+	</g>
+	<g id="FD_x5F_HELP">
+	</g>
+	<g id="FD_x5F_LOGIN">
+	</g>
+	<path class="icon" fill="#D3D3D3" d="M11.727,0.112c-4.087,0-7.4,3.313-7.4,7.4c0,4.087,7.4,16.157,7.4,16.157s7.4-12.07,7.4-16.157
+		C19.128,3.425,15.814,0.112,11.727,0.112z M11.727,11.62c-2.214,0-4.009-1.795-4.009-4.01c0-2.214,1.795-4.01,4.009-4.01
+		c2.215,0,4.01,1.795,4.01,4.01C15.737,9.825,13.942,11.62,11.727,11.62z"/>
+</g>
+<g id="Help" display="none">
+</g>
+</svg>

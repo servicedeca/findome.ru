@@ -1,0 +1,296 @@
+/* Ion.RangeSlider, Simple Skin
+// css version 2.0.3
+// © Denis Ineshin, 2014    https://github.com/IonDen
+// © guybowden, 2014        https://github.com/guybowden
+// ===================================================================================================================*/
+
+/* =====================================================================================================================
+// Skin details */
+
+.irs {
+	height: 100%;
+}
+
+#islider .irs-line {
+	height: 70%;
+	top: 15%;
+	background: transparent;
+}
+
+.mslider .irs-line {
+	height: 70px;
+	background: transparent;
+}
+
+.iss .irs-line {
+	height: 8px;
+	top: 70px;
+	background: #fff;
+}
+
+.irs-bar {
+	height: 8%;
+	background: #00a9e4;
+	top: 70%;
+}
+
+#islider .irs-bar {
+	height: 2px;
+	top:50%;
+	margin-top: -2px;
+	background: #fff;
+	opacity: 0.7;
+}
+
+.mslider .irs-bar {
+	height: 2px;
+	top:35px;
+	margin-top: -2px;
+	background: #fff;
+	opacity: 0.7;
+}
+
+.iss .irs-bar {
+	height: 8px;
+	background: #00a9e4;
+	top: 70px;
+}
+
+.irs-line-left {
+	height: 8px;
+}
+.irs-line-mid {
+	height: 8px;
+}
+.irs-line-right {
+	height: 8px;
+}
+
+
+.irs-bar-edge {
+	height: 10px; top: 33px;
+	width: 14px;
+	border: 1px solid #428bca;
+	border-right: 0;
+	background: #428bca;
+	background: linear-gradient(to top, rgba(66,139,202,1) 0%,rgba(127,195,232,1) 100%); /* W3C */
+	border-radius: 16px 0 0 16px;
+	-moz-border-radius: 16px 0 0 16px;
+}
+
+.irs-shadow {
+	height: 2px; top: 38px;
+	background: #000;
+	opacity: 0.3;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+.lt-ie9 .irs-shadow {
+	filter: alpha(opacity=30);
+}
+
+#islider .irs-slider{
+	top: 20%;
+	width: 12%;
+	height: 80%;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.mlider .irs-slider{
+	top: 20%;
+	width: 12%;
+	height: 80%;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+#islider .irs-slider:before{
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+}
+
+.mslider .irs-slider {
+	top: 15%;
+	width: 70px;
+	height: 70px;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.iss .irs-slider {
+	top: 70px;
+	width: 16px; height: 16px;
+	border-radius: 16px;
+	background: #fff;
+	cursor: pointer;
+	margin-top: -4px;
+	border: 3px solid #00a9e4;
+}
+
+.irs-min, .irs-max {
+	color: #333;
+	font-size: 12px;
+	line-height: 1.333;
+	text-shadow: none;
+	top: 0;
+	padding: 1px 5px;
+	background: rgba(0,0,0,0.1);
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.lt-ie9 .irs-min, .lt-ie9 .irs-max {
+	background: #ccc;
+}
+
+.irs-from, .irs-to, .irs-single {
+	cursor: pointer;
+	background: rgba(76,76,76, 0.5);
+	width: 10%;
+	text-shadow: none;
+	color:#eeeeee;
+	height: 80%;
+	border-radius: 50%;
+	top:10%;
+	z-index: 100;
+	text-align: center;
+	padding-top: 2.7%;
+}
+
+.irs-from, .irs-to, .irs-single:hover{
+	background: #fff;
+}
+
+@media(max-width:2000px){
+	#islider .irs-from, .irs-to, .irs-single{
+		font-size: 20px;
+	}
+}
+
+@media(max-width:1600px){
+	#islider .irs-from, .irs-to, .irs-single{
+		font-size: 18px;
+	}
+}
+
+@media(max-width:1450px){
+	#islider .irs-from, .irs-to, .irs-single{
+		font-size: 16px;
+	}
+}
+
+@media(max-width:1300px){
+	#islider .irs-from, .irs-to, .irs-single{
+		font-size: 14px;
+	}
+}
+
+@media(max-width:1200px){
+	#islider .irs-from, .irs-to, .irs-single{
+		font-size: 12px;
+	}
+}
+
+@media(max-width:960px){
+	#islider .irs-from, .irs-to, .irs-single{
+		font-size: 10px;
+	}
+}
+
+@media(max-width:2000px){
+	#islider .irs-to{
+		font-size: 20px;
+	}
+}
+
+@media(max-width:1600px){
+	#islider .irs-to{
+		font-size: 18px;
+	}
+}
+
+@media(max-width:1450px){
+	#islider .irs-to{
+		font-size: 16px;
+	}
+}
+
+@media(max-width:1300px){
+	#islider .irs-to{
+		font-size: 14px;
+	}
+}
+
+@media(max-width:1200px){
+	#islider .irs-to{
+		font-size: 12px;
+	}
+}
+
+@media(max-width:960px){
+	#islider .irs-to{
+		font-size: 10px;
+	}
+}
+
+
+.lt-ie9 .irs-from, .lt-ie9 .irs-to, .lt-ie9 .irs-single {
+	background: #999;
+}
+
+
+.irs-grid {
+	height: 27px;
+}
+
+
+.irs-grid-pol {
+	background: #fff;
+	opacity: 0.7;
+}
+
+.irs-grid-pol.small {
+	background: #999;
+	display: none;
+}
+
+
+.irs-grid-text {
+	bottom: 5px;
+	color: #eeeeee;
+	font-size: 17px;
+	top:70%;
+}
+
+@media(max-width:2000px){
+	#islider .irs-grid-text{
+		font-size: 16px;
+		top:75%;
+	}
+}
+
+@media(max-width:1600px){
+	#islider .irs-grid-text{
+		font-size: 14px;
+	}
+}
+
+@media(max-width:1450px){
+	#islider .irs-grid-text{
+		font-size: 12px;
+	}
+}
+
+@media(max-width:1300px){
+	#islider .irs-grid-text{
+		font-size: 10px;
+	}
+}
+
+@media(max-width:1200px){
+	#islider .irs-grid-text{
+		display: none;
+	}
+}
+

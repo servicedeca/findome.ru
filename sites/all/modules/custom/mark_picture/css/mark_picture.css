@@ -1,0 +1,214 @@
+.butt-mark {
+  width: 200px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  background-color:rgba(0, 0, 0, 0.20);
+  color: rgba(0, 0, 0, 0.96);
+  cursor: pointer;
+}
+
+.div-plan-complex-active {
+  cursor: crosshair;
+}
+
+.div-plan-complex-queue-active {
+  cursor: crosshair;
+}
+
+.div-plan-home-active {
+  cursor: crosshair;
+}
+
+.div-plan-home {
+  position: relative;
+  display: table;
+}
+
+.div-plan-home svg{
+  width: 800px;
+  height: 400px;
+}
+
+.div-plan-complex {
+  position: relative;
+  display: table;
+}
+
+.div-plan-complex svg{
+  width: 800px;
+  height: 400px;
+}
+
+.div-plan-complex-queue {
+  position: relative;
+  display: table;
+}
+
+.div-plan-complex-queue svg{
+  width: 800px;
+  height: 400px;
+}
+
+.error-add-complex {
+  color: #000000;
+  background-color:#FF0000 ;
+}
+
+.error-dialog {
+  color: #FF0000 ;
+}
+
+.tool-add {
+  cursor: pointer;
+}
+
+.tool-add-active {
+  cursor: pointer;
+  border: 3px solid rgba(0, 0, 0, 0.20);
+}
+
+
+.tool-add:hover {
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  cursor: pointer;
+}
+
+.mark {
+  position: absolute;
+  cursor: pointer;
+  width: 5px;
+  height: 20px;
+  padding: 2px 10px;
+  background-color: #FF0000;
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  border-radius: 20px;
+}
+
+.dialog {
+  position: absolute;
+  width: 150px;
+  padding: 2px 10px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.20);
+}
+
+.dialog a {
+  cursor: pointer;
+}
+.img-mark {
+
+}
+
+.floor-form-block {
+  border: 1px solid #000000;
+  margin-top: 20px;
+  padding: 5px;
+}
+
+
+#add-apartments-plan {
+  width: 200px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  background-color:rgba(0, 0, 0, 0.20);
+  color: rgba(0, 0, 0, 0.96);
+  cursor: pointer;
+}
+
+#ok-add-apartments-plan {
+  width: 100px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  background-color:rgba(0, 0, 0, 0.20);
+  color: rgba(0, 0, 0, 0.96);
+  cursor: pointer;
+}
+
+.floors-html-block {
+  border: 1px solid #000000;
+  margin-top: 20px;
+  padding: 5px;
+}
+
+.title-floor-section {
+  border: 1px solid #646464;
+  background: #cecece;
+}
+
+.floor-plan-image {
+  display: table;
+  position: relative;
+}
+
+.floor-plan-image-active {
+  cursor: crosshair;
+  position: relative;
+}
+
+.floor-window-dialog {
+  width: 150px;
+  height: 200px;
+  background: #d3d3d3;
+  padding: 4px;
+}
+.home-window-dialog {
+  width: 150px;
+  height: 200px;
+  background: #d3d3d3;
+  padding: 4px;
+}
+.complex-window-dialog {
+  width: 150px;
+  height: 200px;
+  background: #d3d3d3;
+  padding: 4px;
+}
+
+.form-block-input {
+  height: 150px;
+  overflow-y: scroll;
+  background: #d3d3d3;
+  padding: 4px;
+}
+
+.floor-window-dialog p {
+  padding: 1px;
+  display: inline;
+}
+.home-window-dialog p {
+  padding: 1px;
+  display: inline;
+}
+.complex-window-dialog p {
+  padding: 1px;
+  display: inline;
+}
+
+
+.input-form-dialog-apartment {
+  width: 55px;
+}
+
+.svg-admin-class {
+  fill: red;
+  opacity: 0.4;
+}
+.svg-plan-queue {
+  fill: blue;
+  opacity: 0.4;
+}
+
+.svg-plan-home-queue {
+  fill: yellow;
+  opacity: 0.4;
+}
+
+.svg-home-passive {
+  fill: green;
+  opacity: 0.4;
+}
+
+.floor-plan-image svg {
+  width: 800px;
+  height: 400px;
+}

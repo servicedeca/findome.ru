@@ -1,0 +1,14 @@
+name = realty_feature_page_node
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = realty_feature_page_node
+dependencies[] = ctools
+dependencies[] = page_manager
+features[ctools][] = page_manager:pages_default:1
+features[features_api][] = api:2
+features[page_manager_handlers][] = node_view__basic_page
+features[page_manager_handlers][] = node_view__panel_context_85d735dd-b4bf-40d4-9ee8-2c16bec08daf
+features[page_manager_handlers][] = node_view__presentation
+features[page_manager_handlers][] = node_view_panel_context
+features[page_manager_handlers][] = node_view_panel_context_2

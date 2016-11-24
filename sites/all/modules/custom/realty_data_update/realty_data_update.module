@@ -1,0 +1,1574 @@
+<?php
+
+define('FTP_HOST', '62.109.22.209');
+define('FTP_USER', 'ftpadmin');
+define('FTP_PASSWORD', 'password1');
+
+/*
+ * implement hook_menu.
+ */
+function realty_data_update_menu() {
+
+  $item['admin/content/realty/update_logs'] = array(
+    'title' => t('Журнал обновлений'),
+    'page callback' => 'realty_data_update_logs',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/add_apartments'] = array(
+      'title' => t('Журнал обновлений'),
+      'page callback' => 'realty_data_update_add_apartments',
+      'access callback' => TRUE,
+      'access arguments' => array('access content'),
+  );
+
+  $item['update_files'] = array(
+    'title' => t('Последнии изменения файлов'),
+    'page callback' => 'realty_data_update_files',
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/new_apartments'] = array(
+    'title' => t('Новые квартиры'),
+    'page callback' => 'realty_data_update_new_apartments',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  return $item;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function realty_data_update_theme() {
+
+  $base = array(
+    'file' => 'theme.inc',
+    'path' => drupal_get_path('module', 'realty_data_update') . '/theme',
+  );
+
+  $items['realty_data_update_logs'] = $base + array(
+      'template' => 'realty-data-update-logs',
+      'variables' => array(
+        'apartments' => NULL,
+      ),
+    );
+
+  $items['realty_data_update_files'] = $base + array(
+      'template' => 'realty-data-update-files',
+      'variables' => array(
+        'apartments' => NULL,
+      ),
+    );
+
+  $items['realty_data_update_new_apartments'] = $base + array(
+      'template' => 'realty-data-update-new-apartments',
+      'variables' => array(
+        'apartments' => NULL,
+      ),
+    );
+
+  return $items;
+}
+
+function realty_data_update_add_apartments() {
+  $met_st = FALSE;
+  $methods = realty_data_update_method_update();
+
+  $number = $_POST['num'];
+
+    if(isset($methods[$number])) {
+      if ($methods[$number]->method == 'FTP' && $methods[$number]->format == 'XML') {
+        realty_data_update_add_apartments_ftp_xml($methods[$number]);
+        printf ("Exit\n");
+        return;
+      }
+      if ($methods[$number]->method == 'FTP' && $methods[$number]->format == 'excel') {
+        realty_data_update_add_apartments_ftp_excel($methods[$number]);
+        printf ("Exit\n");
+        return;
+      }
+      else {
+        printf ("Error\n");
+        printf ("Введите номер файла:  ");
+      }
+    }
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function realty_data_update_admin_paths () {
+
+  $paths = array(
+    'update_files' => TRUE,
+  );
+
+  return $paths;
+}
+
+/**
+ * Page callback to admin/content/new_apartments.
+ */
+function realty_data_update_new_apartments() {
+
+  $apartments = db_query("SELECT * FROM realty_data_update_new_apartments")->fetchAll();
+
+  $page = theme('realty_data_update_new_apartments', array('apartments' => $apartments));
+
+  return $page;
+}
+
+/*
+ *Page callback to /update_files.
+ */
+function realty_data_update_files () {
+
+  $args = array();
+
+  // Получение инфорации о файлах застройщиков
+  $methods = realty_data_update_method_update();
+
+  // Соединение с FTP-сервером
+  $connect = ftp_connect(FTP_HOST);
+
+  if(!$connect) {
+    die('Error connect');
+  }
+
+  ftp_login($connect, FTP_USER, FTP_PASSWORD);
+
+  // Получение списка файлов для каждого застройщика
+  foreach ($methods as $method) {
+
+    $file_list =  ftp_nlist($connect, $method->ftp_dir);
+
+    // Если файл застройщика существет
+    if (count($file_list) > 0) {
+
+      // Дата последнего изменения файла
+      $date_raw = ftp_mdtm($connect, $file_list[0]);
+
+      $date = format_date($date_raw, 'custom', 'Y-m-d H:i:s', 'UTC');
+      $size = ftp_size($connect, $file_list[0]);
+      $size = round($size / 1000000, 2);
+      $developer = implode(", ", $method->name);
+
+      // Формирование массива параметров для теминга
+      $args[] = array (
+        'name' => $developer,
+        'file' => $file_list[0],
+        'size' => $size,
+        'date' =>  $date
+      );
+    }
+    // Если файлы отсутствуют, извлекаем инфорацию из базы данных
+    else {
+      $files = db_query ("SELECT realty_data_update_files.tid_developer, taxonomy_term_data.name,
+                                  realty_data_update_files.file, realty_data_update_files.size, realty_data_update_files.date
+                            FROM realty_data_update_files, taxonomy_term_data
+                            WHERE realty_data_update_files.tid_developer = taxonomy_term_data.tid"
+      )->fetchAll();
+
+      foreach ($files as $file) {
+
+        $size = round($files[0]->size / 1000000, 2);
+        $date = format_date($files[0]->date, 'medium', 'Y-m-d H:i:s', 'UTC');
+
+        // Формирование массива параметров для теминга
+        $args[] = array (
+          'name' => $files[0]->name,
+          'file' => $files[0]->file,
+          'size' => $size,
+          'date' => $date,
+        );
+      }
+    }
+  }
+
+  $responce = theme ('realty_data_update_files', array(
+      'args' => $args
+    )
+  );
+
+  return $responce;
+}
+
+/*
+ *Page callback to /update_logs.
+ */
+function realty_data_update_logs() {
+
+  $vocubulary = taxonomy_vocabulary_machine_name_load('developers');
+  $term_developers = taxonomy_get_tree($vocubulary->vid);
+
+  foreach ($term_developers as $term_developer) {
+    $developers_list[$term_developer->tid] = $term_developer->name;
+    $developers_filter[] = $term_developer->tid;
+  }
+
+  if (isset($_GET['developers'])) {
+    $developers_filter = $_GET['developers'];
+  }
+
+  if (isset($_GET['period_from'])) {
+    $timestamp_from = strtotime($_GET['period_from']['day'] . '-' . $_GET['period_from']['month'] . '-' . $_GET['period_from']['year']);
+  }
+  else {
+    $timestamp_from = 0;
+  }
+
+  if (isset($_GET['period_to'])) {
+    $timestamp_to = strtotime($_GET['period_to']['day'] . '-' . $_GET['period_to']['month'] . '-' . $_GET['period_to']['year']);
+  }
+  else {
+    $timestamp_to = time() + 86400;
+  }
+
+  $db_times = db_query("SELECT DISTINCT start_time
+                          FROM realty_data_update_logs
+                          WHERE tid_developer IN (:developers)
+                            AND start_time > :timestamp_from
+                            AND start_time < :timestamp_to
+                          ORDER BY start_time DESC LIMIT 3",
+    array (
+      ':developers' => $developers_filter,
+      ':timestamp_from' => $timestamp_from,
+      ':timestamp_to' => $timestamp_to)
+  )->fetchAll();
+
+
+  foreach ($db_times as $time) {
+    $time_render = format_date($time->start_time,'medium','Y-m-d H:i:s');
+
+    $apartments[$time_render] = db_query("SELECT realty_data_update_logs.nid_apartment, realty_data_update_logs.old_status,
+                                                  realty_data_update_logs.new_status, realty_data_update_logs.old_cost, realty_data_update_logs.new_cost, node.title
+                                            FROM realty_data_update_logs, node
+                                            WHERE tid_developer IN (:developers)
+                                              AND start_time = :start_time
+                                              AND node.nid = realty_data_update_logs.nid_apartment
+                                            ORDER BY id DESC",
+      array (
+        ':developers' => $developers_filter,
+        ':start_time' => $time->start_time)
+    )->fetchAll();
+  }
+
+  $page = theme ('realty_data_update_logs', array(
+    'apartments' => $apartments,
+    'timestamp_from' => $timestamp_from,
+    'timestamp_to' => $timestamp_to,
+    'developers_list' => $developers_list,
+    'developers_filter' => $developers_filter,
+  ));
+
+  return $page;
+}
+
+/**
+ * Implement hook_form.
+ */
+function realty_data_update_logs_filter_form ($form, &$form_state, $vars = array()) {
+
+  $timestamp_from = array(
+    'year' => format_date($vars['timestamp_from'],'medium','Y'),
+    'month' => format_date($vars['timestamp_from'],'medium','n'),
+    'day' => format_date($vars['timestamp_from'],'medium','j'),
+  );
+
+  $timestamp_to = array(
+    'year' => format_date($vars['timestamp_to'],'medium','Y'),
+    'month' => format_date($vars['timestamp_to'],'medium','n'),
+    'day' => format_date($vars['timestamp_to'],'medium','j'),
+  );
+
+  $form['#action'] = '/admin/content/realty/update_logs';
+  $form['#method'] = 'get';
+
+  $form['developers'] = array(
+    '#type' => 'select',
+    '#title' => t('Застройщик'),
+    '#name' => 'developers[]',
+    '#options' => $vars['developers_list'],
+    '#default_value' => $vars['developers_filter'],
+    '#attributes' => array (
+      'id' => 'select_developers',
+      'multiple' => 'multiple',
+    ),
+  );
+
+  $form['period_from'] = array(
+    '#type' => 'date',
+    '#title' => "Начало периода (с)",
+    '#default_value' => $timestamp_from
+  );
+
+  $form['period_to'] = array(
+    '#type' => 'date',
+    '#title' => "Конец периода (до)",
+    '#default_value' => $timestamp_to
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Применить'),
+  );
+
+  return $form;
+}
+
+/**
+ * Delete file from the ftp-server.
+ */
+function realty_data_update_delete_file($connect, $file, $args = array()) {
+
+  if (isset($connect) && (isset($file))) {
+    if (isset($args['developer'])) {
+
+      $size = ftp_size($connect, $file);
+      $date = ftp_mdtm($connect, $file);
+
+      // Если в одном файле присутствуют несколько застройщиков
+      if (count($args['developer']) > 1) {
+        foreach ($args['developer'] as $developer) {
+
+          // Количество записей застройщика в базе
+          $count_rows = db_query("SELECT tid_developer
+                                    FROM realty_data_update_files
+                                    WHERE tid_developer = :tid_developer",
+            array(
+              ':tid_developer' => $developer
+            )
+          )->rowCount();
+
+          // Если в базе уже имеется запись с информацией о последнем изменении файла застройщиком
+          if ($count_rows > 0) {
+            // Обновление иформации о последнем изменении файла
+            $db_query = db_query ("UPDATE realty_data_update_files
+                                      SET file = :file, size = :size, date = :date
+                                      WHERE tid_developer = :tid_developer",
+              array (
+                ':tid_developer' => $developer,
+                ':file' => $file,
+                ':size' => $size,
+                ':date' => $date,
+              )
+            );
+          }
+          // Если записей нет
+          else {
+            // Добавляем запись с информацей о последнем изменении файла застройщиком
+            $db_query = db_query ("INSERT INTO realty_data_update_files (tid_developer, file, size, date)
+                                    VALUES (:tid_developer, :file, :size, :date)",
+              array (
+                ':tid_developer' => $developer,
+                ':file' => $file,
+                ':size' => $size,
+                ':date' => $date,
+              )
+            );
+          }
+        }
+      }
+      // Если в одном файле присутствует только один застройщик
+      else {
+        // Количество записей застройщика в базе
+        $count_rows = db_query("SELECT tid_developer
+                                    FROM realty_data_update_files
+                                    WHERE tid_developer = :tid_developer",
+          array(
+            ':tid_developer' => $args['developer']
+          )
+        )->rowCount();
+
+        // Если в базе уже имеется запись с информацией о последнем изменении файла застройщиком
+        if ($count_rows > 0) {
+          // Обновление иформации о последнем изменении файла
+          $db_query = db_query ("UPDATE realty_data_update_files
+                                      SET file = :file, size = :size, date = :date
+                                      WHERE tid_developer = :tid_developer",
+            array (
+              ':tid_developer' => $args['developer'],
+              ':file' => $file,
+              ':size' => $size,
+              ':date' => $date,
+            )
+          );
+        }
+        // Если записей нет
+        else {
+          // Добавляем запись с информацей о последнем изменении файла застройщиком
+          $db_query = db_query ("INSERT INTO realty_data_update_files (tid_developer, file, size, date)
+                                    VALUES (:tid_developer, :file, :size, :date)",
+            array (
+              ':tid_developer' => $args['developer'],
+              ':file' => $file,
+              ':size' => $size,
+              ':date' => $date,
+            )
+          );
+        }
+      }
+
+      // Удаление файла с занесением в архив
+/*      $date_render = format_date($date, 'medium', 'YmdHis', 'UTC');
+      $file_name = explode('/', $file);
+
+      ftp_rename($connect, $file, '/' . $file_name[1] . '/archive/' . $date_render . '-' . $file_name[3]);
+      $file_list = ftp_nlist($connect, '/' . $file_name[1] . '/archive/');
+
+
+      if (count($file_list) > 10) {
+        ftp_delete($connect, $file_list[0]);
+      }*/
+
+      return TRUE;
+    }
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Converter xml to array.
+ */
+function realty_data_update_xmlToArray($xml, $options = array()) {
+  $defaults = array(
+    'namespaceSeparator' => ':',//you may want this to be something other than a colon
+    'attributePrefix' => '@',   //to distinguish between attributes and nodes with the same name
+    'alwaysArray' => array(),   //array of xml tag names which should always become arrays
+    'autoArray' => true,        //only create arrays for tags which appear more than once
+    'textContent' => '$',       //key used for the text content of elements
+    'autoText' => true,         //skip textContent key if node has no attributes or child nodes
+    'keySearch' => false,       //optional search and replace on tag and attribute names
+    'keyReplace' => false       //replace values for above search values (as passed to str_replace())
+  );
+  $options = array_merge($defaults, $options);
+  $namespaces = $xml->getDocNamespaces();
+  $namespaces[''] = null; //add base (empty) namespace
+
+  //get attributes from all namespaces
+  $attributesArray = array();
+  foreach ($namespaces as $prefix => $namespace) {
+    foreach ($xml->attributes($namespace) as $attributeName => $attribute) {
+      //replace characters in attribute name
+      if ($options['keySearch']) $attributeName =
+        str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
+      $attributeKey = $options['attributePrefix']
+        . ($prefix ? $prefix . $options['namespaceSeparator'] : '')
+        . $attributeName;
+      $attributesArray[$attributeKey] = (string)$attribute;
+    }
+  }
+
+  //get child nodes from all namespaces
+  $tagsArray = array();
+  foreach ($namespaces as $prefix => $namespace) {
+    foreach ($xml->children($namespace) as $childXml) {
+      //recurse into child nodes
+      $childArray = realty_data_update_xmlToArray($childXml, $options);
+      list($childTagName, $childProperties) = each($childArray);
+
+      //replace characters in tag name
+      if ($options['keySearch']) $childTagName =
+        str_replace($options['keySearch'], $options['keyReplace'], $childTagName);
+      //add namespace prefix, if any
+      if ($prefix) $childTagName = $prefix . $options['namespaceSeparator'] . $childTagName;
+
+      if (!isset($tagsArray[$childTagName])) {
+        //only entry with this key
+        //test if tags of this type should always be arrays, no matter the element count
+        $tagsArray[$childTagName] =
+          in_array($childTagName, $options['alwaysArray']) || !$options['autoArray']
+            ? array($childProperties) : $childProperties;
+      } elseif (
+        is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName])
+        === range(0, count($tagsArray[$childTagName]) - 1)
+      ) {
+        //key already exists and is integer indexed array
+        $tagsArray[$childTagName][] = $childProperties;
+      } else {
+        //key exists so convert to integer indexed array with previous value in position 0
+        $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
+      }
+    }
+  }
+
+  //get text content of node
+  $textContentArray = array();
+  $plainText = trim((string)$xml);
+  if ($plainText !== '') $textContentArray[$options['textContent']] = $plainText;
+
+  //stick it all together
+  $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || ($plainText === '')
+    ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
+
+  //return node as array
+  return array(
+    $xml->getName() => $propertiesArray
+  );
+}
+
+/**
+ * Write log file.
+ */
+function realty_data_update_writeLog($data) {
+
+  $fp = fopen('sites/default/files/ftpfiles/data_update.log', "a+");
+  fwrite ($fp, json_encode($data, JSON_PRETTY_PRINT));
+  fwrite ($fp, PHP_EOL);
+}
+
+/**
+ *  Enumerating objects in XML files.
+ */
+function realty_data_update_enumerating_objects_xml($config, $method, &$ptr_object, $i) {
+  $ptr = &$ptr_object[$i];
+  $unsold_status = 1;
+  //Парсинг необходимых праметров i-го объекта из xml застройщика
+  foreach ($config as $key => $value) {
+
+    if (($key != 'COMPANY') and ($key != 'OBJECT') and ($key != 'STATUS_ACTIVE') and ($key != 'STATUS_RESERVED') and
+      ($key != 'STATUS_UNSOLD') and $key != 'YES_STUDIO' and $key != 'NO_STUDIO') {
+      $config_array = explode(',', $config[$key]);
+
+      if (count($config_array) > 1) {
+        $ptr_value = $ptr;
+
+        for ($j=0; $j < count($config_array); $j++) {
+          $ptr_value = &$ptr_value[$config_array[$j]];
+        }
+      }
+      else {
+        $ptr_value = &$ptr[$config_array[0]];
+      }
+
+      switch ($key) {
+        case 'STREET': {
+          $street = $ptr_value;
+          break;
+        }
+        case 'FLOOR': {
+          $floor = $ptr_value;
+          break;
+        }
+        case 'FULLSQUARE': {
+          $full_sq = $ptr_value;
+          break;
+        }
+        case 'LIVESQUARE': {
+          $live_sq = $ptr_value;
+          break;
+        }
+        case 'ROOM': {
+          $room = $ptr_value;
+          break;
+        }
+        case 'SECTION': {
+          $section = $ptr_value;
+          break;
+        }
+        case 'NUM': {
+          if (isset($num)) {
+            $pre_num = $num;
+          }
+
+          $num = $ptr_value;
+          break;
+        }
+
+        case 'STUDIO': {
+          if (strcasecmp ($ptr_value, $config['YES_STUDIO']) == 0) {
+            $studio = 1;
+          }
+          elseif (strcasecmp ($ptr_value, $config['NO_STUDIO']) == 0) {
+            $studio = 0;
+          }
+          break;
+        }
+
+        case 'APPT': {
+          $appt = preg_replace('/[^a-z0-9\s]+/s', '', $ptr_value);
+
+          break;
+        }
+        case 'STATUS': {
+          if (strcasecmp ($ptr_value, $config['STATUS_ACTIVE']) == 0) {
+            $status = 1;
+          }
+          else if (strcasecmp ($ptr_value, $config['STATUS_RESERVED']) == 0) {
+            $status = 0;
+          }
+          else if ($method->unsold_apartments == true && strcasecmp ($ptr_value, $config['STATUS_UNSOLD']) == 0) {
+            $unsold_status = 0;
+            $status = FALSE;
+          }
+          else {
+            printf ("Error parsing STATUS in config.xml. Object %s is broken.\n", $i);
+            exit();
+          }
+          break;
+        }
+        case 'PRICE': {
+          $price = str_replace(' ','',$ptr_value);
+          break;
+        }
+        case 'COST': {
+          $cost = str_replace(' ','',$ptr_value);
+          break;
+        }
+        default: {
+        printf ("Error parsing config.xml. Object %s is broken.\n", $i);
+        exit();
+        }
+      }
+    }
+    else {
+      continue;
+    }
+  }
+
+  if($studio == 1) {
+    $room = $room.'с';
+  }
+
+  return array(
+    'street' => $street,
+    'pre_num' => $pre_num,
+    'num' => $num,
+    'app_num' => $appt,
+    'status' => $status,
+    'unsold_status' => $unsold_status,
+    'price' => $price,
+    'cost' => $cost,
+    'floor' => $floor,
+    'full_sq' => $full_sq,
+    'live_sq' => $live_sq,
+    'room' => $room,
+    'section' => isset($section) ? $section : 1,
+  );
+}
+
+
+/**
+ * Search home on the street and house number.
+ */
+function realty_data_update_search_home_street_house_number($num, $pre_num, $street) {
+  if ($num != $pre_num) {
+    $home_number = db_query("SELECT entity_id FROM field_data_field_street WHERE entity_id IN
+                 (SELECT entity_id from field_data_field_number_home_street WHERE field_number_home_street_value = :num)
+                 AND field_street_value = :street",
+      array(':num' => $num, ':street' => $street))->fetchAll();
+
+    return $home_number;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Search apartments on the street and house number.
+ */
+function realty_data_update_search_apartments_street_house_number($num, $pre_num, $street, $app_num) {
+  $home_number = realty_data_update_search_home_street_house_number($num, $pre_num, $street);
+
+  if (!empty($home_number)) {
+    $apartment = db_query("SELECT entity_id FROM field_data_field_number_apartament WHERE entity_id IN
+               (SELECT entity_id from field_data_field_apartament_home WHERE field_apartament_home_tid = :home_number)
+               AND field_number_apartament_value = :appt",
+      array(':home_number' => $home_number[0]->entity_id, ':appt' => $app_num))->fetchAll();
+
+    return $apartment;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+
+/**
+ * Import XML files.
+ */
+function realty_data_update_ftp_xml($method) {
+
+  $start_time = REQUEST_TIME;
+
+  $files = realty_data_update_connect_ftp($method->ftp_dir, $method->config_dir);
+
+  $developers = '';
+
+  foreach ($method->name as $key => $name) {
+    if (isset($method->name[$key+1])) {
+      $developers .= "'" .$name . "', ";
+    }
+    else {
+      $developers .= "'" .$name . "'";
+    }
+  }
+
+
+  $xmlNode = simplexml_load_file(realty_file_directory_path() . '/ftpfiles/' . $files['config'][0]);
+  $config = realty_data_update_xmlToArray($xmlNode);
+  //$complex_name  = $config['CONFIG']['COMPANY'];
+  $ptr = $config['CONFIG']['OBJECT'];
+  $ptr_object_array = explode(',', $ptr);
+
+  //Парсинг всех файлов находgящихся в директории ftp сервера
+  foreach ($files['files'] as $file) {
+
+    $xmlNode = simplexml_load_file(realty_file_directory_path() . '/ftpfiles/' . $file);
+
+    //Парсинг xml застройщика
+    $object = realty_data_update_xmlToArray($xmlNode);
+
+    //Формирование прямого ядреса до массива объектов
+    $ptr_object = &$object;
+    for ($i = 0; $i < count($ptr_object_array); $i++) {
+      $ptr_object = &$ptr_object[$ptr_object_array[$i]];
+    }
+
+    //Перебор объектов извлеченных из xml
+    for ($i = 0; $i < count($ptr_object); $i++) {
+      // Получение данных о квартире из XML
+      $results = realty_data_update_enumerating_objects_xml($config['CONFIG'], $method, $ptr_object, $i);
+
+      //Поиск i-го объекта в базе данных (поиск id дома
+
+      $apartment = realty_data_update_search_apartments_street_house_number($results['num'], $results['pre_num'], $results['street'], $results['app_num']);
+
+      //Сравнение значений в базе и в xml
+      if ($apartment) {
+
+        $db_status = db_query("SELECT field_status_value FROM field_data_field_status WHERE entity_id  = :apartment",
+          array(':apartment' => $apartment[0]->entity_id))->fetchAll();
+
+        $db_cost = db_query("SELECT field_full_cost_value FROM field_data_field_full_cost WHERE entity_id  = :apartment",
+          array(':apartment' => $apartment[0]->entity_id))->fetchAll();
+
+        //Загрузка квартиры
+        $node = node_load($apartment[0]->entity_id);
+        //Установка статуса обновления(квартира найдена)
+        $node->field_status_update[LANGUAGE_NONE][0]['value'] = 1;
+
+        //Если квартира продана
+        if ($results['unsold_status'] == 0 && $node->status != 0) {
+
+            $node->status = 0;
+
+            printf ("Updated unsold status appt #%s\n", $apartment[0]->entity_id);
+
+            $tid_home = $node->field_apartament_home[LANGUAGE_NONE][0]['tid'];
+            $home = taxonomy_term_load($tid_home);
+
+            $nid_complex = $home->field_home_complex[LANGUAGE_NONE][0]['target_id'];
+            $node_complex = node_load($nid_complex);
+
+            $tid_developer = $node_complex->field_complex_developer[LANGUAGE_NONE][0]['tid'];
+
+            // Запись информации о продаже квартиры
+            $db_query = db_query("INSERT INTO realty_data_update_logs (tid_developer, nid_complex, tid_home,
+                                      nid_apartment, old_status, new_status, start_time)
+                                    VALUES (:tid_developer, :nid_complex, :tid_home,
+                                      :nid_apartment, :old_status, :new_status, :start_time)",
+              array(
+                ':tid_developer' => $tid_developer,
+                ':nid_complex' => $nid_complex,
+                ':tid_home' => $tid_home,
+                ':nid_apartment' => $node->nid,
+                ':old_status' => (int)$db_status[0]->field_status_value,
+                ':new_status' => 9,
+                ':start_time' => $start_time)
+            );
+
+        }
+        // Если квартира не продана
+        else {
+
+          if ($node->status == 0) {
+            $node->status = 1;
+            printf ("node->status = 1 #%s\n", $apartment[0]->entity_id);
+          }
+
+          // Если статус изменился
+          if ((int)$results['status'] != (int)$db_status[0]->field_status_value) {
+
+            print_r($node->status);
+
+            $node->field_status[LANGUAGE_NONE][0]['value'] = (int)$results['status'];
+
+            $tid_home = $node->field_apartament_home[LANGUAGE_NONE][0]['tid'];
+            $home = taxonomy_term_load($tid_home);
+
+            $nid_complex = $home->field_home_complex[LANGUAGE_NONE][0]['target_id'];
+            $node_complex = node_load($nid_complex);
+
+            $tid_developer = $node_complex->field_complex_developer[LANGUAGE_NONE][0]['tid'];
+
+            // Запись информации об изменении статуса
+            $db_query = db_query ("INSERT INTO realty_data_update_logs (tid_developer, nid_complex, tid_home,
+                                      nid_apartment, old_status, new_status, start_time)
+                                    VALUES (:tid_developer, :nid_complex, :tid_home,
+                                      :nid_apartment, :old_status, :new_status, :start_time)",
+              array (
+                ':tid_developer' => $tid_developer,
+                ':nid_complex' => $nid_complex,
+                ':tid_home' => $tid_home,
+                ':nid_apartment' => $node->nid,
+                ':old_status' => (int)$db_status[0]->field_status_value,
+                ':new_status' => (int)$results['status'],
+                ':start_time' => $start_time)
+            );
+
+            printf ("Updated status appt #%s\n", $apartment[0]->entity_id);
+          }
+
+        }
+
+        // Если квартира не забронирована
+        if ($results['status'] != 0) {
+
+          // Если стоимость изменилась
+          if (!empty($results['cost']) && (int)$results['cost'] != (int)$db_cost[0]->field_full_cost_value) {
+
+            $node->field_full_cost[LANGUAGE_NONE][0]['value'] = (int)$results['cost'];
+
+            $tid_home = $node->field_apartament_home[LANGUAGE_NONE][0]['tid'];
+            $home = taxonomy_term_load($tid_home);
+
+            $nid_complex = $home->field_home_complex[LANGUAGE_NONE][0]['target_id'];
+            $node_complex = node_load($nid_complex);
+
+            $tid_developer = $node_complex->field_complex_developer[LANGUAGE_NONE][0]['tid'];
+
+            //// Запись информации об изменении стоимости
+            $db_query = db_query ("INSERT INTO realty_data_update_logs (tid_developer, nid_complex, tid_home,
+                                      nid_apartment,old_cost, new_cost, start_time)
+                                    VALUES (:tid_developer, :nid_complex, :tid_home,
+                                      :nid_apartment, :old_cost, :new_cost, :start_time)",
+              array(
+                ':tid_developer' => $tid_developer,
+                ':nid_complex' => $nid_complex,
+                ':tid_home' => $tid_home,
+                ':nid_apartment' => $node->nid,
+                ':old_cost' => (int)$db_cost[0]->field_full_cost_value,
+                ':new_cost' => (int)$results['cost'],
+                ':start_time' => $start_time)
+            );
+
+            printf ("Updated cost appt #%s\n", $apartment[0]->entity_id);
+          }
+        }
+        //Сохранение квартиры
+        node_save($node);
+      }
+      // Если квартира не обнаружена в базе то записывается иноформация о новой квартире
+      else {
+        // Поиск записи о квартире в таблице новых квартир
+        $res = db_query("SELECT realty_data_update_new_apartments.id, realty_data_update_new_apartments.status, realty_data_update_new_apartments.coast
+          FROM realty_data_update_new_apartments
+          WHERE realty_data_update_new_apartments.number_apartment = :apartament_num AND
+                realty_data_update_new_apartments.street = :street AND
+                realty_data_update_new_apartments.number_home_street = :num_home_str",
+          array(':apartament_num' => $results['app_num'], ':street' => $results['street'], ':num_home_str' => $results['num']))
+          ->fetchAll();
+
+        //Если квартира найдена
+        if($res) {
+          //Если данные изменились о квартире то обновляем их
+          if($res[0]->status != $results['status'] || $res[0]->coast != $results['cost']) {
+            empty($results['cost']) ? $results['cost'] = $res[0]->coast : $results['cost'];
+
+            db_query("UPDATE realty_data_update_new_apartments
+            SET realty_data_update_new_apartments.status = :status AND
+                realty_data_update_new_apartments.coast = :cost
+            WHERE realty_data_update_new_apartments.number_apartment = :apartament_num AND
+                  realty_data_update_new_apartments.street = :street AND
+                realty_data_update_new_apartments.number_home_street = :num_home_str
+          ", array(':apartament_num' => $results['app_num'], ':street' => $results['street'], ':num_home_str' => $results['num'], ':status' => $results['status'], ':cost' => $results['cost']));
+          }
+        }
+        //Если нет информации о новой квартире
+        else {
+          //если она не продана добовляем запись о новой квартире
+          if ($results['unsold_status'] != 0) {
+            //select name developer and complex
+            $complex = db_query("SELECT node.title, node.nid
+            FROM node
+            WHERE node.nid IN (
+              SELECT field_data_field_home_complex.field_home_complex_target_id
+              FROM field_data_field_home_complex
+              LEFT JOIN field_data_field_street ON field_data_field_home_complex.entity_id = field_data_field_street.entity_id
+              LEFT JOIN field_data_field_number_home_street ON field_data_field_home_complex.entity_id = field_data_field_number_home_street.entity_id
+              WHERE field_data_field_street.field_street_value = :street AND
+                    field_data_field_number_home_street.field_number_home_street_value = :num_home_street
+            )", array(':street' => $results['street'], ':num_home_street' => $results['num']))->fetchAll();
+            $complex_name = $complex[0]->title;
+
+            $developer = db_query("SELECT taxonomy_term_data.name
+            FROM taxonomy_term_data
+            WHERE taxonomy_term_data.tid IN (
+              SELECT field_data_field_complex_developer.field_complex_developer_tid
+              FROM field_data_field_complex_developer
+              WHERE field_data_field_complex_developer.entity_id = :complex_nid
+            )", array(':complex_nid' => $complex[0]->nid))->fetchAll();
+            $developer_name = $developer[0]->name;
+
+            //add apartment
+            db_query("INSERT INTO realty_data_update_new_apartments
+              (number_apartment, complex, developer, street, number_home_street, status, coast)
+              VALUES (:a, :complex, :d, :s, :nh, :status, :coast)",
+              array(':a' => $results['app_num'], ':complex' => $complex_name, ':d' => $developer_name, ':s' => $results['street'], ':nh' => $results['num'], ':status' => $results['status'], ':coast' => $results['cost']));
+          }
+        }
+      }
+    }
+
+    // Удаление файла (удаление файла не происходит. только фиксируется время последненго обновления)
+   /*realty_data_update_delete_file($files['connect'], $method->ftp_dir . '/' . $file, array (
+      'developer' => $method->tid_developer)
+    );*/
+  }
+
+  //Если в файле не существует проданный квартир
+  if ($method->unsold_apartments == false) {
+    realty_data_update_unfound_apartments_developer($method->tid_developer[0]);
+  }
+  return;
+}
+
+/**
+ * Import excel files.
+ */
+function realty_data_update_ftp_excel($method) {
+  $files = realty_data_update_connect_ftp($method->ftp_dir, $method->config_dir);
+
+  $config = json_decode(file_get_contents(realty_file_directory_path() . '/ftpfiles/' . $files['config'][0]));
+
+
+  $developers = '';
+  foreach ($method->name as $key => $name) {
+    if (isset($method->name[$key+1])) {
+      $developers .= "'" .$name . "', ";
+    }
+    else {
+      $developers .= "'" .$name . "'";
+    }
+  }
+
+  foreach($files['files'] as $file) {
+    //Парсинг файла
+    $excel = realty_file_directory_path() . '/ftpfiles/' . $file;
+    $excel_array = realty_data_update_array_from_file($excel);
+
+    //Пребор файла
+    foreach ($excel_array as $key => $exc) {
+      //если поиск квартир будет происходить по жилому комплексу и по дому
+      if (isset($method->complex)) {
+        $complex = $method->complex[0];
+        $home = '';
+        for($i=0; $i<strlen($exc[$config[0]->home]); $i++) {
+          is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
+        }
+
+        $appt = $exc[$config[0]->appt];
+        $price = $exc[$config[0]->price];
+        $cost = $exc[$config[0]->cost];
+        $status = $exc[$config[0]->status];
+        $live_sq = $exc[$config[0]->live_sq];
+
+        //поиск квартиры в базе
+        $result = realty_data_update_select_apartment_complex_home($complex, $home, $appt);
+
+        //если квартира существует в базе
+        if ($result) {
+          $node = node_load($result[0]->nid);
+          printf("node:#%s\n", $node->nid);
+
+          if(!empty($node->field_living_space) && $node->field_living_space[LANGUAGE_NONE][0]['value'] != $live_sq) {
+            $node->field_living_space[LANGUAGE_NONE][0]['value'] = $live_sq;
+          }
+
+          //если стоимость не совпадает
+          if ($cost != $result[0]->field_full_cost_value) {
+            $node->field_full_cost[LANGUAGE_NONE][0]['value'] = $cost;
+          }
+          //статус обновления
+          $node->field_status_update[LANGUAGE_NONE][0]['value'] = 1;
+
+          //если статус всегда ативный
+          if($status = 'active') {
+            $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
+          }
+
+          $node->status = 1;
+          node_save($node);
+        }
+        //если квартира не найдена в базе
+        else {
+          //поиск в таблице новые квартиры
+          $res = db_query("SELECT realty_data_update_new_apartments.id, realty_data_update_new_apartments.status, realty_data_update_new_apartments.coast
+            FROM realty_data_update_new_apartments
+            WHERE realty_data_update_new_apartments.number_apartment = :apartament_num AND
+                  realty_data_update_new_apartments.complex = :complex AND
+                  realty_data_update_new_apartments.number_home_complex = :num_home",
+            array(':apartament_num' => $appt, ':complex' => $complex, ':num_home' => $home))
+            ->fetchAll();
+          //если найдена в таблице новые квартиры
+          if($res) {
+            //обновление данных в таблице новые квартиры
+            db_query("UPDATE realty_data_update_new_apartments
+            SET realty_data_update_new_apartments.coast = :cost
+            WHERE realty_data_update_new_apartments.number_apartment = :apartament_num AND
+                  realty_data_update_new_apartments.complex = :complex AND
+                  realty_data_update_new_apartments.number_home_complex = :num_home
+            ", array(':apartament_num' => $appt, ':complex' => $complex, ':num_home' => $home, ':cost' => $cost));
+          }
+          //если не найдена в таблице новые квартиры
+          else {
+            //поиск комплекса по названию
+            $complex_nid = db_query("SELECT node.nid
+            FROM node
+            WHERE node.title = :complex_name", array(':complex_name' => $complex))->fetchAll();
+
+            //поиск щастройщика по жк
+            $developer = db_query("SELECT taxonomy_term_data.name
+            FROM taxonomy_term_data
+            WHERE taxonomy_term_data.tid IN (
+              SELECT field_data_field_complex_developer.field_complex_developer_tid
+              FROM field_data_field_complex_developer
+              WHERE field_data_field_complex_developer.entity_id = :complex_nid
+            )", array(':complex_nid' => $complex_nid[0]->nid))->fetchAll();
+            $developer_name = $developer[0]->name;
+
+            //добавление записи о новой квартире в таблицу новые квартиры
+            db_query("INSERT INTO realty_data_update_new_apartments
+              (number_apartment, complex, developer, number_home_complex, coast)
+              VALUES (:apartament_num, :complex, :developer, :num_home, :coast)",
+              array(':apartament_num' => $appt, ':developer' => $developer_name, ':complex' => $complex, ':num_home' => $home, ':coast' => $cost));
+
+          }
+
+        }
+      }
+    }
+    //выборка квартир не найденых в файле
+    realty_data_update_select_unfound_apartment_complex_home($complex);
+
+    return;
+  }
+
+}
+
+/**
+ * The connection to the ftp server.
+ */
+function realty_data_update_connect_ftp($method_dir, $config_dir) {
+  $connect = ftp_connect(FTP_HOST);
+
+  if(!$connect) {
+    die('Error connect');
+  }
+
+  ftp_login($connect, FTP_USER, FTP_PASSWORD);
+  $config_files =  ftp_nlist($connect, $config_dir);
+  $name_file = explode('/', $config_files[0]);
+  $fp = fopen(realty_file_directory_path(). '/ftpfiles/' . $name_file[3], "w");
+  fclose($fp);
+  ftp_get($connect, realty_file_directory_path(). '/ftpfiles/' . $name_file[3], $config_files[0], FTP_BINARY);
+  
+  $local_files['config'][] =  $name_file[3];
+
+  $files = ftp_nlist($connect, $method_dir);
+  foreach ($files as $file) {
+    $name_file = explode('/', $file);
+    $fp = fopen(realty_file_directory_path(). '/ftpfiles/' . $name_file[3], "w");
+    fclose($fp);
+    ftp_get($connect, realty_file_directory_path(). '/ftpfiles/' . $name_file[3], $file, FTP_BINARY);
+    $local_files['files'][] =  $name_file[3];
+  }
+
+  $local_files['connect'] = $connect;
+
+  return $local_files;
+}
+
+/**
+ * The choice of method update
+ */
+function realty_data_update_method_update() {
+  return json_decode(file_get_contents(
+      drupal_get_path('module', 'realty_data_update') . '/configuration_developer.json')
+  );
+}
+
+/**
+ * Convert the image into an array.
+ */
+function realty_data_update_array_from_file($file) {
+  $lib_dir = libraries_load('PHPExcel');
+
+  //require_once($lib_dir . '/PHPExcel/IOFactory.php');
+  if ($lib_dir) {
+    $objPHPExcel = PHPExcel_IOFactory::load(drupal_realpath($file));
+    $objPHPExcel->setActiveSheetIndex(0);
+    $aSheet = $objPHPExcel->getActiveSheet();
+
+    foreach ($aSheet->getRowIterator() as $rkey => $row) {
+      $cellIterator = $row->getCellIterator();
+      switch ($rkey) {
+        case 1:
+          foreach ($cellIterator as $ckey => $cell) {
+            $kkey[$ckey] = $cell->getCalculatedValue();
+          }
+          break;
+
+        default:
+          $i = 0;
+          foreach ($cellIterator as $ckey => $cell) {
+            $res[$rkey][$i] = trim($cell->getCalculatedValue());
+            $i++;
+          }
+      }
+    }
+  }
+  else {
+    die('phpexcel not found');
+  }
+  return $res;
+}
+
+/**
+ * Picks unfound apartments.
+ */
+function realty_data_update_unfound_apartments_developer($tid_developer) {
+  //Выборка квартир которые не обнорружены в файле(статус обновлния field_status_update_value)
+  $result_ap = db_query("SELECT node.nid
+        FROM node
+        LEFT JOIN field_data_field_status_update ON node.nid = field_data_field_status_update.entity_id
+        LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+        LEFT JOIN field_data_field_street ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_street.entity_id
+        LEFT JOIN field_data_field_number_home_street ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_number_home_street.entity_id
+        LEFT JOIN field_data_field_home_complex ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_home_complex.entity_id
+        LEFT JOIN field_data_field_complex_developer ON field_data_field_home_complex.field_home_complex_target_id = field_data_field_complex_developer.entity_id
+        LEFT JOIN taxonomy_term_data ON field_data_field_complex_developer.field_complex_developer_tid = taxonomy_term_data.tid
+        WHERE node.type = 'apartament' AND node.status = 1 AND (field_data_field_status_update.field_status_update_value = 0 OR field_data_field_status_update.field_status_update_value = '') AND taxonomy_term_data.tid IN ($tid_developer)
+        ")->fetchAll();
+
+  //Квартирам которые не найденые в файле ставим статус не опубликовано(продано)
+  foreach($result_ap as $res) {
+    $node = node_load($res->nid);
+    $node->status = 0;
+    node_save($node);
+  }
+  // Обновляем статус обновления у всех квартир застройщика текущего файла
+  db_query("UPDATE {node}
+        JOIN field_data_field_status_update ON node.nid = field_data_field_status_update.entity_id
+        LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+        LEFT JOIN field_data_field_street ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_street.entity_id
+        LEFT JOIN field_data_field_number_home_street ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_number_home_street.entity_id
+        LEFT JOIN field_data_field_home_complex ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_home_complex.entity_id
+        LEFT JOIN field_data_field_complex_developer ON field_data_field_home_complex.field_home_complex_target_id = field_data_field_complex_developer.entity_id
+        LEFT JOIN taxonomy_term_data ON field_data_field_complex_developer.field_complex_developer_tid = taxonomy_term_data.tid
+        SET field_data_field_status_update.field_status_update_value = 0
+        WHERE node.type = 'apartament' AND taxonomy_term_data.tid IN ($tid_developer)
+        ");
+
+  return TRUE;
+}
+
+/**
+ * Search Home of the residential complex and house number.
+ */
+function realty_data_update_select_home_complex_number_home($complex, $home) {
+  $home = db_query("SELECT taxonomy_term_data.tid
+            FROM taxonomy_term_data
+            LEFT JOIN field_data_field_home_complex ON taxonomy_term_data.tid = field_data_field_home_complex.entity_id
+            LEFT JOIN field_data_field_number_home ON taxonomy_term_data.tid = field_data_field_number_home.entity_id
+            LEFT JOIN node ON field_data_field_home_complex.field_home_complex_target_id = node.nid
+            WHERE node.title = :complex AND field_data_field_number_home.field_number_home_value = :home
+        ", array(':complex' => $complex, ':home' => $home))->fetchAll();
+
+  return $home;
+}
+
+/**
+ *  Selection of apartments for complexes and home in complex.
+ */
+function realty_data_update_select_apartment_complex_home($complex, $home, $appt) {
+
+  $home = realty_data_update_select_home_complex_number_home($complex, $home);
+  if(!empty($home)) {
+    $result_ap = db_query("SELECT node.nid, field_data_field_number_apartament.field_number_apartament_value, field_data_field_price.field_price_value,
+          field_data_field_full_cost.field_full_cost_value
+          FROM node
+          LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+          LEFT JOIN field_data_field_number_apartament ON node.nid = field_data_field_number_apartament.entity_id
+          LEFT JOIN field_data_field_price ON node.nid = field_data_field_price.entity_id
+          LEFT JOIN field_data_field_full_cost ON node.nid = field_data_field_full_cost.entity_id
+          WHERE node.type = 'apartament'
+          AND field_data_field_apartament_home.field_apartament_home_tid = :home_tid
+            AND field_data_field_number_apartament.field_number_apartament_value = :appt
+          ", array(':home_tid' => $home[0]->tid, ':appt' => $appt))->fetchAll();
+
+    return $result_ap;
+  }
+
+  return FALSE;
+}
+
+/**
+ *  Selection unfound of apartments for complexes and home in complex
+ */
+function realty_data_update_select_unfound_apartment_complex_home($complex) {
+  //поиск кватир не найденых в файле по текущему жк
+  $result_ap = db_query("SELECT node.nid
+        FROM node
+        LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+        LEFT JOIN field_data_field_status_update ON node.nid = field_data_field_status_update.entity_id
+        WHERE node.type = 'apartament'
+        AND field_data_field_apartament_home.field_apartament_home_tid
+          IN (SELECT taxonomy_term_data.tid
+            FROM taxonomy_term_data
+            LEFT JOIN field_data_field_home_complex ON taxonomy_term_data.tid = field_data_field_home_complex.entity_id
+            LEFT JOIN field_data_field_number_home ON taxonomy_term_data.tid = field_data_field_number_home.entity_id
+            LEFT JOIN node ON field_data_field_home_complex.field_home_complex_target_id = node.nid
+            WHERE node.title = :complex)
+        AND field_data_field_status_update.field_status_update_value = '0'
+        AND node.status = '1'
+        ", array(':complex' => $complex,))->fetchAll();
+  //если нашлись то устанавлdru иваем статус продано
+  if ($result_ap) {
+    foreach($result_ap as $app) {
+      $log_data[$app->nid]['status'] = 'sold';
+      $node = node_load($app->nid);
+      $node->status = 0;
+      node_save($node);
+    }
+  }
+  //обновляем статус обновления
+  db_query("UPDATE {node}
+        LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+        LEFT JOIN field_data_field_status_update ON node.nid = field_data_field_status_update.entity_id
+        SET field_data_field_status_update.field_status_update_value = 0
+        WHERE node.type = 'apartament'
+          AND field_data_field_apartament_home.field_apartament_home_tid
+            IN (SELECT taxonomy_term_data.tid
+              FROM taxonomy_term_data
+              LEFT JOIN field_data_field_home_complex ON taxonomy_term_data.tid = field_data_field_home_complex.entity_id
+              LEFT JOIN field_data_field_number_home ON taxonomy_term_data.tid = field_data_field_number_home.entity_id
+              LEFT JOIN node ON field_data_field_home_complex.field_home_complex_target_id = node.nid
+              WHERE node.title = :complex)
+          ", array(':complex' => $complex,));
+
+  return;
+}
+
+/**
+ * Table update with new apartments.
+ */
+function realty_data_update_update_table_new_apartments() {
+  $apartments = db_query("SELECT * FROM realty_data_update_new_apartments")->fetchAll();
+
+  foreach($apartments as $apartment) {
+    if($apartment->number_apartment && $apartment->complex && $apartment->number_home_complex) {
+
+      $result_ap = db_query("SELECT node.nid
+        FROM node
+        LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+        LEFT JOIN field_data_field_number_home ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_number_home.entity_id
+        LEFT JOIN field_data_field_home_complex ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_home_complex.entity_id
+        LEFT JOIN field_data_field_number_apartament ON node.nid = field_data_field_number_apartament.entity_id
+        WHERE node.type = 'apartament'
+        AND
+        field_data_field_home_complex.field_home_complex_target_id
+          IN (SELECT node.nid
+            FROM node
+            WHERE node.type = 'complex' AND node.title = :complex)
+        AND field_data_field_number_home.field_number_home_value = :num_home
+        AND field_data_field_number_apartament.field_number_apartament_value = :ap_num
+        ", array(':ap_num' => $apartment->number_apartment, ':complex' => $apartment->complex, ':num_home' => $apartment->number_home_complex))->fetchAll();
+
+      if(!empty($result_ap)) {
+        realty_data_update_delete_apartment_table($apartment->id);
+      }
+    }
+
+    elseif($apartment->number_apartment && $apartment->street && $apartment->number_home_street ) {
+      $result_ap = db_query("SELECT node.nid
+        FROM node
+        LEFT JOIN field_data_field_number_apartament ON node.nid = field_data_field_number_apartament.entity_id
+        LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+        LEFT JOIN field_data_field_number_home_street ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_number_home_street.entity_id
+        LEFT JOIN field_data_field_street ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_street.entity_id
+        WHERE node.type = 'apartament'
+              AND field_data_field_number_home_street.field_number_home_street_value = :num_home
+              AND field_data_field_street.field_street_value = :street
+              AND field_data_field_number_apartament.field_number_apartament_value = :ap_num
+               ", array(':ap_num' => $apartment->number_apartment, ':street' => $apartment->street, ':num_home' => $apartment->number_home_street))->fetchAll();
+
+      if(!empty($result_ap)) {
+        realty_data_update_delete_apartment_table($apartment->id);
+      }
+    }
+  }
+
+}
+
+/**
+ * Delete apartment with table new apartments.
+ */
+function realty_data_update_delete_apartment_table($apartment) {
+  db_query("DELETE FROM realty_data_update_new_apartments WHERE realty_data_update_new_apartments.id = :app_id",
+    array(':app_id' => $apartment));
+
+  return;
+}
+
+/**
+ * builder form update list new apartments.
+ */
+function realty_data_update_update_list_new_apartments() {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Обновить список'),
+  );
+
+  $form['#submit'][] = 'realty_data_update_update_list_new_apartments_submit';
+
+  return $form;
+}
+
+/**
+ * builder form update list new apartments.
+ */
+function realty_data_update_clear_list_new_apartments_form() {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Очистить список'),
+  );
+
+  $form['#submit'][] = 'realty_data_update_clear_list_new_apartments_submit';
+
+  return $form;
+}
+
+/**
+ * submit to realty_data_update_update_list_new_apartments
+ */
+function realty_data_update_update_list_new_apartments_submit($form, &$form_state) {
+  realty_data_update_update_table_new_apartments();
+
+  return 0;
+}
+
+/**
+ * submit to realty_data_update_clear_list_new_apartments
+ */
+function realty_data_update_clear_list_new_apartments_submit($form, &$form_state) {
+  db_query("DELETE FROM realty_data_update_new_apartments");
+}
+
+
+/**
+ * Create a new apartment.
+ */
+function realty_data_update_add_new_apartment($param) {
+  $home = taxonomy_term_load($param['home_tid']);
+  $file = file_load($param['plan_fid']);
+
+  $node = new stdClass();
+  $node->type = 'apartament';
+  node_object_prepare($node);
+  $node->title = $home->name . ', кв ' . $param['ap_num'];
+  $node->language = LANGUAGE_NONE;
+  $node->uid = 1;
+  $node->status = $param['public'];
+  $node->promote = 1;
+  $node->field_number_apartament[LANGUAGE_NONE][0]['value'] = $param['ap_num'];
+  $node->field_apartament_home[LANGUAGE_NONE][0]['tid'] = $home->tid;
+  $node->field_status[LANGUAGE_NONE][0]['value'] = $param['status'];
+  $node->field_plan_apartment[LANGUAGE_NONE][0] = (array)$file;
+  $node->field_apartment_floor[LANGUAGE_NONE][0]['value'] = $param['floor'];
+  $node->field_price[LANGUAGE_NONE][0]['value'] = (int)$param['price'];
+  $node->field_gross_area[LANGUAGE_NONE][0]['value'] = str_replace(",", ".", $param['full_sq']);
+  $node->field_living_space[LANGUAGE_NONE][0]['value'] = $param['live_sq'] ? str_replace(",", ".", $param['live_sq']) :0;
+  $node->field_hiden_status[LANGUAGE_NONE][0]['value'] = 0;
+  $node->field_number_rooms[LANGUAGE_NONE][0]['value'] = $param['room'];
+  $node->field_section[LANGUAGE_NONE][0]['value'] = $param['section'];
+  $node->field_status_update[LANGUAGE_NONE][0]['value'] = 1;
+  $node->field_full_cost[LANGUAGE_NONE][0]['value'] = (int)$param['cost'];
+  node_save($node);
+  printf ("Add apartment nid %s \n", $node->nid);
+}
+
+/**
+ * the addition of new apartments in the XML file.
+ */
+function realty_data_update_add_apartments_ftp_xml($method) {
+
+  $files = realty_data_update_connect_ftp($method->ftp_dir, $method->config_dir);
+
+  $developers = '';
+
+  foreach ($method->name as $key => $name) {
+    if (isset($method->name[$key+1])) {
+      $developers .= "'" .$name . "', ";
+    }
+    else {
+      $developers .= "'" .$name . "'";
+    }
+  }
+
+
+  $xmlNode = simplexml_load_file(realty_file_directory_path() . '/ftpfiles/' . $files['config'][0]);
+  $config = realty_data_update_xmlToArray($xmlNode);
+  //$complex_name  = $config['CONFIG']['COMPANY'];
+  $ptr = $config['CONFIG']['OBJECT'];
+  $ptr_object_array = explode(',', $ptr);
+
+  //Парсинг всех файлов находgящихся в директории ftp сервера
+  foreach ($files['files'] as $file) {
+
+    $xmlNode = simplexml_load_file(realty_file_directory_path() . '/ftpfiles/' . $file);
+
+    //Парсинг xml застройщика
+    $object = realty_data_update_xmlToArray($xmlNode);
+
+    //Формирование прямого ядреса до массива объектов
+    $ptr_object = &$object;
+    for ($i = 0; $i < count($ptr_object_array); $i++) {
+      $ptr_object = &$ptr_object[$ptr_object_array[$i]];
+    }
+
+    //Перебор объектов извлеченных из xml
+    for ($i = 0; $i < count($ptr_object); $i++) {
+
+      printf (":) ");
+
+      $results = realty_data_update_enumerating_objects_xml($config['CONFIG'], $method, $ptr_object, $i);
+
+      //Поиск i-го объекта в базе данных (поиск id дома)
+      $apartment = realty_data_update_search_apartments_street_house_number($results['num'], $results['pre_num'], $results['street'], $results['app_num']);
+
+      if(!$apartment) {
+        $home = realty_data_update_search_home_street_house_number($results['num'], $results['pre_num'], $results['street']);
+        if(!empty($home)) {
+          $plan = realty_plan_get_apartment_plan($results['app_num'], $home[0]->entity_id);
+
+          if ($results['app_num'] == 16) {
+            print 16 . '-' . $results['num'] . '-' . $results['status'];
+          }
+
+          if(!empty($plan) && isset($results['status'])) {
+            realty_data_update_add_new_apartment( array (
+              'home_tid' => $home[0]->entity_id,
+              'plan_fid' => $plan[0]->path_file,
+              'ap_num' => $results['app_num'],
+              'public' => $results['unsold_status'],
+              'status' => $results['status'],
+              'floor' => $results['floor'],
+              'price' => $results['price'],
+              'full_sq' => $results['full_sq'],
+              'live_sq' => $results['live_sq'],
+              'room' => $results['room'],
+              'section' => $results['section'],
+              'cost' => $results['cost']
+              )
+            );
+
+          }
+        }
+      }
+
+    }
+  }
+}
+
+/**
+ * the addition of new apartments in the Excele file.
+ */
+function realty_data_update_add_apartments_ftp_excel($method) {
+  $files = realty_data_update_connect_ftp($method->ftp_dir, $method->config_dir);
+
+  $config = json_decode(file_get_contents(realty_file_directory_path() . '/ftpfiles/' . $files['config'][0]));
+
+
+  $developers = '';
+  foreach ($method->name as $key => $name) {
+    if (isset($method->name[$key+1])) {
+      $developers .= "'" .$name . "', ";
+    }
+    else {
+      $developers .= "'" .$name . "'";
+    }
+  }
+
+  foreach($files['files'] as $file) {
+    $excel = realty_file_directory_path() . '/ftpfiles/' . $file;
+    $excel_array = realty_data_update_array_from_file($excel);
+    foreach ($excel_array as $key => $exc) {
+
+      printf (":) ");
+
+      if (isset($method->complex)) {
+        $complex = $method->complex[0];
+        $home = '';
+        for($i=0; $i<strlen($exc[$config[0]->home]); $i++) {
+          is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
+        }
+
+        $appt = $exc[$config[0]->appt];
+        $price = $exc[$config[0]->price];
+        $cost = $exc[$config[0]->cost];
+        $full_sq = $exc[$config[0]->full_sq];
+        $live_sq = $exc[$config[0]->live_sq];
+        $floor = $exc[$config[0]->floor];
+        $room = $exc[$config[0]->room];
+
+        if($config[0]->status == 'active') {
+          $status = 1;
+          $public = 1;
+        }
+
+        if(!isset($exc[$config[0]->section])) {
+          $section = 1;
+        } else {
+          $section = $exc[$config[0]->section];
+        }
+
+        $apartment = realty_data_update_select_apartment_complex_home($complex, $home, $appt);
+
+        if(!$apartment) {
+          $home = realty_data_update_select_home_complex_number_home($complex, $home);
+          if(!empty($home)) {
+            $plan = realty_plan_get_apartment_plan($appt, $home[0]->tid);
+
+            if(!empty($plan)) {
+              realty_data_update_add_new_apartment(array(
+                'home_tid' => $home[0]->tid,
+                'plan_fid' => $plan[0]->path_file,
+                'ap_num' => $appt,
+                'public' => $public,
+                'status' => $status,
+                'floor' => $floor,
+                'price' => $price,
+                'full_sq' => $full_sq,
+                'live_sq' => $live_sq,
+                'room' => $room,
+                'section' => $section,
+                'cost' => $cost
+              ));
+            }
+
+          }
+        }
+
+      }
+    }
+  }
+
+}

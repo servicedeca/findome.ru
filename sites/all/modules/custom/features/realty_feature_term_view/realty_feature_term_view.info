@@ -1,0 +1,12 @@
+name = realty_feature_term_view
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = realty_feature_term_view
+dependencies[] = entityreference
+dependencies[] = views
+dependencies[] = views_content
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = term_view
+features_exclude[dependencies][ctools] = ctools

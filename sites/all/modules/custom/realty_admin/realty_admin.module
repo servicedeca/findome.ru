@@ -1,0 +1,817 @@
+<?php
+
+/**
+ * Implement hook_menu()
+ */
+function realty_admin_menu() {
+  $item['admin/content/realty'] = array(
+    'title' => t('Findome'),
+    'page callback' => 'realty_admin_page_bookings',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/bookings'] = array(
+    'title' => t('Бронирования'),
+    'page callback' => 'realty_admin_page_bookings',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/mortgage'] = array(
+    'title' => t('Заявки на ипотеку'),
+    'page callback' => 'realty_admin_page_mortgage',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/summary_info'] = array(
+    'title' => t('Сводная информация'),
+    'page callback' => 'realty_admin_page_summary_info',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/average_price'] = array(
+    'title' => t('Средня цена за кв'),
+    'page callback' => 'realty_admin_page_average_price',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  $item['admin/content/realty/feedback'] = array(
+    'title' => t('Обратная связь'),
+    'page callback' => 'realty_admin_page_feedback',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  return $item;
+}
+
+
+/**
+ * Implement hook_theme()
+ */
+function realty_admin_theme() {
+
+  $base = array(
+    'file' => 'theme.inc',
+    'path' => drupal_get_path('module', 'realty_admin') . '/theme',
+  );
+
+  $items['realty_admin_summary_info'] = $base + array(
+      'template' => 'realty-admin-summary-info',
+      'variables' => array(
+        'args' => NULL
+      ),
+    );
+
+  $items['realty_admin_average_price'] = $base + array(
+      'template' => 'realty-admin-average-price',
+      'variables' => array(
+        'args' => NULL
+      ),
+    );
+
+  $items['realty_admin_theme_page_feedback'] = $base + array(
+      'template' => 'realty-admin-theme-page-feedback',
+      'variables' => array(
+        'args' => NULL
+      ),
+    );
+
+  return $items;
+}
+
+/**
+ * Page callback to admin/content/realty/feedback.
+ */
+function realty_admin_page_feedback() {
+  $a = 1;
+
+  $questions = array();
+  $excur = array();
+  $callback = array();
+
+  $result = db_query("SELECT *
+                      FROM realty_feedback")->fetchAll();
+
+  foreach ($result as $val) {
+    if($val->type == 'callback') {
+      $callback[] = array(
+        'date' => date('d-m-Y', $val->date),
+        'name' => $val->name,
+        'email' => $val->email,
+        'phone' => $val->phone,
+        'date_call' => $val->date_callback
+       );
+    }
+
+    if($val->type == 'excur') {
+      $excur[] = array(
+        'date' => date('d-m-Y', $val->date),
+        'name' => $val->name,
+        'email' => $val->email,
+        'phone' => $val->phone,
+        'date_call' => $val->date_callback,
+        'complex' => node_load($val->complex)->title
+      );
+    }
+
+    if($val->type == 'question') {
+      $questions[] = array(
+        'date' => date('d-m-Y', $val->date),
+        'name' => $val->name,
+        'email' => $val->email,
+        'phone' => $val->phone,
+        'questions_offers' => $val->questions_offers
+      );
+    }
+
+    if($val->type == 'selection') {
+      $selection[] = array(
+        'date' => date('d-m-Y', $val->date),
+        'name' => $val->name,
+        'email' => $val->email,
+        'phone' => $val->phone,
+        'questions_offers' => $val->questions_offers
+      );
+    }
+  }
+
+  return theme('realty_admin_theme_page_feedback', $var = array(
+    'callback' => $callback,
+    'excur' => $excur,
+    'questions' => $questions,
+    'selection' => $selection
+  ));
+
+}
+
+/**
+ * Page callback to admin/content/bookings
+ */
+function realty_admin_page_bookings() {
+
+  return $view = views_embed_view('booking_mortgage_admin', 'bookings_admin');
+}
+
+/**
+ * Page callback to admin/content/mortgage
+ */
+function realty_admin_page_mortgage() {
+
+  return $view = views_embed_view('booking_mortgage_admin', 'mortgage_admin');
+}
+
+/**
+ *  Get all the developers of the city
+ */
+function realty_admin_get_developers_city($city_tid) {
+  return db_query("SELECT taxonomy_term_data.tid, taxonomy_term_data.name
+                    FROM taxonomy_term_data
+                    LEFT JOIN field_data_field_city ON taxonomy_term_data.tid = field_data_field_city.entity_id
+                    WHERE field_data_field_city.field_city_tid = :city_tid",
+    array(
+      ':city_tid' => $city_tid
+    ))->fetchAll();
+}
+
+/**
+ *  Get all the complexes of the developers or city
+ */
+function realty_admin_get_complexes_of_developers_city($developers = array(), $city = NULL) {
+  if ($city == NULL && !empty($developers)) {
+    $query = "SELECT node.nid, node.title
+                FROM node
+                LEFT JOIN field_data_field_complex_developer ON node.nid = field_data_field_complex_developer.entity_id
+                WHERE field_data_field_complex_developer.field_complex_developer_tid IN(:developers)";
+    $arg = array(
+      ':developers' => $developers
+    );
+  }
+  else {
+    $query = "SELECT node.nid, node.title
+                FROM node
+                LEFT JOIN field_data_field_complex_developer ON node.nid = field_data_field_complex_developer.entity_id
+                LEFT JOIN field_data_field_city ON field_data_field_complex_developer.field_complex_developer_tid = field_data_field_city.entity_id
+                WHERE field_data_field_city.field_city_tid = :city_tid";
+    $arg = array(
+      ':city_tid' => $city
+    );
+  }
+
+  $complexes = db_query($query, $arg)->fetchAll();
+
+  foreach($complexes as $complex) {
+    $complexes_op[$complex->nid] = $complex->title;
+  }
+
+  return $complexes_op;
+}
+
+/**
+ * Get the names of developers by tid.
+ */
+function realty_admin_get_names_developers_by_tid($developers_tid) {
+  return db_query("SELECT tid, name
+                    FROM taxonomy_term_data
+                    WHERE tid IN(:developers)",
+    array(
+      ':developers' => $developers_tid,
+    )
+  )->fetchAll();
+}
+
+/**
+ * Developers get on the complexes
+ */
+function realty_admin_get_developers_on_complexes($complexes) {
+  return db_query("SELECT tid, name
+                                  FROM taxonomy_term_data
+                                  WHERE tid IN(
+                                    SELECT field_data_field_complex_developer.field_complex_developer_tid
+                                    FROM field_data_field_complex_developer
+                                    WHERE field_data_field_complex_developer.entity_id IN(:complexes)
+                                  )",
+    array(
+      ':complexes' => $complexes,
+    )
+  )->fetchAll();
+}
+
+/**
+ * Get complexes by nid.
+ */
+function realty_admin_get_complexes_by_nid($complexes) {
+  return db_query("SELECT node.nid AS entity_id, node.title, field_data_field_complex_developer.field_complex_developer_tid AS developer
+                                FROM node
+                                LEFT JOIN field_data_field_complex_developer ON node.nid = field_data_field_complex_developer.entity_id
+                                WHERE node.nid IN(:complex)",
+    array(
+      ':complex' => $complexes
+    )
+  )->fetchAll();
+}
+
+/**
+ * Get complexes from the developer.
+ */
+function realty_admin_get_complexes_from_developer($developer_tid) {
+  return db_query("SELECT field_data_field_complex_developer.entity_id, node.title
+                                FROM field_data_field_complex_developer, node
+                                WHERE field_data_field_complex_developer.field_complex_developer_tid = :developer_tid
+                                AND field_data_field_complex_developer.entity_id = node.nid",
+    array(
+      ':developer_tid' => $developer_tid
+    )
+  )->fetchAll();
+}
+
+/**
+ * Implement hook_form
+ */
+function realty_admin_summary_info_form($form, &$form_state, $arg) {
+  $cities = taxonomy_get_tree(1);
+  foreach($cities as $city) {
+    $city_op[$city->tid] = $city->name;
+  }
+
+  $default_city = 1;
+  $developers = realty_admin_get_developers_city($default_city);
+  foreach ($developers as $dev) {
+    $developers_options[$dev->tid] = $dev->name;
+  }
+
+  $complexes = realty_admin_get_complexes_of_developers_city(NULL, $default_city);
+
+  if (!empty($form_state['values']['cities'])) {
+    $ajax_city = $form_state['values']['cities'];
+    $developers = realty_admin_get_developers_city($ajax_city);
+    foreach ($developers as $dev) {
+      $developers_options[$dev->tid] = $dev->name;
+    }
+  }
+
+  if (!empty($form_state['values']['developers'])) {
+    $ajax_developers = $form_state['values']['developers'];
+    $complexes = realty_admin_get_complexes_of_developers_city($ajax_developers, NULL);
+  }
+  elseif(isset($ajax_city)) {
+    $complexes = realty_admin_get_complexes_of_developers_city(NULL, $ajax_city);
+  }
+
+  if ($arg == 'average_price') {
+    $date = realty_analytics_get_date_average_price();
+  }
+  else if ($arg == 'summary_info'){
+    $date = realty_analytics_get_date_count_apartments();
+  }
+  $options_date[0] = t('Текущая');
+  foreach($date as $d) {
+    $options_date[$d->date] = date("m.d.y H:i:s", $d->date);
+  }
+
+  $form['cities'] = array(
+    '#title' => t('Города'),
+    '#type' => 'select',
+    '#options' => $city_op,
+    '#default_value' => $default_city,
+    '#ajax' => array(
+      'callback' => 'realty_admin_form_ajax_form_load_developers',
+      'wrapper' => 'form-ajax-developers',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+    '#prefix' => '<div class="container-inline">',
+    //'#suffix' => '</div>',
+  );
+
+  $form['developers'] = array(
+    '#title' => t('Застройщики'),
+    '#type' => 'select',
+    '#options' => $developers_options,
+    '#ajax' => array(
+      'callback' => 'realty_admin_form_ajax_form_load_complexes',
+      'wrapper' => 'form-ajax-complexes',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+    '#prefix' => '<div id = "form-ajax-developers">',
+    //'#suffix' => '</div>',
+    '#multiple' => TRUE,
+    '#validated' => TRUE,
+  );
+
+  $form['complexes'] = array(
+    '#title' => t('Жилые комплексы'),
+    '#type' => 'select',
+    '#options' => $complexes,
+    '#prefix' => '<div id = "form-ajax-complexes" class="container-inline">',
+    '#suffix' => '</div></div>',
+    '#multiple' => TRUE,
+    '#validated' => TRUE,
+  );
+
+  $form['date'] = array(
+    '#title' => t('Дата'),
+    '#type' => 'select',
+    '#options' => $options_date,
+    '#validated' => TRUE,
+  );
+
+  $form['arg'] = array(
+    '#type' => 'hidden',
+    '#value' => $arg,
+  );
+
+  $form['submit'] = array(
+    '#value' => t('Применить'),
+    '#type' => 'submit',
+    '#suffix' => '</div>',
+    '#ajax' => array(
+      'callback' => 'realty_admin_summary_info_form_submit',
+    )
+  );
+
+  return $form;
+}
+
+/**
+ * Page callback to 'admin/content/realty/average_price'
+ */
+function realty_admin_page_average_price() {
+  $default_city = 1;
+
+  $args = realty_analytics_average_price($default_city, NULL, NULL);
+
+  $form = drupal_get_form('realty_admin_summary_info_form', 'average_price');
+
+  //realty_analytics_insert_average_price($args);
+
+  return  render($form)
+          . '<div id="div-average_price">'
+          . theme('realty_admin_average_price', array('args' => $args))
+          . '</div>';
+}
+
+/**
+ * AJAX callback for loading developers list
+ */
+function realty_admin_form_ajax_form_load_developers($form, &$form_state) {
+  return [$form['developers'], $form['complexes']];
+}
+
+/**
+ * AJAX callback for loading complexes list
+ */
+function realty_admin_form_ajax_form_load_complexes($form, &$form_state) {
+  return $form['complexes'];
+}
+
+/**
+ * button submit callback.
+ */
+function realty_admin_summary_info_form_submit($form, &$form_state) {
+  $developers = NULL;
+  $complexes = NULL;
+
+  $city = $form_state['values']['cities'];
+
+  if(isset($form_state['values']['developers'])) {
+    $developers = $form_state['values']['developers'];
+  }
+
+  if(isset($form_state['values']['complexes'])) {
+    $complexes = $form_state['values']['complexes'];
+  }
+
+  if($form_state['values']['arg'] == 'summary_info') {
+    if($form_state['values']['date'] == 0) {
+      $args = realty_admin_get_summary_info($city, $developers, $complexes);
+    }
+    else {
+      $args = realty_admin_get_summary_info_db($city, $developers, $complexes, $form_state['values']['date']);
+    }
+
+    $response = theme ('realty_admin_summary_info', array (
+        'args' => $args,
+      )
+    );
+
+    $commands[] = ajax_command_html('#div-summary_info', $response);
+  }
+
+  if($form_state['values']['arg'] == 'average_price') {
+    if($form_state['values']['date'] == 0) {
+      $args = realty_analytics_average_price($city, $developers, $complexes);
+    }
+    else {
+      $args = realty_analytics_average_price_db($city, $developers, $complexes, $form_state['values']['date']);
+    }
+
+    $response = theme ('realty_admin_average_price', array (
+        'args' => $args,
+      )
+    );
+
+    $commands[] = ajax_command_html('#div-average_price', $response);
+  }
+
+
+  cache_set('realty_admin_summary_info_html', $response);
+
+  $commands[] = ajax_command_html('#div-summary_info', $response);
+  ajax_deliver(array('#type' => 'ajax', '#commands' => $commands));
+
+  drupal_exit();
+}
+
+/**
+ *  Get summary info
+ */
+function realty_admin_get_summary_info($city = NULL, $developers = NULL, $complexes = NULL) {
+  $args = array();
+
+  $args['developers'] = array();
+  $args['apartment_types'] = array();
+
+  if($developers) {
+    $db_developers = realty_admin_get_names_developers_by_tid($developers);
+  }
+  else {
+    $db_developers = realty_admin_get_developers_city($city);
+  }
+
+  if($complexes) {
+    $db_developers = realty_admin_get_developers_on_complexes($complexes);
+
+    $db_complexes_complexes = realty_admin_get_complexes_by_nid($complexes);
+  }
+  //если не выбраны жк
+  else {
+    // Формирование списка Жилых комплексов для Застройщиков
+    foreach ($db_developers as $developer) {
+      $db_complexes = realty_admin_get_complexes_from_developer($developer->tid);
+    }
+  }
+
+  foreach ($db_developers as $developer) {
+    $prev_developer = 0;
+    if(isset($complexes) && !empty($complexes)) {
+      foreach ($db_complexes_complexes AS $kc =>$comp) {
+        if($comp->developer == $developer->tid) {
+          $db_complexes_developer[$kc] = $comp;
+        }
+      }
+      $db_complexes = $db_complexes_developer;
+      $db_complexes_developer = [];
+    }
+    else {
+      $db_complexes = realty_admin_get_complexes_from_developer($developer->tid);
+    }
+    foreach ($db_complexes as $complex) {
+      unset($db_homes);
+      $prev_complex = 0;
+      // Список домов ЖК
+      $db_homes = db_query("SELECT entity_id
+                              FROM field_data_field_home_complex
+                              WHERE field_home_complex_target_id = :complex_id",
+        array (
+          ':complex_id' => $complex->entity_id
+        )
+      )->fetchCol();
+
+      foreach($db_homes as $k => $home_tid) {
+        $home = taxonomy_term_load($home_tid);
+        $prev_home = 0;
+        //Список секций дома
+        if (!empty($home->field_home_section)) {
+          foreach($home->field_home_section[LANGUAGE_NONE] as $section_id) {
+            unset($apartment_all);
+            // Список типов квартир
+            $apartment_types = realty_get_types_apartment();
+
+            // Заголовки из типов квартир для таблицы теминга
+            $array_diff = array_diff($apartment_types, $args['apartment_types']);
+
+            if (!empty($array_diff)) {
+              foreach ($array_diff as $value) {
+                $args['apartment_types'][] = $value;
+              }
+              sort($args['apartment_types'], SORT_NATURAL);
+            }
+            //------------------------------------
+
+            $section = entity_load('field_collection_item', array($section_id['value']));
+            $section_num = $section[$section_id['value']]->field_number_section[LANGUAGE_NONE][0]['value'];
+            strpos($section_num, '_') ? $section_num = str_replace("_", ".", "$section_num") : $section_num;
+
+            if(!empty($section_num)) {
+
+              //Колличество квартир в секции по типам запоненых в ручную
+              $args['sections'][$section_id['value']]['home_tid'] = $home->tid;
+              $args['sections'][$section_id['value']]['home_name'] = $home->name;
+              $args['sections'][$section_id['value']]['complex_nid'] = $complex->entity_id;
+              $args['sections'][$section_id['value']]['developer_tid'] = $developer->tid;
+              $args['sections'][$section_id['value']]['city_tid'] = $city;
+              $args['sections'][$section_id['value']]['section_num'] = $section_num;
+
+              $apartment_all['1'] = !empty($section[$section_id['value']]->field_home_section_1_room) ? $section[$section_id['value']]->field_home_section_1_room['und'][0]['value'] : 0;
+
+              $apartment_all['1c'] = !empty($section[$section_id['value']]->field_home_section_1c_room) ? $section[$section_id['value']]->field_home_section_1c_room[LANGUAGE_NONE][0]['value'] : 0;
+
+              $apartment_all['2'] = !empty($section[$section_id['value']]->field_home_section_2_room) ? $section[$section_id['value']]->field_home_section_2_room[LANGUAGE_NONE][0]['value'] : 0;
+
+              $apartment_all['2c'] = !empty($section[$section_id['value']]->field_home_section_2c_room) ? $section[$section_id['value']]->field_home_section_2c_room[LANGUAGE_NONE][0]['value'] : 0;
+
+              $apartment_all['3'] = !empty($section[$section_id['value']]->field_home_section_3_room) ? $section[$section_id['value']]->field_home_section_3_room[LANGUAGE_NONE][0]['value'] : 0;
+
+              $apartment_all['3c'] = !empty($section[$section_id['value']]->field_home_section_3c_room) ? $section[$section_id['value']]->field_home_section_3c_room[LANGUAGE_NONE][0]['value'] : 0;
+
+              $apartment_all['4'] = 0;
+              $apartment_all['5'] = 0;
+
+              //Общее Колличество квартир в секции запоненых в ручную
+              foreach($apartment_all as $value) {
+                $apartment_all['all'] += $value;
+              }
+
+              foreach ($apartment_types as $apartment_type) {
+                //все активные квартиры в секции
+                $count_apartments_active = db_query("SELECT node.nid
+                                              FROM field_data_field_apartament_home, node
+                                              LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                              LEFT JOIN field_data_field_section ON node.nid = field_data_field_section.entity_id
+                                              LEFT JOIN field_data_field_number_rooms ON node.nid = field_data_field_number_rooms.entity_id
+                                              WHERE node.status = 1
+                                                AND field_data_field_status.field_status_value = 1
+                                                AND field_data_field_apartament_home.entity_id = node.nid
+                                                AND field_data_field_number_rooms.field_number_rooms_value IN(:room)
+                                                AND field_data_field_section.field_section_value = :section
+                                                AND field_data_field_apartament_home.field_apartament_home_tid = :home",
+                  array(
+                    ':home' => $home_tid, ':section' => $section_num, ':room' => $apartment_type
+                  )
+                )->rowCount();
+
+                //все забронированные квартпры в секции
+                $count_apartments_booking = db_query("SELECT node.nid
+                                              FROM field_data_field_apartament_home, node
+                                              LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                              LEFT JOIN field_data_field_section ON node.nid = field_data_field_section.entity_id
+                                              LEFT JOIN field_data_field_number_rooms ON node.nid = field_data_field_number_rooms.entity_id
+                                              WHERE node.status = 1
+                                                AND field_data_field_status.field_status_value = 0
+                                                AND field_data_field_apartament_home.entity_id = node.nid
+                                                AND field_data_field_number_rooms.field_number_rooms_value IN(:room)
+                                                AND field_data_field_section.field_section_value = :section
+                                                AND field_data_field_apartament_home.field_apartament_home_tid = :home",
+                  array(
+                    ':home' => $home_tid, ':section' => $section_num, ':room' => $apartment_type
+                  )
+                )->rowCount();
+                //колличество забронированных и активных квртир
+                $count_apartments_base = $count_apartments_active + $count_apartments_booking;
+
+                //подсчет кооличества по типам квартир в секции
+                $args['sections'][$section_id['value']]['apartments']['apartment_active'][$apartment_type] = $count_apartments_active;
+                $args['sections'][$section_id['value']]['apartments']['apartment_booking'][$apartment_type] = $count_apartments_booking;
+                $args['sections'][$section_id['value']]['apartments']['apartment_base'][$apartment_type] = $count_apartments_base;
+                $args['sections'][$section_id['value']]['apartments']['apartment_all'][$apartment_type] = $apartment_all[$apartment_type];
+
+                //общее колличество квартир в секции
+                $args['sections'][$section_id['value']]['apartments']['apartment_active']['all'] += $count_apartments_active;
+                $args['sections'][$section_id['value']]['apartments']['apartment_booking']['all'] += $count_apartments_booking;
+                $args['sections'][$section_id['value']]['apartments']['apartment_base']['all'] += $count_apartments_base;
+                $args['sections'][$section_id['value']]['apartments']['apartment_all']['all'] = $apartment_all['all'];
+
+                $args['homes'][$home->name]['complex_nid'] = $complex->entity_id;
+                $args['homes'][$home->name]['developer_tid'] = $developer->tid;
+                $args['homes'][$home->name]['city_tid'] = $city;
+                $args['homes'][$home->name]['complex_name'] = $complex->title;
+                $args['homes'][$home->name]['home_tid'] = $home->tid;
+                //подсчет кооличества по типам квартир в доме
+                $args['homes'][$home->name]['apartments']['apartment_active'][$apartment_type] += $count_apartments_active;
+                $args['homes'][$home->name]['apartments']['apartment_booking'][$apartment_type] += $count_apartments_booking;
+                $args['homes'][$home->name]['apartments']['apartment_base'][$apartment_type] += $count_apartments_base;
+                $args['homes'][$home->name]['apartments']['apartment_all'][$apartment_type] += $apartment_all[$apartment_type];
+
+                //общее колличество квартир в доме
+                $args['homes'][$home->name]['apartments']['apartment_active']['all'] += $count_apartments_active;
+                $args['homes'][$home->name]['apartments']['apartment_booking']['all'] += $count_apartments_booking;
+                $args['homes'][$home->name]['apartments']['apartment_base']['all'] += $count_apartments_base;
+
+                $args['complexes'][$complex->title]['developer_tid'] = $developer->tid;
+                $args['complexes'][$complex->title]['developer_name'] = $developer->name;
+                $args['complexes'][$complex->title]['complex_nid'] = $complex->entity_id;
+                $args['complexes'][$complex->title]['city_tid'] = $city;
+                //подсчет кооличества по типам квартир в жк
+                $args['complexes'][$complex->title]['apartments']['apartment_active'][$apartment_type] += $count_apartments_active;
+                $args['complexes'][$complex->title]['apartments']['apartment_booking'][$apartment_type] += $count_apartments_booking;
+                $args['complexes'][$complex->title]['apartments']['apartment_base'][$apartment_type] += $count_apartments_base;
+                $args['complexes'][$complex->title]['apartments']['apartment_all'][$apartment_type] += $apartment_all[$apartment_type];
+                //общее колличество квартир в жк
+                $args['complexes'][$complex->title]['apartments']['apartment_active']['all'] += $count_apartments_active;
+                $args['complexes'][$complex->title]['apartments']['apartment_booking']['all'] += $count_apartments_booking;
+                $args['complexes'][$complex->title]['apartments']['apartment_base']['all'] += $count_apartments_base;
+
+                $args['developers'][$developer->name]['city_tid'] = $city;
+                $args['developers'][$developer->name]['developer_tid'] = $developer->tid;
+                //подсчет кооличества по типам квартир у застройщика
+                $args['developers'][$developer->name]['apartments']['apartment_active'][$apartment_type] += $count_apartments_active;
+                $args['developers'][$developer->name]['apartments']['apartment_booking'][$apartment_type] += $count_apartments_booking;
+                $args['developers'][$developer->name]['apartments']['apartment_base'][$apartment_type] += $count_apartments_base;
+                $args['developers'][$developer->name]['apartments']['apartment_all'][$apartment_type] += $apartment_all[$apartment_type];
+
+                //общее колличество квартир у застройщика
+                $args['developers'][$developer->name]['apartments']['apartment_active']['all'] += $count_apartments_active;
+                $args['developers'][$developer->name]['apartments']['apartment_booking']['all'] += $count_apartments_booking;
+                $args['developers'][$developer->name]['apartments']['apartment_base']['all'] += $count_apartments_base;
+
+                //общее колличество квартир в городе
+                $args['city'][$city]['apartments']['apartment_active'][$apartment_type] += $count_apartments_active;
+                $args['city'][$city]['apartments']['apartment_booking'][$apartment_type] += $count_apartments_booking;
+                $args['city'][$city]['apartments']['apartment_base'][$apartment_type] += $count_apartments_base;
+                $args['city'][$city]['apartments']['apartment_all'][$apartment_type] += $apartment_all[$apartment_type];
+
+                $args['city'][$city]['apartments']['apartment_active']['all'] += $count_apartments_active;
+                $args['city'][$city]['apartments']['apartment_booking']['all'] += $count_apartments_booking;
+                $args['city'][$city]['apartments']['apartment_base']['all'] += $count_apartments_base;
+              }
+
+              if($home->tid == $prev_home) {
+                $args['homes'][$home->name]['apartments']['apartment_all']['all'] += $apartment_all['all'];
+              }
+              else {
+                $args['homes'][$home->name]['apartments']['apartment_all']['all'] = $apartment_all['all'];
+                $prev_home = $home->tid;
+              }
+
+              if($complex->entity_id == $prev_complex) {
+                $args['complexes'][$complex->title]['apartments']['apartment_all']['all'] += $apartment_all['all'];
+              }
+              else {
+                $args['complexes'][$complex->title]['apartments']['apartment_all']['all'] = $apartment_all['all'];
+                $prev_complex = $complex->entity_id;
+              }
+
+              if($developer->tid == $prev_developer) {
+                $args['developers'][$developer->name]['apartments']['apartment_all']['all'] += $apartment_all['all'];
+              }
+              else {
+                $args['developers'][$developer->name]['apartments']['apartment_all']['all'] = $apartment_all['all'];
+                $prev_developer = $developer->tid;
+              }
+
+              $args['city'][$city]['apartments']['apartment_all']['all'] += $apartment_all['all'];
+
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+  cache_set('realty_admin_summary_info', $args);
+
+  return $args;
+}
+
+/**
+ * Get count apartments in data base
+ */
+function realty_admin_get_summary_info_db($city, $developers, $complexes, $date) {
+  $result = db_query("SELECT *
+              FROM realty_analytics_count_apartments
+              WHERE date = :date ",
+              array(':date' => $date))->fetchAll();
+
+  $arg['apartment_types'] = realty_get_types_apartment();
+
+  foreach ($result as $value) {
+    $value->developer_tid ? $developer = taxonomy_term_load($value->developer_tid) : 0;
+    $value->complex_nid ? $complex = node_load($value->complex_nid) : 0;
+    $value->home_tid ? $home = taxonomy_term_load($value->home_tid) : 0;
+
+    if (!$value->developer_tid) {
+      $arg['city'][$value->city_tid]['apartments']['apartment_active'] = (array)json_decode($value->apartment_active);
+      $arg['city'][$value->city_tid]['apartments']['apartment_booking'] = (array)json_decode($value->apartment_booking);
+      $arg['city'][$value->city_tid]['apartments']['apartment_base'] = (array)json_decode($value->apartment_base);
+      $arg['city'][$value->city_tid]['apartments']['apartment_all'] = (array)json_decode($value->apartment_all);
+    }
+    if ($value->developer_tid && !$value->complex_nid) {
+      $arg['developers'][$developer->name]['developer_tid'] = $developer->tid;
+      $arg['developers'][$developer->name]['city_tid'] = $value->city_tid;
+      $arg['developers'][$developer->name]['apartments']['apartment_active'] = (array)json_decode($value->apartment_active);
+      $arg['developers'][$developer->name]['apartments']['apartment_booking'] = (array)json_decode($value->apartment_booking);
+      $arg['developers'][$developer->name]['apartments']['apartment_base'] = (array)json_decode($value->apartment_base);
+      $arg['developers'][$developer->name]['apartments']['apartment_all'] = (array)json_decode($value->apartment_all);
+    }
+    if ($value->complex_nid && !$value->home_tid) {
+      $arg['complexes'][$complex->title]['complex_nid'] = $complex->nid;
+      $arg['complexes'][$complex->title]['developer_tid'] = $developer->tid;
+      $arg['complexes'][$complex->title]['developer_name'] = $developer->name;
+      $arg['complexes'][$complex->title]['city_tid'] = $value->city_tid;
+      $arg['complexes'][$complex->title]['apartments']['apartment_active'] = (array)json_decode($value->apartment_active);
+      $arg['complexes'][$complex->title]['apartments']['apartment_booking'] = (array)json_decode($value->apartment_booking);
+      $arg['complexes'][$complex->title]['apartments']['apartment_base'] = (array)json_decode($value->apartment_base);
+      $arg['complexes'][$complex->title]['apartments']['apartment_all'] = (array)json_decode($value->apartment_all);
+    }
+    if ($value->home_tid && !$value->section) {
+      $arg['homes'][$home->name]['complex_nid'] = $complex->nid;
+      $arg['homes'][$home->name]['complex_name'] = $complex->title;
+      $arg['homes'][$home->name]['developer_tid'] = $developer->tid;
+      $arg['homes'][$home->name]['developer_name'] = $developer->name;
+      $arg['homes'][$home->name]['city_tid'] = $value->city_tid;
+      $arg['homes'][$home->name]['apartments']['apartment_active'] = (array)json_decode($value->apartment_active);
+      $arg['homes'][$home->name]['apartments']['apartment_booking'] = (array)json_decode($value->apartment_booking);
+      $arg['homes'][$home->name]['apartments']['apartment_base'] = (array)json_decode($value->apartment_base);
+      $arg['homes'][$home->name]['apartments']['apartment_all'] = (array)json_decode($value->apartment_all);
+    }
+    if ($value->section) {
+      $section = entity_load('field_collection_item', array($value->section));
+      $section_num = $section[$value->section]->field_number_section[LANGUAGE_NONE][0]['value'];
+      strpos($section_num, '_') ? $section_num = str_replace("_", ".", "$section_num") : $section_num;
+
+      $arg['sections'][$value->section]['complex_nid'] = $complex->nid;
+      $arg['sections'][$value->section]['developer_tid'] = $developer->tid;
+      $arg['sections'][$value->section]['section_num'] = $section_num;
+      $arg['sections'][$value->section]['home_name'] = $home->name;
+      $arg['sections'][$value->section]['home_name'] = $home->tid;
+      $arg['sections'][$value->section]['city_tid'] = $value->city_tid;
+      $arg['sections'][$value->section]['apartments']['apartment_active'] = (array)json_decode($value->apartment_active);
+      $arg['sections'][$value->section]['apartments']['apartment_booking'] = (array)json_decode($value->apartment_booking);
+      $arg['sections'][$value->section]['apartments']['apartment_base'] = (array)json_decode($value->apartment_base);
+      $arg['sections'][$value->section]['apartments']['apartment_all'] = (array)json_decode($value->apartment_all);
+    }
+  }
+  cache_set('realty_admin_summary_info', $arg);
+
+  return $arg;
+}
+
+
+/**
+ * Page callback to admin/content/summary_info
+ */
+function realty_admin_page_summary_info() {
+
+  $args = realty_admin_get_summary_info(1);
+
+  $response = theme ('realty_admin_summary_info', array (
+      'args' => $args,
+    )
+  );
+
+  $form = drupal_get_form('realty_admin_summary_info_form', 'summary_info');
+
+
+  cache_set('realty_admin_summary_info_html', $response);
+
+  return
+  '<h1>Активные / Забронированные / Активные + Забронированные / Всего(вручную)</h1>' .
+    render($form) . '<div id="div-summary_info">' . $response . '</div>';
+}

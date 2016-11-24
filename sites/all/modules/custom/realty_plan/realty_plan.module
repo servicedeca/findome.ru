@@ -1,0 +1,301 @@
+<?php
+
+/*
+ * implement hook_menu.
+ */
+function realty_plan_menu() {
+
+  $item['admin/content/realty/plans_apartments'] = array(
+    'title' => t('Планировки'),
+    'page callback' => 'realty_plan_plans_apartments',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+
+  $item['admin/content/realty/plans_apartments/update_apartments'] = array(
+    'title' => t('Обновление'),
+    'page callback' => 'realty_plan_update_apartments',
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+  );
+
+  return $item;
+}
+
+/**
+ * Implement hook_theme
+ */
+function realty_plan_theme() {
+  $base = array(
+    'file' => 'theme.inc',
+    'path' => drupal_get_path('module', 'realty_plan') . '/theme',
+  );
+
+  $items['realty_plan_plans_apartments_page'] = $base + array(
+      'template' => 'realty-plan-plans-apartments-page',
+  );
+
+  return $items;
+}
+
+/**
+ * Implement hook_forms.
+ */
+function realty_plan_forms($form_id, $args) {
+
+  $forms = array();
+
+  if (strpos($form_id, 'realty_plan_add_plans_apartments_form') === 0) {
+    $forms['realty_plan_add_plans_apartments_form_' . $args[0]['id']] = array(
+      'callback' => 'realty_plan_add_plans_apartments_form',
+    );
+  }
+
+  return $forms;
+}
+
+/**
+ * Implement hook_form.
+ */
+function realty_plan_add_plans_apartments_form($form, &$form_state, $i) {
+  $homes = taxonomy_get_tree(6);
+
+  foreach($homes as $home) {
+    $home_options[$home->tid] =  $home->name;
+  }
+
+  $result = realty_plan_get_parameter_plan_apartments($i);
+  if(!empty($result)) {
+    $apartments = '';
+    foreach($result as $key => $val) {
+      $apartments == '' ? $apartments .= $val->apartments : $apartments .= ',' . $val->apartments;
+    }
+    $file = $result[0]->path_file;
+    $home_id = $result[0]->home_id;
+  }
+
+  $form['file'] = array(
+    '#type' => 'managed_file',
+    '#title' => 'Планировка',
+    '#upload_location' => 'public://',
+    '#description' => t('Выберите и загрузите планировку. *Если нажать кнопку удалить то планировка удалится с сайта везде. Чтобы очистить форму нужно воспользоваться кнопкой ниже "Очистить".'),
+    '#default_value' => isset($file) ? $file : NULL,
+    '#upload_validators' => array(
+      'file_validate_is_image' => array(),
+      'file_validate_size' => array(1 * 1024 * 1024),
+    ),
+  );
+
+  $form['apartments'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Номера квартир'),
+    '#description' => t('Укажите номера квартир через запятую'),
+    '#default_value' => isset($apartments) ? $apartments : NULL
+  );
+
+  $form['homes'] = array(
+    '#type' => 'select',
+    '#title' => 'Дом',
+    '#description' => t('Выберите дом, в котором находятся указанные выше квартиры.'),
+    '#options' => $home_options,
+    '#default_value' => isset($home_id) ? $home_id : NULL
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Сохранить'),
+  );
+
+  $form['number_form'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $i,
+  );
+
+  $form['submit_clear'] = array(
+    '#type' => 'submit',
+    '#value' => t('Очистить'),
+    '#submit' => array('realty_plan_add_more_form_add_submit_clear')
+  );
+
+  $form['#submit'][] = 'realty_plan_add_more_form_add_submit';
+
+  return $form;
+}
+
+
+/**
+ * button submit callback.
+ */
+function realty_plan_add_more_form_add_submit($form, &$form_state) {
+
+  // Save new file
+  $file = file_load($form_state['values']['file']);
+  $file->status = FILE_STATUS_PERMANENT;
+  file_save($file);
+  file_usage_add($file, 'realty_plan', 'realty_plan', 0);
+  variable_set('realty_plan_filefid', $file->fid);
+
+  $apartments = explode(',', $form_state['values']['apartments']);
+
+  foreach($apartments as $apartment) {
+    realty_plan_insert_inf_plan(array(
+      'number_form' => $form_state['values']['number_form'],
+      'path_file' => $file->fid,
+      'apartments' => trim($apartment),
+      'home_id' => $form_state['values']['homes'],
+    ));
+  }
+}
+
+/**
+ * clear Form realty_data_update_add_plans_apartments_form
+ */
+function realty_plan_add_more_form_add_submit_clear($form, &$form_state) {
+  db_query("DELETE FROM realty_plan_plan_apartments
+            WHERE realty_plan_plan_apartments.form_id = :form_id",
+    array(':form_id' => $form_state['values']['number_form']));
+}
+
+/**
+ * Page callback to admin/content/plans_apartments
+ */
+function realty_plan_plans_apartments() {
+  return theme('realty_plan_plans_apartments_page');
+}
+
+/**
+ * Insert information about the layout.
+ */
+function realty_plan_insert_inf_plan($options) {
+  $result = db_query ("SELECT *
+                        FROM realty_plan_plan_apartments
+                        WHERE realty_plan_plan_apartments.form_id = :form_id AND
+                        realty_plan_plan_apartments.apartments = :apartment",
+    array (':form_id' => $options['number_form'], ':apartment' => $options['apartments'])
+  )->fetchAll();
+
+  if(empty($result)) {
+    $db_query = db_query ("INSERT INTO realty_plan_plan_apartments(form_id, path_file, apartments, home_id)
+                           VALUES (:form_id, :path_file, :apartments, :home_id)",
+      array (
+        ':form_id' => $options['number_form'],
+        ':path_file' => $options['path_file'],
+        ':apartments' => $options['apartments'],
+        ':home_id' => $options['home_id'],
+      )
+    );
+  }
+
+  elseif ($result[0]->path_file != $options['path_file'] || $result[0]->home_id != $options['home_id']) {
+    $db_query = db_query ("UPDATE realty_plan_plan_apartments
+                             SET path_file = :file, home_id = :home_id
+                             WHERE id = :id", array (
+                          ':file' => $options['path_file'],
+                          ':id' => (int)$result[0]->id,
+                          ':home_id' => $options['home_id']));
+  }
+
+}
+
+/**
+ * Select the parameter values from the table realty_data_update_plan_apartments.
+ */
+function realty_plan_get_parameter_plan_apartments($number_form) {
+  $result = db_query ("SELECT *
+                            FROM realty_plan_plan_apartments
+                            WHERE realty_plan_plan_apartments.form_id = :form_id",
+    array(':form_id' => $number_form)
+  )->fetchAll();
+
+  return $result;
+}
+
+/**
+ * Page callback to admin/content/update_apartments
+ */
+function realty_plan_update_apartments() {
+  $form = drupal_get_form('realty_plan_param_update_apartments_form');
+
+  $menu = '<div style="height: 40px">
+      <ul class="tabs primary">
+        <li>
+          <a href="/admin/content/plans_apartments">Планировки</a>
+        </li>
+        <li class="active">
+          <a href="/admin/content/plans_apartments/update_apartments" class="active" >
+          <span class="element-invisible">(активная вкладка)</span>Обновление планировок</a>
+        </li>
+      </ul>
+    </div>';
+
+  return $menu . render($form);
+}
+
+/**
+ * Implement hook_form.
+ */
+function realty_plan_param_update_apartments_form($form, &$form_state) {
+  $complexes = realty_get_complex_current_city(NULL, 1);
+
+  $form['complex'] = array(
+    '#type' => 'select',
+    '#title' => 'Жилой комплекс',
+    '#description' => t('Выберите жилой комплекс в котором хотите обновить планировки'),
+    '#options' => $complexes,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Обновить'),
+  );
+
+  $form['#suffix'] = t('Планировки обновятся в только в тех квартирах которые указаны на странице "Планировки"');
+
+  $form['#submit'][] = 'realty_plan_param_update_apartments_form_submit';
+
+  return $form;
+}
+
+/**
+ * Get the apartment plan.
+ */
+function realty_plan_get_apartment_plan($apartment, $home) {
+  $plan = db_query("SELECT *
+                     FROM realty_plan_plan_apartments
+                     WHERE home_id = :home_id AND apartments = :ap_num
+                    ", array(':ap_num' => $apartment, ':home_id' => $home))->fetchAll();
+
+  return $plan;
+}
+
+/**
+ * button submit callback.
+ */
+function realty_plan_param_update_apartments_form_submit($form, &$form_state) {
+
+  $apartments = db_query("SELECT node.nid
+          FROM node
+          LEFT JOIN field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id
+          LEFT JOIN field_data_field_home_complex ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_home_complex.entity_id
+          WHERE node.type = 'apartament'
+          AND field_data_field_home_complex.field_home_complex_target_id IN(
+            SELECT node.nid
+            FROM node
+            WHERE node.nid = :complex_nid)
+          ", array(':complex_nid' => $form_state['values']['complex']))->fetchAll();
+
+  foreach($apartments as $ap) {
+    $node = node_load($ap->nid);
+    $ap_num = $node->field_number_apartament[LANGUAGE_NONE][0]['value'];
+    $home_tid = $node->field_apartament_home[LANGUAGE_NONE][0]['tid'];
+    $plan = realty_plan_get_apartment_plan($ap_num, $home_tid);
+    if(!empty($plan)) {
+      $file = file_load($plan[0]->path_file);
+      if($file->fid != $node->field_plan_apartment[LANGUAGE_NONE][0]['fid']) {
+        $node->field_plan_apartment[LANGUAGE_NONE][0] = (array)$file;
+        node_save($node);
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+function realty_schema() {
+
+  // table for average cost per square meter
+  $schema['realty_feedback'] = array(
+    'description' => 'Feedback',
+    'fields' => array (
+
+      'id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+
+      'name' => array(
+        'description' => 'user name.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'email' => array(
+        'description' => 'user email.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'phone' => array(
+        'description' => 'phone number.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'date_callback' => array(
+        'description' => 'date and time for callback',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'questions_offers' => array (
+        'description' => 'questions and offers.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'type' => array (
+        'description' => 'type feedback',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'complex' => array(
+        'description' => 'complex',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'date' => array(
+        'description' => 'date',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+//CREATE TABLE realty_feedback (id int(20) NOT NULL AUTO_INCREMENT, name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, email VARCHAR(255), phone VARCHAR(255), date_callback VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, complex VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, questions_offers VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci, date VARCHAR(255), PRIMARY KEY(id));

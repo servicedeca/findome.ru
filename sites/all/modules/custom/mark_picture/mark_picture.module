@@ -1,0 +1,181 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implement hook_form_alter.
+ */
+function mark_picture_form_taxonomy_form_term_alter(&$form, &$form_state, $form_id) {
+  if ($form['vocabulary_machine_name']['#value'] == 'homes') {
+    $form['#theme'] = 'taxonomy_form_term_homes';
+  }
+}
+
+/**
+ * Implement hook_form_alter.
+ */
+function mark_picture_form_node_form_alter(&$form, $form_state) {
+  if ($form['#node']->type == 'complex') {
+    $form['#theme'] = 'node_form_complexes';
+  }
+}
+
+
+/**
+ * Implement hook_form_alter.
+ */
+function mark_picture_form_field_ui_field_edit_form_alter(&$form, &$form_state,$form_id) {
+  $form['field']['cardinality']['#options'] = array(
+    -1 => 'Не ограничено',
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    5 => 5,
+    6 => 6,
+    7 => 7,
+    8 => 8,
+    9 => 9,
+    11 => 11,
+    12 => 12,
+    13 => 12,
+    14 => 14,
+    15 => 15,
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+
+function mark_picture_theme() {
+
+  $base = array(
+    'file' => 'theme.inc',
+    'path' => drupal_get_path('module', 'mark_picture') . '/theme',
+  );
+
+  $items['taxonomy_form_term_homes'] = $base + array(
+      'template' => 'taxonomy-form-term-homes',
+      'render element' => 'form',
+  );
+
+  $items['node_form_complexes'] = $base + array(
+      'template' => 'node-form-complexes',
+      'render element' => 'form',
+    );
+
+  return $items;
+}
+
+/*
+ * implement hook_menu.
+ */
+function mark_picture_menu() {
+
+  $item['add_plan_complex'] = array(
+    'page callback' => 'mark_picture_add_plan_complex',
+    'access callback' => TRUE,
+  );
+
+  $item['mark_picture_add_section'] = array(
+    'page callback' => 'mark_picture_add_section',
+    'access callback' => TRUE,
+  );
+
+  $item['add_plan_complex/edit_svg'] = array(
+    'page callback' => 'mark_picture_add_plan_complex_edit_svg',
+    'access callback' => TRUE,
+  );
+
+  $item['add_plan_home'] = array(
+    'page callback' => 'mark_picture_add_plan_home',
+    'access callback' => TRUE,
+  );
+
+  $item['mark_picture_get_nid_apartment'] = array(
+    'page callback' => 'mark_picture_get_nid_apartment',
+    'access callback' => TRUE,
+  );
+
+  return $item;
+}
+
+/**
+ * Page callback to /realty_get_nid_apartment.
+ */
+function mark_picture_get_nid_apartment() {
+  $result = db_query("SELECT node.nid AS nid
+    FROM {node} node
+    LEFT JOIN {field_data_field_apartament_home} field_data_field_apartament_home ON node.nid = field_data_field_apartament_home.entity_id AND (field_data_field_apartament_home.entity_type = 'node' AND field_data_field_apartament_home.deleted = '0')
+    LEFT JOIN {taxonomy_term_data} taxonomy_term_data_field_data_field_apartament_home ON field_data_field_apartament_home.field_apartament_home_tid = taxonomy_term_data_field_data_field_apartament_home.tid
+    LEFT JOIN {field_data_field_apartment_floor} field_data_field_apartment_floor ON node.nid = field_data_field_apartment_floor.entity_id AND (field_data_field_apartment_floor.entity_type = 'node' AND field_data_field_apartment_floor.deleted = '0')
+    LEFT JOIN {field_data_field_number_apartament} field_data_field_number_apartament ON node.nid = field_data_field_number_apartament.entity_id AND (field_data_field_number_apartament.entity_type = 'node' AND field_data_field_number_apartament.deleted = '0')
+    WHERE (( (node.status = 1) AND (field_data_field_apartament_home.field_apartament_home_tid = '".$_POST['home']."') AND (field_data_field_apartment_floor.field_apartment_floor_value = '".$_POST['floor']."') AND (field_data_field_number_apartament.field_number_apartament_value = '".$_POST['apartment']."') ))
+    ")->fetchObject();
+  if (!empty($result)) {
+    $result = realty_get_appartment_info($result->nid);
+    print $result;
+  }
+  else {
+    print FALSE;
+  }
+  drupal_exit();
+}
+
+/**
+ * Page callback to /add_plan_complex/edit_svg
+ */
+function mark_picture_add_plan_complex_edit_svg() {
+  if (!empty($_POST['obj'])) {
+    foreach ($_POST['obj'] as $val) {
+      $file = fopen($val['file'], 'a');
+      ftruncate($file, 0);
+      fwrite($file, $val['svg']);
+      fclose($file);
+    }
+  }
+  drupal_exit();
+}
+
+/**
+ * Page callback to /add_plan_home
+ */
+function mark_picture_add_plan_home() {
+  if ($_POST['file']) {
+      $answer['img'] = file_get_contents(realty_file_directory_path() . '/' . $_POST['file']);
+      $answer['file'] = realty_file_directory_path() . '/' . $_POST['file'];
+      print json_encode($answer);
+  }
+
+  drupal_exit();
+}
+
+/**
+ * Page callback to /add_plan_complex.
+ */
+function mark_picture_add_plan_complex() {
+
+  if ($_POST['nid']) {
+    $node = node_load($_POST['nid']);
+    if (!empty($node->field_plan_complex)) {
+      $answer['img'] = file_get_contents($node->field_plan_complex[LANGUAGE_NONE][0]['uri'], true);
+      $answer['file'] = realty_file_directory_path() . '/' .$node->field_plan_complex[LANGUAGE_NONE][0]['filename'];
+
+      print json_encode($answer);
+    }
+    else {
+      print NULL;
+    }
+  }
+
+  drupal_exit();
+}
+
+/**
+ * Page callback to /mark_picture_add_section.
+ */
+function mark_picture_add_section() {
+  $section = $_POST['sections'];
+}

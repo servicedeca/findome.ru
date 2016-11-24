@@ -1,0 +1,7 @@
+name = Realty data export
+description = Export Entity Data.
+package = Realty
+core = 7.x
+version = «1.x-1.0»
+
+dependencies[] = libraries

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the realty_faeture_page_taxonomy feature.
+ */
+
+include_once 'realty_faeture_page_taxonomy.features.inc';

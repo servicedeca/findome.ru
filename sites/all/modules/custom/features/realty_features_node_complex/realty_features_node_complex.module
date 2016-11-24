@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the realty_features_node_complex feature.
+ */
+
+include_once 'realty_features_node_complex.features.inc';

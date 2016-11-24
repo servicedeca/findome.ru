@@ -1,0 +1,175 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+function realty_analytics_schema() {
+
+  // table for average cost per square meter
+  $schema['realty_analytics_average_price_sq'] = array(
+    'description' => 'Average price per square meter',
+    'fields' => array (
+      'id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+
+      'all_apartments' => array(
+        'description' => 'All apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_1' => array(
+        'description' => 'one room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_1c' => array(
+        'description' => 'one c room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_2' => array(
+        'description' => 'two room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_2c' => array(
+        'description' => 'two c room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_3' => array(
+        'description' => 'three room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_3c' => array(
+        'description' => 'three c room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_4' => array(
+        'description' => 'four room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'r_5' => array(
+        'description' => 'five room apartments.',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+
+      'developer_tid' => array (
+        'description' => 'developer tid.',
+        'type' => 'int',
+      ),
+
+      'complex_nid' => array (
+        'description' => 'complex nid.',
+        'type' => 'int',
+      ),
+
+      'city_tid' => array (
+        'description' => 'city tid.',
+        'type' => 'int',
+      ),
+
+      'date' => array(
+        'description' => 'date.',
+        'type' => 'varchar',
+        'length' => 255,
+      )
+
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Create data base {realty_analytics_count_apartments}.git
+ */
+function realty_analytics_update_7002() {
+  db_create_table('realty_analytics_count_apartments', array(
+
+      'fields' => array (
+
+        'id' => array(
+          'description' => '',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+        ),
+
+        'apartment_active' => array (
+          'description' => 'Active apartments.',
+          'type' => 'varchar',
+          'length' => 255,
+        ),
+
+        'apartment_booking' => array (
+          'description' => 'Booking apartments.',
+          'type' => 'varchar',
+          'length' => 255,
+        ),
+
+        'apartment_base' => array (
+          'description' => 'Booking and active apartments.',
+          'type' => 'varchar', 'length' => 255,
+        ),
+
+        'apartment_all' => array (
+          'description' => 'All apartments.',
+          'type' => 'varchar',
+          'length' => 255,
+        ),
+
+        'city_tid' => array (
+          'description' => 'city tid.',
+          'type' => 'int',
+        ),
+
+        'developer_tid' => array (
+          'description' => 'developer tid.',
+          'type' => 'int',
+        ),
+
+        'complex_nid' => array (
+          'description' => 'complex nid.',
+          'type' => 'int',
+        ),
+
+        'home_tid' => array (
+          'description' => 'home tid.',
+          'type' => 'int',
+        ),
+
+        'section' => array (
+          'description' => 'section id.',
+          'type' => 'varchar',
+          'length' => 255,
+        ),
+
+        'date' => array (
+          'description' => 'date.',
+          'type' => 'varchar',
+          'length' => 255, )
+      ),
+
+      'primary key' => array('id'),
+    )
+  );
+}
+
+

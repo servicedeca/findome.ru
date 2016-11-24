@@ -1,0 +1,17 @@
+name = realty_feature_complex_pages
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = realty_feature_complex_pages
+features[ctools][] = page_manager:pages_default:1
+features[features_api][] = api:2
+features[page_manager_pages][] = complex_mortgage
+features[page_manager_pages][] = documents
+features[page_manager_pages][] = gallery
+features[page_manager_pages][] = gallery_tour
+features[page_manager_pages][] = page_complex_reviews
+features[page_manager_pages][] = plan_complex
+features[page_manager_pages][] = stock
+features[page_manager_pages][] = visualization
+features_exclude[dependencies][ctools] = ctools
+features_exclude[dependencies][page_manager] = page_manager

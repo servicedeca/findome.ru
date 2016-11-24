@@ -1,0 +1,417 @@
+
+
+#realty-filter-form {
+  display: none;
+}
+
+#form-search-hidden {
+  display: none;
+}
+
+.view-filters {
+
+}
+
+.hide-buttom {
+  display: none;
+}
+
+.form-item, .form-actions {
+  margin: 0;
+}
+
+#hint-box {
+  display: none;
+}
+
+#views-exposed-form-map-map-city {
+  display: none;
+}
+
+#views-exposed-form-apartments-apartment-complex {
+  display: none;
+}
+
+#views-exposed-form-apartments-apartment-developer {
+  display: none;
+}
+
+.yamaps-search-form {
+  display: none;
+}
+
+.yamaps-map-container {
+  position: absolute;
+  margin: 0;
+  height: 400px;
+}
+
+.complex-filter-square label {
+  color:#f2f2f2;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-weight: 300;
+  font-size:16px;
+}
+
+.form-item-field-gross-area-value-min {
+  display: inline;
+}
+.form-item-field-gross-area-value-max {
+  display: inline;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.recall h3 {
+  width: 95%;
+  float: left;
+  padding-top: 0px;
+  margin-top: 5px;
+  color: #000;
+  font-size: 18px;
+  margin-bottom: 0px;
+}
+
+.plan-home-section {
+  display: none;
+}
+
+.over-plan {
+  cursor: pointer;
+}
+
+.plan-home-section-floor {
+  display: none;
+}
+
+.tab-menu-active {
+  color: #2391af;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#admin-menu {
+  z-index: 10000;
+}
+
+#user-login {
+  /* top: 100px;
+   position: absolute;*/
+}
+
+@media(max-width:960px){
+  #index #menu{
+    height: 50px;
+    line-height: 50px;
+    font-size:12px;
+  }
+}
+
+@media(max-width:960px){
+  .ms-choice > div {
+    background: none;
+  }
+}
+
+.title-block h2{
+  color:#fff;
+  font-weight: 600;
+  position: relative;
+  font-size: 30px;
+  width: 80%;
+  text-transform: uppercase;
+}
+
+
+@media (max-width: 1200px){
+  .title-block h2{
+    font-size: 25px;
+    margin-left: -5px;
+  }
+}
+@media(max-width:1200px){
+  .complex-filter-square-lebel{
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+@media (max-width: 1200px){
+  .title-block p {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: -5px;
+  }
+}
+
+@media(max-width:1200px){
+  .apartment-image-vertical {
+    height:80%;
+  }
+}
+
+@media(max-width:1200px){
+  .complex-filter-square-lebel{
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+#views-exposed-form-complex-complexs {
+  display: none;
+}
+
+.fotorama__arr, .fotorama__fullscreen-icon, .fotorama__video-close, .fotorama__video-play {
+  background: url(../images/fotorama.png) no-repeat;
+  background: none;
+}
+
+#views-exposed-form-apartments-result-search {
+  display: none;
+}
+
+#index #views-exposed-form-apartments-result-search {
+  display: inline;
+}
+
+#views-exposed-form-stock-all-stock-city {
+  display: none;
+}
+
+.password-strength {
+  display: none;
+}
+
+input.password-confirm, input.password-field {
+  width: 350px;
+}
+
+div.messages {
+
+}
+
+.payment-additional-fields {
+  display: none;
+}
+
+.comparison {
+  cursor: pointer;
+}
+
+.modal_checkbox label {
+  height: 100%;
+  width: 100%;
+}
+
+#svg-plan {
+  margin-bottom: 0px;
+}
+
+#svg-plan svg{
+  width: 100%;
+  height: 100%;
+}
+
+.div-complex-plan svg{
+  width: 100%;
+  height: 100%;
+}
+
+.list-floor-link li {
+  display: inline;
+  text-transform: uppercase;
+  height: 70px;
+  line-height: 70px;
+  margin-bottom: 35px;
+  margin-right: 10px;
+}
+.list-floor-link span {
+  color: #fff;
+  font-size: 15px;
+  padding-right: 15px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.link-floor {
+  color: #fff;
+}
+
+.number-floor-active a {
+  color: #00b7e4;
+  font-weight: 700;
+}
+
+.svg-admin-class {
+  float: left;
+}
+
+.complex-plan {
+  cursor: pointer;
+  opacity:1;
+  transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+}
+
+.complex-plan:hover {
+  cursor: pointer;
+  fill:#00a5d1;
+  opacity:1;
+  transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+}
+
+.home-plan {
+  cursor: pointer;
+  transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+}
+
+.home-plan:hover {
+  cursor: pointer;
+  fill:#00a5d1;
+  opacity:1;
+  transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+}
+
+.floor-plan {
+  opacity:0.7;
+}
+
+.active-apartment-svg {
+  opacity: 0;
+  cursor: pointer;
+  transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+}
+
+.active-apartment-svg:hover {
+  opacity: 0.4;
+  fill: #00a5d1;
+  cursor: pointer;
+  transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+}
+
+
+.booking-apartment-svg{
+  fill:#eee;
+  opacity:0.3;
+  cursor: pointer;
+}
+
+.booking-apartment-svg:hover{
+  fill:#eee;
+  opacity:0.3;
+}
+
+.apt_active {
+  opacity:0.4;
+  fill:#00a5d1;
+}
+
+#div-info-box p {
+  color: #d3d3d3;
+  font-size: 14px;
+  padding-left: 35px;
+  margin: 5px 0;
+}
+
+form .error-input-bottom {
+  border-bottom: 1px solid #d17575;
+}
+
+#div-mortgage-applications {
+  display: none;
+}
+
+#mortgage-form-bookings {
+  display: none;
+}
+
+.real-div-height {
+  height: 100%;
+}
+
+.ajax-progress-throbber {
+  display: none;
+}
+
+#ajax-register-user-login-wrapper div.status{
+  display: none;
+}
+
+#ajax-register-user-register-form-wrapper--2 div.status{
+  display: none;
+}
+
+#ajax-register-user-login-wrapper div.error{
+  color: #939393;
+}
+
+#ajax-register-user-login-wrapper .error a {
+  color: #00a5d1;
+}
+
+#ajax-register-user-register-form-wrapper--2 div.error{
+  color: #939393;
+}
+
+#ajax-register-user-pass-wrapper div.error{
+  color: #939393;
+}
+
+#realty-password-edit .status {
+  display: none;
+}
+
+.realty-preload {
+  display: none;
+  position:fixed;
+  z-index:99999;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  min-width:1000px;
+  opacity: 0.5;
+  background:url(../images/oval.svg) center center no-repeat #00a5d1;background-size:44px
+}
+
+#realty-title-complex a{
+  color: #4c4c4c;
+}
+
+.feedback-menu .grippie {
+  display: none;
+}
+
+.excur-offer-button {
+  color: #ffffff;
+}
+
+.selection-order {
+  display: none;
+}
+
+.selection-order input.button-feedback {
+  width: 60%;
+  margin-left: 20%;
+  background: #00b7e4;
+}

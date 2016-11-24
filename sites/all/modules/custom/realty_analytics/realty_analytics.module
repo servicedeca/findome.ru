@@ -1,0 +1,520 @@
+<?php
+
+/**
+ * Implement hook_menu()
+ */
+function realty_analytics_menu() {
+
+  $items['realty/analytics'] = array(
+    'title' => 'analytics',
+    'page callback' => 'realty_analytics_page',
+    //'page arguments' => array('city', 2),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback
+ */
+function realty_analytics_page() {
+  realty_analytics_get_max_price();
+  realty_analytics_count_developers();
+
+  //$apartments_price = realty_analytics_get_price_apartments();
+}
+
+/**
+ * Get apartments
+ */
+function realty_analytics_get_price_apartments() {
+
+  $rooms = REALTY_ROOM;
+
+  $apartments['all'] = db_query("SELECT count(field_data_field_price.entity_id) AS count_apartments , avg(field_data_field_price.field_price_value) AS avg_price
+                              FROM field_data_field_price
+                              WHERE field_data_field_price.field_price_value != 0
+                                AND field_data_field_price.entity_id IN
+                                (SELECT node.nid
+                                  FROM node
+                                  LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                  WHERE node.type = 'apartament' AND node.status = 1 AND
+                                  field_data_field_status.field_status_value = 1)")->fetchAll();
+
+  foreach($rooms as $key => $room) {
+    $apartments[$room] = db_query("SELECT count(field_data_field_price.entity_id) AS count_apartments , avg(field_data_field_price.field_price_value) AS avg_price
+                              FROM field_data_field_price
+                              WHERE field_data_field_price.field_price_value != 0
+                                AND field_data_field_price.entity_id IN
+                                (SELECT node.nid
+                                  FROM node
+                                  LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                  LEFT JOIN field_data_field_number_rooms ON node.nid = field_data_field_number_rooms.entity_id
+                                  WHERE node.type = 'apartament' AND node.status = 1 AND
+                                  field_data_field_status.field_status_value = 1
+                                  AND field_data_field_number_rooms.field_number_rooms_value = :room)", array(':room' => $room))->fetchAll();
+  }
+
+  return $apartments;
+}
+
+/**
+ * Get count developers.
+ */
+function realty_analytics_count_developers() {
+  $result = db_query("SELECT count(taxonomy_term_data.tid) AS count_developers
+                              FROM taxonomy_term_data
+                              WHERE taxonomy_term_data.vid = 3")->fetchAll();
+
+  return $result[0]->count_developers;
+}
+
+/**
+ *  Get count active complexes.
+ */
+function realty_analytics_count_complexes() {
+  $result = db_query("SELECT count(node.nid) AS count_complexes
+                              FROM node
+                              LEFT JOIN field_data_field_archive ON node.nid = field_data_field_archive.entity_id
+                              WHERE node.type = 'complex' AND node.status = 1 AND
+                              field_data_field_archive.field_archive_value = 0")->fetchAll();
+
+  return $result[0]->count_complexes;
+}
+
+/**
+ * Get count active complex in areas.
+ */
+function realty_analytics_count_complex_area() {
+  $areas = db_query("SELECT taxonomy_term_data.tid, taxonomy_term_data.name
+                              FROM taxonomy_term_data
+                              WHERE taxonomy_term_data.vid = 5")->fetchAll();
+  foreach($areas as $area) {
+    $res = db_query("SELECT count(node.nid) AS count_complexes
+                              FROM node
+                              LEFT JOIN field_data_field_archive ON node.nid = field_data_field_archive.entity_id
+                              LEFT JOIN field_data_field_area ON node.nid = field_data_field_area.entity_id
+                              WHERE node.type = 'complex' AND node.status = 1 AND
+                              field_data_field_area.field_area_tid = :tid", array(':tid' => $area->tid))->fetchAll();
+    $result[$area->name] = $res[0]->count_complexes;
+  }
+
+  return $result;
+}
+
+/**
+ * Get min price
+ */
+function realty_analytics_get_min_price() {
+  $rooms = REALTY_ROOM;
+
+  $apartments['all'] = db_query("SELECT field_data_field_price.entity_id, field_data_field_price.field_price_value
+                              FROM field_data_field_price
+                              WHERE field_data_field_price.field_price_value IN(
+                                SELECT MIN(field_data_field_price.field_price_value)
+                                FROM field_data_field_price
+                                LEFT JOIN node ON field_data_field_price.entity_id = node.nid
+                                LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                WHERE node.type = 'apartament' AND node.status = 1 AND field_data_field_price.field_price_value != 0 AND
+                                  field_data_field_status.field_status_value = 1)
+                                ")->fetchAll();
+
+
+  foreach($rooms as $key => $room) {
+    $apartments[$room] = db_query("SELECT field_data_field_price.entity_id, field_data_field_price.field_price_value
+                              FROM field_data_field_price
+                              WHERE field_data_field_price.field_price_value IN(
+                                SELECT MIN(field_data_field_price.field_price_value)
+                                FROM field_data_field_price
+                                LEFT JOIN node ON field_data_field_price.entity_id = node.nid
+                                LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                LEFT JOIN field_data_field_number_rooms ON node.nid = field_data_field_number_rooms.entity_id
+                                WHERE node.type = 'apartament' AND node.status = 1 AND field_data_field_price.field_price_value != 0 AND
+                                  field_data_field_status.field_status_value = 1 AND field_data_field_number_rooms.field_number_rooms_value = :room)
+                                ", array(':room' => $room))->fetchAll();
+  }
+
+  return $apartments;
+}
+
+/**
+ * Get min price
+ */
+function realty_analytics_get_max_price() {
+  $rooms = REALTY_ROOM;
+
+  $apartments['all'] = db_query("SELECT field_data_field_price.entity_id, field_data_field_price.field_price_value
+                              FROM field_data_field_price
+                              WHERE field_data_field_price.field_price_value IN(
+                                SELECT MAX (field_data_field_price.field_price_value)
+                                FROM field_data_field_price
+                                LEFT JOIN node ON field_data_field_price.entity_id = node.nid
+                                LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                WHERE node.type = 'apartament' AND node.status = 1 AND field_data_field_price.field_price_value != 0 AND
+                                  field_data_field_status.field_status_value = 1)
+                                ")->fetchAll();
+
+
+  foreach($rooms as $key => $room) {
+    $apartments[$room] = db_query("SELECT field_data_field_price.entity_id, field_data_field_price.field_price_value
+                              FROM field_data_field_price
+                              WHERE field_data_field_price.field_price_value IN(
+                                SELECT MAX (field_data_field_price.field_price_value)
+                                FROM field_data_field_price
+                                LEFT JOIN node ON field_data_field_price.entity_id = node.nid
+                                LEFT JOIN field_data_field_status ON node.nid = field_data_field_status.entity_id
+                                LEFT JOIN field_data_field_number_rooms ON node.nid = field_data_field_number_rooms.entity_id
+                                WHERE node.type = 'apartament' AND node.status = 1 AND field_data_field_price.field_price_value != 0 AND
+                                  field_data_field_status.field_status_value = 1 AND field_data_field_number_rooms.field_number_rooms_value = :room)
+                                ", array(':room' => $room))->fetchAll();
+  }
+
+  return $apartments;
+}
+
+/**
+ * Get the average price per square for developers and complexes
+ */
+function realty_analytics_average_price($city, $developers, $complexes) {
+
+  $types = realty_get_types_apartment();
+  $args['apartment_types'] = $types;
+
+  if ($developers) {
+    $db_developers = realty_admin_get_names_developers_by_tid($developers);
+  }
+  else {
+    $db_developers = realty_admin_get_developers_city($city);
+  }
+
+  if($complexes) {
+    $db_developers = realty_admin_get_developers_on_complexes($complexes);
+
+    $db_complexes_complexes = realty_admin_get_complexes_by_nid($complexes);
+  }
+  //если не выбраны жк
+  else {
+    // Формирование списка Жилых комплексов для Застройщиков
+    if ($developers) {
+      foreach ($developers as $developer) {
+        $db_complexes = realty_admin_get_complexes_from_developer($developer->tid);
+      }
+    }
+  }
+
+  foreach ($db_developers as $developer) {
+    foreach($types as $type) {
+      $args['developers'][$developer->name]['apartments'][$type] = realty_get_average_price_apartment_developer($developer->tid, array($type));
+    }
+    $args['developers'][$developer->name]['apartments']['all'] = realty_get_average_price_apartment_developer($developer->tid);
+    $args['developers'][$developer->name]['tid'] = $developer->tid;
+    $args['developers'][$developer->name]['city_tid'] = $city;
+    if(isset($complexes) && !empty($complexes)) {
+      foreach ($db_complexes_complexes AS $kc =>$comp) {
+        if($comp->developer == $developer->tid) {
+          $db_complexes_developer[$kc] = $comp;
+        }
+      }
+      $db_complexes = $db_complexes_developer;
+      $db_complexes_developer = [];
+    }
+    else {
+      $db_complexes = realty_admin_get_complexes_from_developer($developer->tid);
+    }
+
+    foreach($db_complexes as $complex) {
+      foreach($types as $type) {
+        $args['complexes'][$complex->title]['apartments'][$type] = realty_get_average_price_apartment_complex($complex->entity_id, array($type));
+      }
+      $args['complexes'][$complex->title]['developer_name'] = $developer->name;
+      $args['complexes'][$complex->title]['developer_tid'] = $developer->tid;
+      $args['complexes'][$complex->title]['nid'] = $complex->entity_id;
+      $args['complexes'][$complex->title]['city_tid'] = $city;
+
+      $args['complexes'][$complex->title]['apartments']['all'] = realty_get_average_price_apartment_complex($complex->entity_id);
+    }
+  }
+
+  $prices['all'] = 0;
+  $count['all'] = 0;
+  foreach ($args['developers'] as $dev) {
+    if(!empty($dev['apartments']['all'])) {
+      $prices['all'] += (int)str_replace(" ","", $dev['apartments']['all']);
+      $count['all']++;
+    }
+    foreach($types as $type) {
+      if (!empty($dev['apartments'][$type])) {
+        $prices[$type] += (int)str_replace(" ","", $dev['apartments'][$type]);
+        $count[$type]++;
+      }
+    }
+  }
+  foreach($types as $type) {
+
+    $args['city'][$city]['apartments'][$type] = number_format((int)($prices[$type] / $count[$type]), 0, '', ' ' );
+  }
+
+  $args['city'][$city]['apartments']['all'] = number_format((int)($prices['all'] / $count['all']), 0, '', ' ' );
+  $args['city'][$city]['tid'] = $city;
+
+  cache_set('realty_admin_average_price', $args);
+
+  return $args;
+}
+
+/**
+ * Get the average price per square for developers and complexes in data base
+ */
+function realty_analytics_average_price_db($city, $developers, $complexes, $date) {
+  $result = db_query("SELECT *
+              FROM realty_analytics_average_price_sq
+              WHERE realty_analytics_average_price_sq.date = :date
+              AND realty_analytics_average_price_sq.city_tid = :city
+              ", array(':date' => $date, ':city' => $city))->fetchAll();
+
+  $types = realty_get_types_apartment();
+  $args['apartment_types'] = $types;
+
+  if($complexes) {
+    $db_developers = realty_admin_get_developers_on_complexes($complexes);
+    foreach($db_developers as $dev) {
+      $developers[$dev->tid] = $dev->tid;
+    }
+  }
+
+  foreach ($result as $key => $value) {
+    if (!$value->developer_tid && !$value->complex_nid) {
+      foreach($types as $type) {
+        $type_r = 'r_' . $type;
+        $args['city'][$value->city_tid]['apartments'][$type] = $value->$type_r;
+      }
+
+      $args['city'][$value->city_tid]['apartments']['all'] = $value->all_apartments;
+      $args['city'][$value->city_tid]['tid'] = $value->city_tid;
+    }
+
+    if (!$value->complex_nid && $value->developer_tid) {
+      if (($developers && in_array($value->developer_tid, $developers) || !$developers)) {
+        $developer = realty_admin_get_names_developers_by_tid(array($value->developer_tid));
+        foreach($types as $type) {
+          $type_r = 'r_' . $type;
+          $args['developers'][$developer[0]->name]['apartments'][$type] = $value->$type_r;
+        }
+        $args['developers'][$developer[0]->name]['apartments']['all'] = $value->all_apartments;
+        $args['developers'][$developer[0]->name]['tid'] = $value->developer_tid;
+        $args['developers'][$developer[0]->name]['city_tid'] = $value->city_tid;
+      }
+    }
+
+    if($value->complex_nid) {
+      if($complexes && in_array($value->complex_nid, $complexes) || !$complexes) {
+        $complex = realty_admin_get_complexes_by_nid(array($value->complex_nid));
+        $developer = realty_admin_get_names_developers_by_tid(array($complex[0]->developer));
+        foreach($types as $type) {
+          $type_r = 'r_' . $type;
+          $args['complexes'][$complex[0]->title]['apartments'][$type] = $value->$type_r;
+        }
+        $args['complexes'][$complex[0]->title]['developer_name'] = $developer[0]->name;
+        $args['complexes'][$complex[0]->title]['developer_tid'] = $value->developer_tid;
+        $args['complexes'][$complex[0]->title]['nid'] = $value->complex_nid;
+        $args['complexes'][$complex[0]->title]['city_tid'] = $value->city_tid;
+
+        $args['complexes'][$complex[0]->title]['apartments']['all'] = $value->all_apartments;
+      }
+    }
+  }
+  cache_set('realty_admin_average_price', $args);
+  return $args;
+}
+
+/**
+ * sql query to insert data average price.
+ */
+function realty_analytics_sql_insert_average_price($city_tid = NULL, $developer_tid = NULL, $complex_nid = NULL, $apartments, $date) {
+
+  db_query("INSERT INTO realty.realty_analytics_average_price_sq (
+                          all_apartments,
+                          realty_analytics_average_price_sq.r_1,
+                          realty_analytics_average_price_sq.r_1c,
+                          realty_analytics_average_price_sq.r_2,
+                          realty_analytics_average_price_sq.r_2c,
+                          realty_analytics_average_price_sq.r_3,
+                          realty_analytics_average_price_sq.r_3c,
+                          realty_analytics_average_price_sq.r_4,
+                          realty_analytics_average_price_sq.r_5,
+                          developer_tid,
+                          complex_nid,
+                          city_tid,
+                          date)
+              VALUES (:all_apartments,
+                      :one_apartments,
+                      :one_c_apartments,
+                      :two_apartments,
+                      :two_c_apartments,
+                      :three_apartments,
+                      :three_c_apartments,
+                      :four_apartments,
+                      :five_apartments,
+                      :developer_tid,
+                      :complex_nid,
+                      :city_tid,
+                      :date)",
+    array (
+      ':all_apartments' => $apartments['all'],
+      ':one_apartments' => $apartments['1'],
+      ':one_c_apartments' => $apartments['1c'],
+      ':two_apartments' => $apartments['2'],
+      ':two_c_apartments' => $apartments['2c'],
+      ':three_apartments' => $apartments['3'],
+      ':three_c_apartments' => $apartments['3c'],
+      ':four_apartments' => $apartments['4'],
+      ':five_apartments' => $apartments['5'],
+      ':developer_tid' => $developer_tid,
+      ':complex_nid' => $complex_nid,
+      ':city_tid' => $city_tid,
+      ':date' => $date,));
+}
+
+/**
+ * Paste the average price of apartments.
+ */
+function realty_analytics_insert_average_price($array) {
+  $date = time();
+
+  foreach($array['city'] as $value) {
+    if ($value['apartments']['all']) {
+      realty_analytics_sql_insert_average_price($value['tid'], NULL, NULL, $value['apartments'], $date);
+    }
+  }
+
+  foreach($array['developers'] as $developer) {
+    if ($developer['apartments']['all']) {
+      realty_analytics_sql_insert_average_price($developer['city_tid'], $developer['tid'], NULL, $developer['apartments'], $date);
+    }
+  }
+
+  foreach($array['complexes'] as $complexes) {
+    if ($complexes['apartments']['all']) {
+      realty_analytics_sql_insert_average_price($developer['city_tid'], $complexes['developer_tid'], $complexes['nid'], $complexes['apartments'], $date);
+    }
+  }
+
+}
+
+/**
+ * sql query to insert data count apartments.
+ */
+function realty_analytics_sql_insert_count_apartments($city_tid, $developer_tid, $complex_nid, $home_tid, $section_id, $apartments, $date) {
+  db_query("INSERT INTO realty.realty_analytics_count_apartments (
+                          apartment_active,
+                          apartment_booking,
+                          apartment_base,
+                          apartment_all,
+                          developer_tid,
+                          complex_nid,
+                          city_tid,
+                          home_tid,
+                          section,
+                          date)
+              VALUES (:apartment_active,
+                      :apartment_booking,
+                      :apartment_base,
+                      :apartment_all,
+                      :developer_tid,
+                      :complex_nid,
+                      :city_tid,
+                      :home_tid,
+                      :section_id,
+                      :date)",
+    array (
+      ':apartment_active' => $apartments['apartment_active'],
+      ':apartment_booking' => $apartments['apartment_booking'],
+      ':apartment_base' => $apartments['apartment_base'],
+      ':apartment_all' => $apartments['apartment_all'],
+      ':developer_tid' => $developer_tid,
+      ':complex_nid' => $complex_nid,
+      ':city_tid' => $city_tid,
+      ':home_tid' => $home_tid,
+      ':section_id' => $section_id,
+      ':date' => $date,));
+}
+
+/**
+ * Paste the count apartments.
+ */
+function realty_analytics_insert_count_apartments($array) {
+  $date = time();
+
+  foreach($array['city'] as $city_tid => $value) {
+    foreach($value['apartments'] as $type_ap => $val) {
+      $json_val[$type_ap] = json_encode($val);
+    }
+    realty_analytics_sql_insert_count_apartments($city_tid, NULL, NULL, NULL, NULL, $json_val, $date);
+  }
+
+  foreach($array['developers'] as $developer) {
+    foreach($developer['apartments'] as $type_ap => $val) {
+      $json_val[$type_ap] = json_encode($val);
+    }
+    realty_analytics_sql_insert_count_apartments($developer['city_tid'], $developer['developer_tid'], NULL, NULL, NULL, $json_val, $date);
+  }
+
+  foreach($array['complexes'] as $complexes) {
+    foreach($complexes['apartments'] as $type_ap => $val) {
+      $json_val[$type_ap] = json_encode($val);
+    }
+    realty_analytics_sql_insert_count_apartments($complexes['city_tid'], $complexes['developer_tid'], $complexes['complex_nid'], NULL, NULL, $json_val, $date);
+  }
+
+  foreach($array['homes'] as $home) {
+    foreach($home['apartments'] as $type_ap => $val) {
+      $json_val[$type_ap] = json_encode($val);
+    }
+    realty_analytics_sql_insert_count_apartments($home['city_tid'], $home['developer_tid'], $home['complex_nid'], $home['home_tid'], NULL, $json_val, $date);
+  }
+
+  foreach($array['sections'] as $section_id => $section) {
+    foreach($section['apartments'] as $type_ap => $val) {
+      $json_val[$type_ap] = json_encode($val);
+    }
+    realty_analytics_sql_insert_count_apartments($section['city_tid'], $section['developer_tid'], $section['complex_nid'], $section['home_tid'], $section_id, $json_val, $date);
+  }
+
+}
+
+/**
+ * Get date for average price
+ */
+function realty_analytics_get_date_average_price() {
+  return db_query("SELECT realty_analytics_average_price_sq.date
+              FROM realty_analytics_average_price_sq
+              GROUP BY realty_analytics_average_price_sq.date")->fetchAll();
+}
+
+/**
+ * Get date for count apartments
+ */
+function realty_analytics_get_date_count_apartments() {
+  return db_query("SELECT realty_analytics_count_apartments.date
+              FROM realty_analytics_count_apartments
+              GROUP BY realty_analytics_count_apartments.date")->fetchAll();
+}
+
+
+/**
+ * Get max and min cost apartment on developer.
+ */
+function realty_analytics_get_max_cost_developer($developer_tid) {
+  $cost = db_query("SELECT  MAX (field_data_field_full_cost.field_full_cost_value) AS max_cost, MIN (field_data_field_full_cost.field_full_cost_value) as min_cost
+                      FROM field_data_field_full_cost
+                      LEFT JOIN node ON field_data_field_full_cost.entity_id = node.nid
+                      LEFT JOIN field_data_field_apartament_home ON field_data_field_full_cost.entity_id = field_data_field_apartament_home.entity_id
+                      LEFT JOIN field_data_field_home_complex ON field_data_field_apartament_home.field_apartament_home_tid = field_data_field_home_complex.entity_id
+                      LEFT JOIN field_data_field_complex_developer ON field_data_field_home_complex.field_home_complex_target_id = field_data_field_complex_developer.entity_id
+                      WHERE field_data_field_complex_developer.field_complex_developer_tid = :developer_tid AND node.status = 1",
+                      array(':developer_tid' => $developer_tid))->fetchAll();
+
+  return $cost;
+}
+

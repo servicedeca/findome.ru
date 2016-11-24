@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="305px"
+	 height="222px" viewBox="0 0 305 222" enable-background="new 0 0 305 222" xml:space="preserve">
+<g id="back">
+</g>
+<g id="text">
+</g>
+<g id="img">
+</g>
+<g id="main">
+	<g id="FIND_x5F_logo_2">
+	</g>
+	<g id="marker_x5F_map_x5F_area">
+	</g>
+	<g>
+		<defs>
+			<rect id="SVGID_19_" x="-2849.812" y="-518.425" width="2560" height="904.68"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_19_"  overflow="visible"/>
+		</clipPath>
+	</g>
+	<g>
+		<rect y="0" opacity="0.2" fill="#939393" width="305" height="222"/>
+		<g>
+			<path fill="#939393" d="M300,5v212H5V5H300 M305,0H0v222h305V0L305,0z"/>
+		</g>
+		<g>
+			<ellipse fill="#939393" cx="152.5" cy="113.192" rx="10.842" ry="10.522"/>
+			<path fill="#939393" d="M133.526,93.024V88.64h-9.035v4.384h-4.518v40.336h65.054V93.024H133.526z M152.5,128.976
+				c-8.981,0-16.263-7.067-16.263-15.783s7.282-15.783,16.263-15.783s16.263,7.067,16.263,15.783S161.481,128.976,152.5,128.976z
+				 M182.316,102.67h-10.842v-7.015h10.842V102.67z"/>
+		</g>
+	</g>
+</g>
+<g id="ann" display="none">
+</g>
+<g id="logo">
+</g>
+</svg>
