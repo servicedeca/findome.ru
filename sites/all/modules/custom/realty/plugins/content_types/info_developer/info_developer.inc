@@ -74,7 +74,7 @@ function template_preprocess_realty_info_developer(&$vars) {
   $apartment_active = json_decode($count_apartments[0]->apartment_active, TRUE);
   $apartment_all = json_decode($count_apartments[0]->apartment_all, TRUE);
   $vars['apartments_active'] = array (
-    '1' => (int)$apartment_active['1'] + (int)$apartment_active['1с'],
+    '1' => (int)$apartment_active['1'] + (int)$apartment_active['1c'],
     '2' => (int)$apartment_active['2'] + (int)$apartment_active['2c'],
     '3' => (int)$apartment_active['3'] + (int)$apartment_active['3c'],
     '4_5' => (int)$apartment_active['4'] + (int)$apartment_active['5'],

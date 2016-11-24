@@ -918,7 +918,7 @@
                 }
 
                 var countApartment, countApartmentStudio;
-                var apartmentTypes = ['1', '1с', '2', '2с', '3', '3с'];
+                var apartmentTypes = ['1', '1c', '2', '2c', '3', '3c'];
 
                 // Обновление основной информации о доме
 

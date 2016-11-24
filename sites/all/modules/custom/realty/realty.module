@@ -12,11 +12,11 @@ define('REALTY_FRONT_THEME_PATH', drupal_get_path('theme', 'realty_theme'));
 function realty_get_types_apartment()
 {
   return array('1' => '1',
-    '1с' => '1c',
+    '1c' => '1c',
     '2' => '2',
-    '2с' => '2c',
+    '2c' => '2c',
     '3' => '3',
-    '3с' => '3c',
+    '3c' => '3c',
     '4' => '4',
     '5' => '5',
   );
@@ -4143,7 +4143,7 @@ function realty_get_info_home()
 
                     WHERE node.status = 1
                           AND field_data_field_status.field_status_value = 1
-                          AND field_data_field_number_rooms.field_number_rooms_value NOT IN (1, '1с', '2', '2с', 3, '3с')
+                          AND field_data_field_number_rooms.field_number_rooms_value NOT IN (1, '1c', '2', '2c', 3, '3c')
                           AND field_data_field_apartament_home.field_apartament_home_tid = :home_tid
                           AND field_data_field_section.field_section_value = :section_id
                         AND field_data_field_number_section.field_number_section_value = :section_id";
@@ -4215,7 +4215,7 @@ function realty_get_info_home()
                       LEFT JOIN field_data_field_home_quantity_otherc_room ON field_data_field_home_quantity_otherc_room.entity_id = field_data_field_apartament_home.field_apartament_home_tid
                     WHERE node.status = 1
                           AND field_data_field_status.field_status_value = 1
-                          AND field_data_field_number_rooms.field_number_rooms_value NOT IN (1, '1с', '2', '2c', 3, '3c')
+                          AND field_data_field_number_rooms.field_number_rooms_value NOT IN (1, '1c', '2', '2c', 3, '3c')
                           AND field_data_field_apartament_home.field_apartament_home_tid = :home_tid";
 
       $db_args[':home_tid'] = $home_tid;

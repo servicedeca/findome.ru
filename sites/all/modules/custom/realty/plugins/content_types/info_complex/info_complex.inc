@@ -264,9 +264,9 @@ function template_preprocess_realty_info_complex(&$vars) {
   $vars['address'] = $address[0]['value'];
 
   // Количество квартир
-  $vars['count_1'] = realty_get_apartment_active_complex($node->nid, array('1с', '1'));
-  $vars['count_2'] = realty_get_apartment_active_complex($node->nid, array('2с', '2'));
-  $vars['count_3'] = realty_get_apartment_active_complex($node->nid, array('3с', '3'));
+  $vars['count_1'] = realty_get_apartment_active_complex($node->nid, array('1c', '1'));
+  $vars['count_2'] = realty_get_apartment_active_complex($node->nid, array('2c', '2'));
+  $vars['count_3'] = realty_get_apartment_active_complex($node->nid, array('3c', '3'));
   $vars['count_other'] = realty_get_apartment_active_complex($node->nid) - ($vars['count_1'] + $vars['count_2'] + $vars['count_3']);
 
   $vars['count_active_apartments'] = $vars['count_1'] + $vars['count_2'] + $vars['count_3'] + $vars['count_other'];
