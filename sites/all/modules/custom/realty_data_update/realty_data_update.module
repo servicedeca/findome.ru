@@ -632,7 +632,7 @@ function realty_data_update_enumerating_objects_xml($config, $method, &$ptr_obje
   }
 
   if($studio == 1) {
-    $room = $room.'с';
+    $room = $room.'c';
   }
 
   return array(

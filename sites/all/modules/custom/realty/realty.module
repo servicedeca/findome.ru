@@ -1247,7 +1247,7 @@ function realty_search_count_result()
                 AND field_data_field_gross_area.field_gross_area_value >= :sq_min
                 AND field_data_field_gross_area.field_gross_area_value <= :sq_max
                 AND field_data_field_apartment_ceiling_height.entity_id = node.nid
-                AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value >= 1
+                AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value >= 0
                 AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value <= 5
                 AND field_data_field_apartment_floor.entity_id = node.nid
                 AND field_data_field_apartment_floor.field_apartment_floor_value >= :floors_min
