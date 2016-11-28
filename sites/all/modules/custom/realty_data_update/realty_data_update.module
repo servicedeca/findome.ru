@@ -1527,7 +1527,9 @@ function realty_data_update_add_apartments_ftp_excel($method) {
         $full_sq = $exc[$config[0]->full_sq];
         $live_sq = $exc[$config[0]->live_sq];
         $floor = $exc[$config[0]->floor];
-        $room = $exc[$config[0]->room];
+        $room = str_replace("'", '', $exc[$config[0]->room]);
+        $room = str_replace("с", "c", $room);
+
 
         if($config[0]->status == 'active') {
           $status = 1;
