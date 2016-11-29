@@ -769,20 +769,22 @@ function realty_data_update_ftp_xml($method) {
 
             $tid_developer = $node_complex->field_complex_developer[LANGUAGE_NONE][0]['tid'];
 
-            // Запись информации о продаже квартиры
-            $db_query = db_query("INSERT INTO realty_data_update_logs (tid_developer, nid_complex, tid_home,
+            if ($tid_developer != 74) {
+              // Запись информации о продаже квартиры
+              $db_query = db_query("INSERT INTO realty_data_update_logs (tid_developer, nid_complex, tid_home,
                                       nid_apartment, old_status, new_status, start_time)
                                     VALUES (:tid_developer, :nid_complex, :tid_home,
                                       :nid_apartment, :old_status, :new_status, :start_time)",
-              array(
-                ':tid_developer' => $tid_developer,
-                ':nid_complex' => $nid_complex,
-                ':tid_home' => $tid_home,
-                ':nid_apartment' => $node->nid,
-                ':old_status' => (int)$db_status[0]->field_status_value,
-                ':new_status' => 9,
-                ':start_time' => $start_time)
-            );
+                  array(
+                      ':tid_developer' => $tid_developer,
+                      ':nid_complex' => $nid_complex,
+                      ':tid_home' => $tid_home,
+                      ':nid_apartment' => $node->nid,
+                      ':old_status' => (int)$db_status[0]->field_status_value,
+                      ':new_status' => 9,
+                      ':start_time' => $start_time)
+              );
+            }
 
         }
         // Если квартира не продана
