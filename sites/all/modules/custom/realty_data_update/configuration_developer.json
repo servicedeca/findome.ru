@@ -72,5 +72,15 @@
     "ftp_dir": "/user009/files",
     "config_dir": "/user009/config",
     "unsold_apartments": false
+  },
+  {
+    "name": ["ЗАО Строитель"],
+    "tid_developer": ["206"],
+    "complex": ["ЖК Аксиома"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user010/files",
+    "config_dir": "/user010/config",
+    "unsold_apartments": false
   }
 ]
