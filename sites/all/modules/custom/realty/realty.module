@@ -4707,7 +4707,12 @@ function realty_generation_pdf_apartment($node)
       $pdf_path = $_SERVER['DOCUMENT_ROOT'] . "/sites/default/files/pdf/apartment-$node->nid.pdf";
       $pdf_file = "/sites/default/files/pdf/apartment-$node->nid.pdf";
       if (!$pdf->saveAs($pdf_path)) {
-        $error = TRUE;
+            $error = TRUE;
+          watchdog(
+              'mymodule',
+              'message: @message',
+              array('@message' => $pdf->getError())
+          );
       }
       unlink($file_path);
     } else {
