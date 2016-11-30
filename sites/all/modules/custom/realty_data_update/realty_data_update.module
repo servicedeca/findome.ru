@@ -16,13 +16,6 @@ function realty_data_update_menu() {
     'access arguments' => array('access content'),
   );
 
-  $item['admin/content/realty/add_apartments'] = array(
-      'title' => t('Журнал обновлений'),
-      'page callback' => 'realty_data_update_add_apartments',
-      'access callback' => TRUE,
-      'access arguments' => array('access content'),
-  );
-
   $item['update_files'] = array(
     'title' => t('Последнии изменения файлов'),
     'page callback' => 'realty_data_update_files',
@@ -946,6 +939,7 @@ function realty_data_update_ftp_xml($method) {
  * Import excel files.
  */
 function realty_data_update_ftp_excel($method) {
+
   $files = realty_data_update_connect_ftp($method->ftp_dir, $method->config_dir);
 
   $config = json_decode(file_get_contents(realty_file_directory_path() . '/ftpfiles/' . $files['config'][0]));
@@ -1575,4 +1569,8 @@ function realty_data_update_add_apartments_ftp_excel($method) {
     }
   }
 
+}
+
+function realty_data_update_delete_new_apartments_table() {
+    db_query("DELETE FROM realty_data_update_new_apartments");
 }
