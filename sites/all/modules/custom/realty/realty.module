@@ -1232,8 +1232,7 @@ function realty_search_count_result()
 
   // Формирование основного запроса
   $tables = 'node, field_data_field_price, field_data_field_full_cost,
-             field_data_field_apartment_floor, field_data_field_gross_area,
-             field_data_field_apartment_ceiling_height, field_data_field_apartament_home' . $tables;
+             field_data_field_apartment_floor, field_data_field_gross_area, field_data_field_apartament_home' . $tables;
 
   $query = 'SELECT node.nid from ' . $tables . '
               WHERE node.status = 1
@@ -1246,9 +1245,6 @@ function realty_search_count_result()
                 AND field_data_field_gross_area.entity_id = node.nid
                 AND field_data_field_gross_area.field_gross_area_value >= :sq_min
                 AND field_data_field_gross_area.field_gross_area_value <= :sq_max
-                AND field_data_field_apartment_ceiling_height.entity_id = node.nid
-                AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value >= 0
-                AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value <= 5
                 AND field_data_field_apartment_floor.entity_id = node.nid
                 AND field_data_field_apartment_floor.field_apartment_floor_value >= :floors_min
                 AND field_data_field_apartment_floor.field_apartment_floor_value <= :floors_max
@@ -5400,8 +5396,8 @@ function realty_form_views_exposed_form_alter(&$form, &$form_state)
       $form_state['input']['field_full_cost_value']['max'] = 5000000;
     }
     if (!isset($_POST['field_apartment_ceiling_height_value'])) {
-      $form_state['input']['field_apartment_ceiling_height_value']['min'] = 0;
-      $form_state['input']['field_apartment_ceiling_height_value']['max'] = 5;
+      $form_state['input']['field_apartment_ceiling_height_value']['min'] = '';
+      $form_state['input']['field_apartment_ceiling_height_value']['max'] = '';
     }
 
     if (isset($_POST['area'])) {
