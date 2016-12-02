@@ -743,7 +743,7 @@
 
       $(".modal").on('hidden.bs.modal', function(){
         currentSelection = [];
-        $('#edit-submit-apartments').trigger('click');
+        //$('#edit-submit-apartments').trigger('click');
       });
 
 
