@@ -253,19 +253,19 @@ function template_preprocess_realty_main_header(&$vars) {
     $vars['link_developers'] = '<a data-context="developerCon" data-toggle="modal" data-target=".modal_cities" class="contextCtr">Застройщики</a>';
     $vars['link_mortgage'] = '<a data-context="mortageCon" data-toggle="modal" data-target=".modal_cities" class="contextCtr">Ипотека</a>';
   }
-  if (isset($city)) {
+/*  if (isset($city)) {
     // Статические ссылки
     $vars['link_search'] = l(t('Подбор квартир'), 'search/' . $city->tid);
     $vars['link_complexes'] = l(t('Новостройки'), 'complexes/city/' . $city->tid);
     $vars['link_developers'] = l(t('Застройщики'), 'developers/city/' . $city->tid);
     $vars['link_mortgage'] = l(t('Ипотека'), 'mortgage/city/' . $city->tid);
-  } else if ($_GET['q'] == "node/4629") {
+  } else if ($_GET['q'] == "node/4629") {*/
     // Статические ссылки
     $vars['link_search'] = l(t('Подбор квартир'), 'search/1');
     $vars['link_complexes'] = l(t('Новостройки'), 'complexes/city/1');
     $vars['link_developers'] = l(t('Застройщики'), 'developers/city/1');
     $vars['link_mortgage'] = l(t('Ипотека'), 'mortgage/city/1');
-  }
+/*  }*/
 
   /*** Раздел Как работает сервис ***/
 
