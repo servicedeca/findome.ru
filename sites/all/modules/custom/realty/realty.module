@@ -1231,39 +1231,40 @@ function realty_search_count_result()
     }
 
     // Формирование основного запроса
-    // Формирование основного запроса
     $tables = 'node, field_data_field_price, field_data_field_full_cost,
              field_data_field_apartment_floor, field_data_field_gross_area,
-    field_data_field_apartment_floor, field_data_field_gross_area, field_data_field_apartament_home' . $tables;
+             field_data_field_apartment_ceiling_height, field_data_field_apartament_home' . $tables;
 
     $query = 'SELECT node.nid from ' . $tables . '
               WHERE node.status = 1
-                    AND field_data_field_price.entity_id = node.nid
-                    AND field_data_field_price.field_price_value >= :price_min
-                    AND field_data_field_price.field_price_value <= :price_max
-                    AND field_data_field_full_cost.entity_id = node.nid
-                    AND field_data_field_full_cost.field_full_cost_value >= :cost_min
-                    AND field_data_field_full_cost.field_full_cost_value <= :cost_max
-                    AND field_data_field_gross_area.entity_id = node.nid
-                    AND field_data_field_gross_area.field_gross_area_value >= :sq_min
-                    AND field_data_field_gross_area.field_gross_area_value <= :sq_max   
-
-                    AND field_data_field_apartment_floor.entity_id = node.nid
-                    AND field_data_field_apartment_floor.field_apartment_floor_value >= :floors_min
-                    AND field_data_field_apartment_floor.field_apartment_floor_value <= :floors_max
-                    AND field_data_field_apartament_home.entity_id = node.nid
-                    AND field_data_field_apartament_home.field_apartament_home_tid IN (
-                        SELECT taxonomy_term_data.tid FROM taxonomy_term_data, field_data_field_home_complex
-                                        WHERE field_data_field_home_complex.entity_id = taxonomy_term_data.tid
-                    AND field_data_field_home_complex.field_home_complex_target_id IN (
+                AND field_data_field_price.entity_id = node.nid
+                AND field_data_field_price.field_price_value >= :price_min
+                AND field_data_field_price.field_price_value <= :price_max
+                AND field_data_field_full_cost.entity_id = node.nid
+                AND field_data_field_full_cost.field_full_cost_value >= :cost_min
+                AND field_data_field_full_cost.field_full_cost_value <= :cost_max
+                AND field_data_field_gross_area.entity_id = node.nid
+                AND field_data_field_gross_area.field_gross_area_value >= :sq_min
+                AND field_data_field_gross_area.field_gross_area_value <= :sq_max
+                AND field_data_field_apartment_ceiling_height.entity_id = node.nid
+                AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value >= 0
+                AND field_data_field_apartment_ceiling_height.field_apartment_ceiling_height_value <= 5
+                AND field_data_field_apartment_floor.entity_id = node.nid
+                AND field_data_field_apartment_floor.field_apartment_floor_value >= :floors_min
+                AND field_data_field_apartment_floor.field_apartment_floor_value <= :floors_max
+                AND field_data_field_apartament_home.entity_id = node.nid
+                AND field_data_field_apartament_home.field_apartament_home_tid IN (
+                  SELECT taxonomy_term_data.tid FROM taxonomy_term_data, field_data_field_home_complex
+                    WHERE field_data_field_home_complex.entity_id = taxonomy_term_data.tid
+                      AND field_data_field_home_complex.field_home_complex_target_id IN (
                         SELECT node.nid FROM node, field_data_field_complex_developer
-                                              WHERE field_data_field_complex_developer.entity_id = node.nid
-                    AND field_data_field_complex_developer.field_complex_developer_tid IN (
-                        SELECT taxonomy_term_data.tid FROM taxonomy_term_data, field_data_field_city
-                                                    WHERE field_data_field_city.entity_id = taxonomy_term_data.tid
-                    AND field_data_field_city.field_city_tid = :city
-                                                  )
-                                            )
+                          WHERE field_data_field_complex_developer.entity_id = node.nid
+                            AND field_data_field_complex_developer.field_complex_developer_tid IN (
+                              SELECT taxonomy_term_data.tid FROM taxonomy_term_data, field_data_field_city
+                                WHERE field_data_field_city.entity_id = taxonomy_term_data.tid
+                                  AND field_data_field_city.field_city_tid = :city
+                              )
+                        )
                   )' . $query;
 
     // Выполнение запроса
@@ -4144,7 +4145,7 @@ function realty_get_info_home()
                           AND field_data_field_status.field_status_value = 1
                           AND field_data_field_number_rooms.field_number_rooms_value NOT IN (1, '1c', '2', '2c', 3, '3c')
                           AND field_data_field_apartament_home.field_apartament_home_tid = :home_tid
-                          AND field_data_field_secруtion.field_section_value = :section_id
+                          AND field_data_field_section.field_section_value = :section_id
                         AND field_data_field_number_section.field_number_section_value = :section_id";
 
             $db_args[':section_id'] = $section_id;
@@ -5399,8 +5400,8 @@ function realty_form_views_exposed_form_alter(&$form, &$form_state)
             $form_state['input']['field_full_cost_value']['max'] = 5000000;
         }
         if (!isset($_POST['field_apartment_ceiling_height_value'])) {
-            $form_state['input']['field_apartment_ceiling_height_value']['min'] = '0';
-            $form_state['input']['field_apartment_ceiling_height_value']['max'] = '5';
+            $form_state['input']['field_apartment_ceiling_height_value']['min'] = 0;
+            $form_state['input']['field_apartment_ceiling_height_value']['max'] = 5;
         }
 
         if (isset($_POST['area'])) {
