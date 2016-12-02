@@ -280,11 +280,11 @@
           $('#edit-field-price-value-min').val(priceMin);
           $('#edit-field-price-value-max').val(priceMax);
 
-          string_input = new String(priceMin / 1000)+' - '+new String(priceMax / 1000)+' тыс. руб.';
+          string_input = new String(priceMin / 1000)+' - '+new String(priceMax >=100000 ? 100 : priceMax / 1000)+' тыс. руб.';
           $(".search-input-price").val(string_input);
 
           $('#modal_slider_price-from_value').html(priceMin/1000+'<span>до</span>');
-          $('#modal_slider_price-to_value').html(priceMax/1000);
+          $('#modal_slider_price-to_value').html(priceMax >= 100000 ? 100 : priceMax / 1000);
         });
 
         $(".coast").change(function(){
@@ -296,11 +296,11 @@
           $('#edit-field-full-cost-value-min').val(coastMin);
           $('#edit-field-full-cost-value-max').val(coastMax);
 
-          string_input = new String(coastMin/1000000)+' - '+new String(coastMax/1000000)+' млн. руб.';
+          string_input = new String(coastMin/1000000)+' - '+new String(coastMax >= 5000000 ? 5 : coastMax/1000000)+' млн. руб.';
           $(".search-input-cost").val(string_input);
 
           $('#modal_slider_cost-from_value').html(coastMin/1000000+'<span>до</span>');
-          $('#modal_slider_cost-to_value').html(coastMax/1000000);
+          $('#modal_slider_cost-to_value').html(coastMax >= 5000000 ? 5 : coastMax/1000000);
         });
 
         $(".ceiling").change(function(){
