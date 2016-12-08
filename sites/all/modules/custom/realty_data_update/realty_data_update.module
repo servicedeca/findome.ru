@@ -1519,8 +1519,12 @@ function realty_data_update_add_apartments_ftp_excel($method) {
             if (isset($method->complex)) {
                 $complex = $method->complex[0];
                 $home = '';
-                for($i=0; $i<strlen($exc[$config[0]->home]); $i++) {
-                    is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
+                if ($config[0]->str_home == 'true') {
+                    $home = $exc[$config[0]->home];
+                } else {
+                    for ($i = 0; $i < strlen($exc[$config[0]->home]); $i++) {
+                        is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
+                    }
                 }
 
                 $appt = $exc[$config[0]->appt];
@@ -1545,8 +1549,7 @@ function realty_data_update_add_apartments_ftp_excel($method) {
                     } elseif($exc[$config[0]->field_status] == "") {
                         $status = 1;
                     } else {
-                        $public = 0;
-                        $status = 0;
+                        break;
                     }
                 }
 
