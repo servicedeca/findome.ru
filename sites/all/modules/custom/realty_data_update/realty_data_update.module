@@ -1546,10 +1546,12 @@ function realty_data_update_add_apartments_ftp_excel($method) {
                 } elseif($config[0]->status == 'not_active') {
                     if ($exc[$config[0]->field_status] == $config[0]->book_status) {
                         $status = 0;
+                        $public = 1;
                     } elseif($exc[$config[0]->field_status] == "") {
                         $status = 1;
+                        $public = 1;
                     } else {
-                        break;
+                        continue;
                     }
                 }
 
