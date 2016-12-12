@@ -1009,6 +1009,7 @@ function realty_data_update_ftp_excel($method) {
 
                     if($config[0]->status == 'active') {
                         $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
+                        $node->status = 1;
                     } elseif($config[0]->status == 'not_active') {
                         if ($exc[$config[0]->field_status] == $config[0]->book_status) {
                             $node->field_status[LANGUAGE_NONE][0]['value'] = 0;
@@ -1021,7 +1022,6 @@ function realty_data_update_ftp_excel($method) {
                         }
                     }
 
-                    //$node->status = 1;
                     node_save($node);
                 }
                 //если квартира не найдена в базе
