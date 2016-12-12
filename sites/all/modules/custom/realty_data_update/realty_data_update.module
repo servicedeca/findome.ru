@@ -913,10 +913,10 @@ function realty_data_update_ftp_xml($method) {
                         $developer_name = $developer[0]->name;
 
 
-            if (!$complex_name || !$developer_name) {
-                $developer = taxonomy_term_load($method->tid_developer[0]);
-                $developer_name = $developer->name;
-            }
+                        if (!$complex_name || !$developer_name) {
+                            $developer = taxonomy_term_load($method->tid_developer[0]);
+                            $developer_name = $developer->name;
+                        }
 
                         //add apartment
                         db_query("INSERT INTO realty_data_update_new_apartments
@@ -972,8 +972,12 @@ function realty_data_update_ftp_excel($method) {
             if (isset($method->complex)) {
                 $complex = $method->complex[0];
                 $home = '';
-                for($i=0; $i<strlen($exc[$config[0]->home]); $i++) {
-                    is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
+                if ($config[0]->str_home == 'true') {
+                    $home = $exc[$config[0]->home];
+                } else {
+                    for ($i = 0; $i < strlen($exc[$config[0]->home]); $i++) {
+                        is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
+                    }
                 }
 
                 $appt = $exc[$config[0]->appt];
