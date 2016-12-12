@@ -38,11 +38,8 @@ function realty_node_update_drush(){
 
   if ($apartments) {
     foreach ($apartments as $apartment) {
-      $node = node_load($apartment->nid);
-      //$node->status = 1;
-
-        $sec = explode('.', $node->field_section['und'][0]['value']);
-        $node->field_section['und'][0]['value'] = $sec[1];
+        $node = node_load($apartment->nid);
+        $node->status = 1;
         printf ("save - %s \n", $apartment->nid);
 
       node_save($node);
