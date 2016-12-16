@@ -112,6 +112,46 @@
     "ftp_dir": "/user011/files",
     "config_dir": "/user011/config",
     "unsold_apartments": false
-  }
+  },
+  {
+    "name": ["SKY GROUP"],
+    "tid_developer": ["211"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user012/files",
+    "config_dir": "/user012/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ЗАО Город в Городе"],
+    "tid_developer": ["212"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user013/files",
+    "config_dir": "/user013/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО Ростпроектстрой"],
+    "tid_developer": ["215"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user014/files",
+    "config_dir": "/user014/config",
+    "unsold_apartments": false
+  },
+  {
+  "name": ["ООО «Капитал Инвест» НСК"],
+  "tid_developer": ["213"],
+  "complex": ["ЖК"],
+  "method": "FTP",
+  "format": "excel",
+  "ftp_dir": "/user015/files",
+  "config_dir": "/user015/config",
+  "unsold_apartments": false
+}
 
 ]
