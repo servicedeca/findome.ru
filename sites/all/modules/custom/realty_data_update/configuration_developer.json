@@ -94,26 +94,6 @@
     "unsold_apartments": false
   },
   {
-    "name": ["СМУ №9"],
-    "tid_developer": ["209"],
-    "complex": ["ЖК"],
-    "method": "FTP",
-    "format": "excel",
-    "ftp_dir": "/user011/files",
-    "config_dir": "/user011/config",
-    "unsold_apartments": false
-  },
-  {
-    "name": ["СМУ №9"],
-    "tid_developer": ["209"],
-    "complex": ["ЖК"],
-    "method": "FTP",
-    "format": "excel",
-    "ftp_dir": "/user011/files",
-    "config_dir": "/user011/config",
-    "unsold_apartments": false
-  },
-  {
     "name": ["SKY GROUP"],
     "tid_developer": ["211"],
     "complex": ["ЖК"],
