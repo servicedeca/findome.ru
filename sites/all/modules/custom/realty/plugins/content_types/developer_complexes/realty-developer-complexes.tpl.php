@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="col-xs-3 devs-complex">
-            <div class="vertical">
+            <div class="">
               <?php if(isset($logos)): ?>
                 <?php foreach ($logos as $logo): ?>
                   <?php print $logo; ?>
