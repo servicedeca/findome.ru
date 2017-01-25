@@ -6061,7 +6061,7 @@ function realty_booking_apartment_form_submit($form, &$form_state)
     $not_login = true;
 
     // Пользователь не авторизован
-    if ($user->uid == 0) {
+    if ($user->uid == 0 || !$not_login) {
         $user_email = $form_state['values']['email'];
 
         $user_account = user_load_by_mail($user_email);
