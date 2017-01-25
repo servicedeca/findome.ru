@@ -68,7 +68,7 @@ function realty_init()
             drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q']);
         }
     }
-    else if ($domain[0] == 'findome') {
+    else if ($domain[0] == 'findome' || $domain[0] == 'www') {
         if ($_GET['q'] != "<front>") {
             if ($_GET['q'] == "node/2497" || $_GET['q'] == "comparison" || $_GET['q'] == "contacts"
                 || $_GET['q'] == "articles" || $_GET['q'] == "policy" || $_GET['q'] == "cooperation" ||  $_GET['q'] == "guide") {
