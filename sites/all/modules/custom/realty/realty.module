@@ -5908,11 +5908,11 @@ function realty_booking_apartment_form_validate($form, &$form_state)
         $errors .= '<p>' . t('Поле "Ф.И.О" обязательно для заполнения') . '</p>';
         $commands[] = ajax_command_invoke('input[name="name"]', 'addClass', array('error-input-bottom'));
     }
-
+/*
     if (empty($form_state['values']['email'])) {
         $errors .= '<p>' . t('Поле "e-mail" обязательно для заполнения') . '</p>';
         $commands[] = ajax_command_invoke('input[name="email"]', 'addClass', array('error-input-bottom'));
-    }
+    }*/
     /*
     if(!$form_state['values']['managers']) {
       $errors .= '<p>' . t('Выберите менеджера') . '</p>';
