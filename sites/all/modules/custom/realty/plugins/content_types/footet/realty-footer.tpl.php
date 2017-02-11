@@ -103,6 +103,9 @@
             <a href="/cooperation?p=<?php print $key; ?>"><?php print $title; ?></a>
           </li>
         <?php endforeach; ?>
+        <li>
+          <a href="affiliate.findome.ru">Партнерская программа FinAff</a>
+        </li>
 
         </ul>
       </div>
