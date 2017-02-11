@@ -104,7 +104,7 @@
           </li>
         <?php endforeach; ?>
         <li>
-          <a href="/affiliate.findome.ru">Партнерская программа FinAff</a>
+          <a href="http://affiliate.findome.ru">Партнерская программа FinAff</a>
         </li>
 
         </ul>
