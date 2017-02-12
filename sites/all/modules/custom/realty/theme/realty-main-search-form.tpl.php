@@ -1,7 +1,7 @@
 <div class="col-xs-12 zero-padding search-top">
   <div class="col-xs-4 zero-padding search-item">
 
-    <div class="col-xs-12 zero-padding search-title" style="width: 99.7%;">
+    <div class="col-xs-12 zero-padding search-title" style="">
       <div class="vertical">
         <h2>Поиск<span>по параметрам</span>
         </h2>
@@ -28,7 +28,7 @@
   </div>
 
   <div class="col-xs-4 zero-padding search-item">
-    <a data-toggle="modal" data-target=".modal_cities" class="col-xs-8 zero-padding search-title" style="border:none;">
+    <a data-toggle="modal" data-target=".modal_cities" class="col-xs-8 zero-padding search-title" style="border-right:none;">
       <div class="vertical">
         <p id="city_id" data-city-id="<?php print $city_id; ?>"><?php print $city;?></p>
         <span class="search-city-span">выбрать другой город</span>
