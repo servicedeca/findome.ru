@@ -124,14 +124,63 @@
     "unsold_apartments": false
   },
   {
-  "name": ["ООО «Капитал Инвест» НСК"],
-  "tid_developer": ["213"],
-  "complex": ["ЖК"],
-  "method": "FTP",
-  "format": "excel",
-  "ftp_dir": "/user015/files",
-  "config_dir": "/user015/config",
-  "unsold_apartments": false
-}
-
+    "name": ["ООО «Капитал Инвест» НСК"],
+    "tid_developer": ["213"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user015/files",
+    "config_dir": "/user015/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО «АКД-Мета»"],
+    "tid_developer": ["210"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user016/files",
+    "config_dir": "/user016/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО «АКД-Мета»"],
+    "tid_developer": ["210"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user016/files",
+    "config_dir": "/user016/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО фирма Арго"],
+    "tid_developer": ["214"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user017/files",
+    "config_dir": "/user017/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["МУП УЗСПТС"],
+    "tid_developer": ["231"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user018/files",
+    "config_dir": "/user018/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ЗАО «НОВОСИБСТРОЙСЕРВИС»"],
+    "tid_developer": ["232"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user019/files",
+    "config_dir": "/user019/config",
+    "unsold_apartments": false
+  }
 ]
