@@ -144,16 +144,6 @@
     "unsold_apartments": false
   },
   {
-    "name": ["ООО «АКД-Мета»"],
-    "tid_developer": ["210"],
-    "complex": ["ЖК"],
-    "method": "FTP",
-    "format": "excel",
-    "ftp_dir": "/user016/files",
-    "config_dir": "/user016/config",
-    "unsold_apartments": false
-  },
-  {
     "name": ["ООО фирма Арго"],
     "tid_developer": ["214"],
     "complex": ["ЖК"],
