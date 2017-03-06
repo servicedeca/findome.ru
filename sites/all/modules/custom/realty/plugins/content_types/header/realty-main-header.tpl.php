@@ -144,3 +144,34 @@
   ga('send', 'pageview');
 
 </script>
+
+<script>
+    (function(){
+        var partner_server = 'http://affiliate.findome.ru';
+        var program = '362050dd-5c05-4ad1-8f90-8acae3159708';
+        var partnerId = undefined;
+        var path =  window.location.search.substring(1);
+        var arr = path.split('&');
+        for(var i = 0; i<arr.length; i++){
+            var key = arr[i];
+            if(!key) continue;
+            // startWith es5
+            if(key.lastIndexOf('partner', 0) === 0){
+                var arr2 = key.split('=');
+                if(arr2[0] === 'partner'){
+                    partnerId = arr2[1];
+                }
+            }
+        }
+        if(partnerId){
+            function htmlToElement(html) {
+                var template = document.createElement('template');
+                template.innerHTML = html;
+                return template.content.firstChild;
+            }
+            var url = partner_server+'/customer/click/'+program+'/'+partnerId;
+            var s = htmlToElement('<img style="display: none;" src="'+url+'">');
+            document.body.appendChild(s);
+        }
+    }());
+</script>
