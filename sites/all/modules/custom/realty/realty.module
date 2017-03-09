@@ -5871,6 +5871,7 @@ function realty_booking_apartment_form($form, $form_state, $node, $developer)
         '#type' => 'submit',
         '#attributes' => array(
             'class' => array('col-xs-4', 'col-xs-offset-4', 'comment-button', 'margin-bottom-50'),
+            'onclick' => "_ghftr94jrfwkur7hhf('anyAction', 'uniqueActionId');",
         ),
         '#ajax' => array(
             'callback' => 'realty_booking_apartment_form_submit',

@@ -2,6 +2,22 @@
 
     Drupal.ajax.prototype.commands.reloadPage = function() {
         window.location.reload();
+    };
+
+
+    // при успешном целевом действии необходимо выполнить единоразово следующий код на клиенте.
+    // передав параметры целевого действия: type - тип, actionid - сгенерированный уникальный идентификатор
+    function _ghftr94jrfwkur7hhf(type, actionId) {
+        var partner_server = 'http://affiliate.findome.ru';
+        var program = '362050dd-5c05-4ad1-8f90-8acae3159708';
+        function htmlToElement(html) {
+            var template = document.createElement('template');
+            template.innerHTML = html;
+            return template.content.firstChild;
+        }
+        var url = partner_server+'/customer/action?program='+program+'&actionType='+type+'&actionId='+actionId;
+        var s = htmlToElement('<img style="display: none;" src="'+url+'">');
+        document.body.appendChild(s);
     }
 
     var addHtmlInfoApartment = function(response, classModal){
