@@ -2571,6 +2571,10 @@
         })
     }
 
+    $('#left-left-item').click(function () {
+        $('div.realty-preload').show();
+    });
+
 //end.
 }(jQuery));
 
