@@ -172,5 +172,65 @@
     "ftp_dir": "/user019/files",
     "config_dir": "/user019/config",
     "unsold_apartments": false
+  },
+  {
+    "name": ["ГК Союз"],
+    "tid_developer": ["246"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user020/files",
+    "config_dir": "/user020/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ГК СССР"],
+    "tid_developer": ["248"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user021/files",
+    "config_dir": "/user021/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО Камея"],
+    "tid_developer": ["247"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user022/files",
+    "config_dir": "/user022/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО ИСК «Русь»"],
+    "tid_developer": ["244"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user023/files",
+    "config_dir": "/user023/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["Сибмонтажспецстрой"],
+    "tid_developer": ["245"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user024/files",
+    "config_dir": "/user024/config",
+    "unsold_apartments": false
+  },
+  {
+    "name": ["ООО Новый Мир Химметалл"],
+    "tid_developer": ["177"],
+    "complex": ["ЖК"],
+    "method": "FTP",
+    "format": "excel",
+    "ftp_dir": "/user007/excel/files",
+    "config_dir": "/user007/excel/config",
+    "unsold_apartments": false
   }
 ]
