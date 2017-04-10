@@ -2572,7 +2572,7 @@
     }
 
     $('#left-left-item').click(function () {
-        $('div.realty-preload').show();
+        $('div.download-container').show();
     });
 
 //end.

@@ -17,5 +17,21 @@
 <?php print $page; ?>
 <?php print $scripts; ?>
 <?php print $page_bottom; ?>
+
+<div class="download-container">
+  <img src="http://novosibirsk.findome.ru/sites/all/themes/realty_theme/images/minilogo.svg">
+  <p>Квартира в клике от вас</p>
+  <div id="fountainG">
+    <div id="fountainG_1" class="fountainG"></div>
+    <div id="fountainG_2" class="fountainG"></div>
+    <div id="fountainG_3" class="fountainG"></div>
+    <div id="fountainG_4" class="fountainG"></div>
+    <div id="fountainG_5" class="fountainG"></div>
+    <div id="fountainG_6" class="fountainG"></div>
+    <div id="fountainG_7" class="fountainG"></div>
+    <div id="fountainG_8" class="fountainG"></div>
+  </div>
+
+</div>
 </body>
 </html>
