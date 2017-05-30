@@ -3,7 +3,7 @@
 #
 
 # Protect files and directories from prying eyes.
-<FilesMatch "\.(engine|inc|info|install|make|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)(~|\.sw[op]|\.bak|\.orig|\.save)?$|^(\..*|Entries.*|Repository|Root|Tag|Template)$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig\.save)$">
+<FilesMatch "\.(engine|inc|info|install|make|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)(~|\.sw[op]|\.bak|\.orig|\.save)?$|^(\..*|Entries.*|Repository|Root|Tag|Template|composer\.(json|lock))$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig\.save)$">
   Order allow,deny
 </FilesMatch>
 
@@ -31,8 +31,7 @@ DirectoryIndex index.php index.html index.htm
   php_flag session.auto_start               off
   php_value mbstring.http_input             pass
   php_value mbstring.http_output            pass
-  php_flag mbstring.encoding_translation    off      
-  php_value memory_limit 1256m
+  php_flag mbstring.encoding_translation    off
 </IfModule>
 
 # Requires mod_expires to be enabled.
@@ -119,15 +118,6 @@ DirectoryIndex index.php index.html index.htm
 
   # Rules to correctly serve gzip compressed CSS and JS files.
   # Requires both mod_rewrite and mod_headers to be enabled.
-
-  # DISALLOW ALL!!!
-  RewriteCond %{HTTP_HOST} ^findome\.ru
-  RewriteRule ^robots\.txt$ robots_ru.txt [L]
-
-  RewriteCond %{HTTP_HOST} ^xn--80aiondh1b\.xn--p1ai
-  RewriteRule ^robots\.txt$ disallow_rf.txt [L]
-
-
   <IfModule mod_headers.c>
     # Serve gzip compressed CSS files if they exist and the client accepts gzip.
     RewriteCond %{HTTP:Accept-encoding} gzip

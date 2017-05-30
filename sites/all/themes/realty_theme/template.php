@@ -970,7 +970,7 @@ function realty_theme_theme_registry_alter(&$theme_registry) {
 }
 
 /**
- * Process variables for realty-user-menu.tpl.php.
+ * Process variables for realty-developer-page.tpl.php.
  */
 function realty_theme_preprocess_realty_user_menu(&$vars) {
   global $user;

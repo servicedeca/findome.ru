@@ -1,5 +1,5 @@
-<div id="hellopreloader_preload">
-</div>
+<!--<div id="hellopreloader_preload">-->
+<!--</div>-->
 
 <?php if (isset($how_it_works)): ?>
 

@@ -367,9 +367,12 @@ class ConsistentCacheBase extends ConsistentCacheBaseFailSafe {
       return $this->backend->set($cid, $data, $expire);
     }
     elseif (!$this->safe) {
-      // Only buffer during transactions when safe mode is off.
-      // Otherwise, discard cache set.
+      // Only buffer set operations during transactions when safe mode is off.
       $this->buffer->set($cid, $this->deepClone($data), $expire, $depth);
+    }
+    else {
+      // Not safe, delete the cache item instead.
+      $this->buffer->delete($cid, $depth);
     }
   }
 

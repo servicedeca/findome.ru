@@ -77,7 +77,7 @@ function template_preprocess_realty_reference_book(&$vars) {
   }
 
   // Формирование содержимого для страницы Помощника
-  foreach ($terms_pages as $term_page) {
+      foreach ($terms_pages as $term_page) {
 
     // Если запрошен определенный раздел
     if ($_GET['p'] == $term_page->tid) {
@@ -88,6 +88,5 @@ function template_preprocess_realty_reference_book(&$vars) {
     $vars['content']['sections'][$term_page->tid]['title'] = $term_page->name;
     $vars['content']['sections'][$term_page->tid]['text'] = $term_page->description;
   }
-
   $vars['img_pointer'] = file_get_contents(REALTY_FRONT_THEME_PATH . '/images/pointer.svg');
 }

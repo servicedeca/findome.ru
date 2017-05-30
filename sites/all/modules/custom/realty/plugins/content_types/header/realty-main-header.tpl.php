@@ -12,8 +12,8 @@
 <?php arg(0) != 'search' ? print $a = theme('realty_feedback_block') : 0; ?>
 
 
-<div id="hellopreloader_preload">
-</div>
+<!--<div id="hellopreloader_preload">-->
+<!--</div>-->
 <div class="realty-preload">
 </div>
 <?php if (isset($how_it_works)): ?>

@@ -969,7 +969,7 @@ function realty_data_update_ftp_excel($method) {
         //Пребор файла
         foreach ($excel_array as $key => $exc) {
             //если поиск квартир будет происходить по жилому комплексу и по дому
-            if (isset($method->complex) || isset($config[0]->complex)) {
+            if ((isset($method->complex) || isset($config[0]->complex))&& !empty($exc[$config[0]->complex])) {
                 $complex = $method->complex[0];
                 if (isset($config[0]->complex)) {
                     $complex = $exc[$config[0]->complex];

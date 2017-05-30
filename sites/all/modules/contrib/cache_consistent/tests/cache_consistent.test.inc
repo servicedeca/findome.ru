@@ -4,6 +4,9 @@
  * Database cache implementation for test purposes.
  */
 
+// Make sure the CacheVariableHandlerInterface class is available.
+require_once dirname(__FILE__) . '/../cache_consistent.inc';
+
 /**
  * Base class for web test cases.
  */

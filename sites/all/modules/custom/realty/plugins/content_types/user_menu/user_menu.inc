@@ -40,7 +40,7 @@ function realty_user_menu_content_type_theme(&$theme, $plugin) {
 }
 
 /**
- * Process variables for realty-user-menu.tpl.php.
+ * Process variables for realty-developer-page.tpl.php.
  */
 function template_preprocess_realty_user_menu(&$vars) {
   $vars['img_profile'] = theme('image', array(

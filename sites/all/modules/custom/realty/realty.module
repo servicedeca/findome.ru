@@ -60,12 +60,12 @@ function realty_init()
     else if ($_SERVER['HTTP_HOST'] == 'xn--80aiondh1b.xn--p1ai') {
         if ($_GET['q'] == "<front>") {
             if (isset($_COOKIE['cityId'])) {
-                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/' . $_COOKIE['cityId']);
+                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/' . $_COOKIE['cityId']);
             } else {
-                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
+                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
             }
         } else {
-            drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q']);
+            drupal_goto('http://novosibirsk.findome.dev/' . $_GET['q']);
         }
     }
     else if ($domain[0] == 'findome' || $domain[0] == 'www') {
@@ -83,24 +83,24 @@ function realty_init()
                 } else {
                     $data = '';
                 }
-                drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q'] . $data);
-                //do_post_request('http://novosibirsk.findome.ru/' . $_GET['q'], $_POST);
+                drupal_goto('http://novosibirsk.findome.dev/' . $_GET['q'] . $data);
+                //do_post_request('http://novosibirsk.findome.dev/' . $_GET['q'], $_POST);
             }
-            drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
+            drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
         } else {
             if (isset($_COOKIE['cityId'])) {
-                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/' . $_COOKIE['cityId']);
+                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/' . $_COOKIE['cityId']);
             } else {
-                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
+                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
 
             }
         }
     } else if ($domain[0] == 'novosibirsk') {
         if ($_GET['q'] == "<front>") {
-            drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
+            drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
         } else  if ($_GET['q'] == "node/2497" || $_GET['q'] == "comparison" || $_GET['q'] == "contacts"
             || $_GET['q'] == "articles" || $_GET['q'] == "policy" || $_GET['q'] == "cooperation"  ||  $_GET['q'] == "guide") {
-            //drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q']);
+            //drupal_goto('http://novosibirsk.findome.dev/' . $_GET['q']);
         }
     }
 
@@ -1564,7 +1564,7 @@ function realty_mortgage_request_form($form, $form_state, $param = array())
     $form['mortgage-request-submit'] = array(
         '#type' => 'submit',
         '#attributes' => array(
-            'class' => array('ok-button', 'use-ajax-submit'),
+            'class' => array('ok-button', 'use-ajax-submit', 'show-loader'),
         ),
         '#ajax' => array(
             'callback' => 'realty_mortgage_request_form_submit',
@@ -5870,9 +5870,9 @@ function realty_booking_apartment_form($form, $form_state, $node, $developer)
     $form['submit'] = array(
         '#type' => 'submit',
         '#attributes' => array(
-            'class' => array('col-xs-4', 'col-xs-offset-4', 'comment-button', 'margin-bottom-50'),
-            'onclick' => "_ghftr94jrfwkur7hhf('anyAction', 'uniqueActionId');",
+            'class' => array('col-xs-4', 'col-xs-offset-4', 'comment-button', 'margin-bottom-50', 'show-loader'),
         ),
+        '#id' => 'realty_booking_apartment',
         '#ajax' => array(
             'callback' => 'realty_booking_apartment_form_submit',
         ),
@@ -7409,3 +7409,7 @@ function realty_request_callback_form_submit($form, $form_state)
 
     drupal_exit();
 }
+
+//<input class="col-xs-4 col-xs-offset-4 comment-button margin-bottom-50 show-loader form-submit ajax-processed" type="submit" id="edit-submit--9" name="op" value="Отправить заявку">
+//<input class="col-xs-4 col-xs-offset-4 comment-button margin-bottom-50 show-loader form-submit" type="submit" id="edit-submit--3" name="op" value="Отправить заявку">
+//<input class="col-xs-4 col-xs-offset-4 comment-button margin-bottom-50 show-loader form-submit" type="submit" id="edit-submit--3" name="op" value="Отправить заявку">

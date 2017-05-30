@@ -191,17 +191,19 @@
             });
 
             setTimeout(function(){
-                $('#hellopreloader_preload').fadeOut('0',function() {
+                $('.download-container').fadeOut('0',function() {
                     //$(this).remove();
                 });
+                $('#download-container-dev').show();
             }, 10);
 
             // Обработка ошибок
             window.onerror = function(message, url, lineNumber) {
                 console.log("fadeOut");
-                $('#hellopreloader_preload').fadeOut('0',function() {
+                $('.download-container').fadeOut('0',function() {
                     //$(this).remove();
                 });
+                $('#download-container-dev').show();
             };
 
 
@@ -1677,7 +1679,7 @@
 
             //Click on Add to Compare
             $(document).on('click', '.apartment-comparison',function () {
-                $('div.realty-preload').show();
+                $('div.download-container').show();
                 var apartment = $(this).parent();
                 var nid = $(this).data('node-id');
                 var page = $(this).data('page');
@@ -1726,7 +1728,7 @@
                         $
                     },
                     error: function(response) {
-                        $('div.realty-preload').fadeOut('0',function() {
+                        $('div.download-container').fadeOut('0',function() {
                             //$(this).remove();
                         });
                         alert('false');
@@ -2575,6 +2577,17 @@
         $('div.download-container').show();
     });
 
-//end.
+    //submit book
+    $(document).on('click', '.show-loader', function () {
+        $('div.download-container').show();
+    });
+
+    $(document).ajaxSuccess(function() {
+        $('div.download-container').hide();
+    })
+
+
+    $('#download-container-dev').show();
+    //end.
 }(jQuery));
 

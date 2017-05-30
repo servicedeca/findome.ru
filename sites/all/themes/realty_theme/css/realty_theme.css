@@ -422,3 +422,28 @@ form .error-input-bottom {
   overflow: auto;
   display: BLOCK;
 }
+
+.download-container-dev{
+  height:100%;
+  width:100%;
+  background:#3e90b1;
+  text-align:center;
+  z-index:10000;
+  position:fixed;
+  opacity:1;
+  top:0
+}
+.download-container-dev img{
+  margin-top:40%;
+  margin-top:19%;
+  margin-bottom:10px
+}
+.download-container-dev p{
+  display:block;
+  color:#fefefe;
+  font-size:20px;
+  line-height:24px;
+  margin-bottom:30px;
+  padding-left:15px;
+  padding-right:15px
+}

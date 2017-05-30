@@ -4,6 +4,8 @@
  * Web test cases for Cache Consistent.
  */
 
+// Make sure the ConsistentCacheTestCaseBase class is available.
+require_once dirname(__FILE__) . '/cache_consistent.test.inc';
 require_once dirname(__FILE__) . '/cache_consistent.tests.inc';
 
 /**
