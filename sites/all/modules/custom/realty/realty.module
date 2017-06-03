@@ -60,12 +60,12 @@ function realty_init()
     else if ($_SERVER['HTTP_HOST'] == 'xn--80aiondh1b.xn--p1ai') {
         if ($_GET['q'] == "<front>") {
             if (isset($_COOKIE['cityId'])) {
-                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/' . $_COOKIE['cityId']);
+                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/' . $_COOKIE['cityId']);
             } else {
-                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
+                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
             }
         } else {
-            drupal_goto('http://novosibirsk.findome.dev/' . $_GET['q']);
+            drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q']);
         }
     }
     else if ($domain[0] == 'findome' || $domain[0] == 'www') {
@@ -83,24 +83,24 @@ function realty_init()
                 } else {
                     $data = '';
                 }
-                drupal_goto('http://novosibirsk.findome.dev/' . $_GET['q'] . $data);
-                //do_post_request('http://novosibirsk.findome.dev/' . $_GET['q'], $_POST);
+                drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q'] . $data);
+                //do_post_request('http://novosibirsk.findome.ru/' . $_GET['q'], $_POST);
             }
-            drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
+            drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
         } else {
             if (isset($_COOKIE['cityId'])) {
-                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/' . $_COOKIE['cityId']);
+                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/' . $_COOKIE['cityId']);
             } else {
-                drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
+                drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
 
             }
         }
     } else if ($domain[0] == 'novosibirsk') {
         if ($_GET['q'] == "<front>") {
-            drupal_goto('http://novosibirsk.findome.dev/taxonomy/term/1');
+            drupal_goto('http://novosibirsk.findome.ru/taxonomy/term/1');
         } else  if ($_GET['q'] == "node/2497" || $_GET['q'] == "comparison" || $_GET['q'] == "contacts"
             || $_GET['q'] == "articles" || $_GET['q'] == "policy" || $_GET['q'] == "cooperation"  ||  $_GET['q'] == "guide") {
-            //drupal_goto('http://novosibirsk.findome.dev/' . $_GET['q']);
+            //drupal_goto('http://novosibirsk.findome.ru/' . $_GET['q']);
         }
     }
 
