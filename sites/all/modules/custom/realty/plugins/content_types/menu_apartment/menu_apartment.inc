@@ -104,7 +104,7 @@ function template_preprocess_realty_menu_apartment(&$vars) {
     }
 
   // Кнопка Получить документы
-  $vars['img_pdf'] = file_get_contents(REALTY_FRONT_THEME_PATH . '/images/apartment_pdf.svg');
+  $vars['img_pdf'] = file_get_contents(REALTY_FRONT_THEME_PATH . '/images/calculator.svg');
 
   // Получение логотипа Жилого комплекса
   $logo = theme('image', array(

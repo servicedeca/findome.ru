@@ -1,16 +1,16 @@
-const basePaste = 11.4;
-const squareDiscount = 1;
-const vtb = 0.5
-const onlyTwoDocs = 0.5;
-const kVTB = 1 / 12;
-const k1VTB = 1.6;
-const minPaste = 10.4;
-const costFrom = 3000000;
-const pasteFrom = 600000;
+const basePaste = 11.4; //базовая ставка
+const squareDiscount = 1; // Зависимость от площади квартиры
+const vtb = 0.5; // Завсимость от зп в ВТБ
+const onlyTwoDocs = 0.5; // Зависимость от количесва документов
+const kVTB = 1 / 12; // Коэффициент ВТБ
+const k1VTB = 1.6; // Коэффициент ВТБ
+const minPaste = 10.4; // Минимальная ставка
+const costFrom = 3000000; //Минимальный размер кредита
+const pasteFrom = 600000; // Минимальный первоначальный взнос
 
-let currentPaste = basePaste;
-let currentPriceFlat = costFrom;
-let currentPricePaste = 0;
+let currentPaste = basePaste; // Текущая ставка
+let currentPriceFlat = costFrom; // Текущая цена
+let currentPricePaste = 0; // Текущий размер кредита
 
 $(document).ready(function() {
 
@@ -18,7 +18,7 @@ $(document).ready(function() {
   var th = $(this);
   $.ajax({
     type: "POST",
-    url: "cgi-bin/forms.php",
+    url: "/cgi-bin/forms.php",
     data: th.serialize()
   }).done(function() {
     $("#myModal").modal('hide');
@@ -95,13 +95,29 @@ $(document).ready(function() {
 
   $("#area").on("click", function() {
     if ($(this).is(":checked")) {
+      $('.shadow').css('display', 'block');
       if (currentPaste  > minPaste && currentPaste  + squareDiscount > minPaste) {
           currentPaste -= squareDiscount;
-          $("#paste_current").html(currentPaste);
+          if (currentPaste <= 10.4){
+            currentPaste = 10.4;
+          }
+          $("#paste_current").html(currentPaste + " <span>%</span>");
+          makeParams();
       }
     } else {
+
+      if(($('#twodoc').is(":checked"))){
+        $('.shadow').css('display', 'block');
+      } else {
+        $('.shadow').css('display', 'none');
+      }
+
       currentPaste += squareDiscount;
-      $("#paste_current").html(currentPaste);
+      if (($('#vtbcard').is(":checked"))){
+        currentPaste = 10.9;
+      }
+      $("#paste_current").html(currentPaste + " <span>%</span>");
+      makeParams();
     }
   });
 
@@ -109,23 +125,33 @@ $(document).ready(function() {
     if ($(this).is(":checked")) {
       if (currentPaste > minPaste && currentPaste + vtb > minPaste) {
         currentPaste -= vtb;
-        $("#paste_current").html(currentPaste);
+        $("#paste_current").html(currentPaste + " <span>%</span>");
+        makeParams();
       }
     } else {
       currentPaste += vtb;
-      $("#paste_current").html(currentPaste);
+      $("#paste_current").html(currentPaste + " <span>%</span>");
+      makeParams();
     }
   });
 
   $("#twodoc").on("click", function() {
     if ($(this).is(":checked")) {
-        if (currentPaste > minPaste && currentPaste + vtb > minPaste) {
+            $('.shadow').css('display', 'block');
+        if (currentPaste >= minPaste && currentPaste + vtb > minPaste) {
           currentPaste += onlyTwoDocs;
-          $("#paste_current").html(currentPaste);
+          $("#paste_current").html(currentPaste + " <span>%</span>");
+          makeParams();
         }
     } else {
+      if(($('#area').is(":checked"))){
+        $('.shadow').css('display', 'block');
+      } else {
+        $('.shadow').css('display', 'none');
+      }
       currentPaste -= onlyTwoDocs;
-      $("#paste_current").html(currentPaste);
+      $("#paste_current").html(currentPaste + " <span>%</span>");
+      makeParams();
     }
   });
 
@@ -133,11 +159,15 @@ $(document).ready(function() {
   $("#app_cost").bind("change", function(e) {
     currentPriceFlat = $("#app_cost").val();
     $("#sizeCredit").html((String(currentPriceFlat - currentPricePaste).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ')) + " <span>&#8381;</span>");
+
+    makeParams();
   });
 
   $("#paste").bind("change", function(e) {
     currentPricePaste = $("#paste").val();
     $("#sizeCredit").html((String(currentPriceFlat - currentPricePaste).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ')) + " <span>&#8381;</span>");
+
+    makeParams();
   });
 
 
@@ -150,9 +180,8 @@ $(document).ready(function() {
     let payment = Math.abs(MonthlyPayment(summCredit, creditTerm, currentPaste));
     let MustMonthly = Math.abs(mustMonthlyIncome(payment));
 
-     payment /= 10;
-     MustMonthly /= 10;
-
+    //  payment /= 10;
+    //  MustMonthly /= 10;
     $("#post_period").html(payment.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
     $("#must_payment").html(MustMonthly.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
   });
@@ -161,30 +190,49 @@ $(document).ready(function() {
 
 
   let summCredit = parseFloat($("#app_cost").val());
+  let vznos = parseFloat($("#paste").val());
+  let creditS = summCredit - vznos;
   let creditTerm = parseFloat($("#period").val());
   let currentPaste1 = parseInt(currentPaste);
 
-  let payment = Math.abs(MonthlyPayment(summCredit, creditTerm, currentPaste));
+  let payment = Math.abs(MonthlyPayment(creditS, creditTerm, currentPaste));
   let MustMonthly = Math.abs(mustMonthlyIncome(payment));
 
-   payment /= 10;
-   MustMonthly /= 10;
+  //  payment /= 10;
+  //  MustMonthly /= 10;
 
   $("#post_period").html(payment.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
   $("#must_payment").html(MustMonthly.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
 
 
-    $("#paste_current").html(currentPaste);
+    $("#paste_current").html(currentPaste + " <span>%</span>");
 });
 
+let makeParams = function() {
+    let summCredit = parseFloat($("#app_cost").val());
+    let creditTerm = parseFloat($("#period").val());
+    let currentPaste1 = parseInt(currentPaste);
+
+    let payment = Math.abs(MonthlyPayment(summCredit, creditTerm, currentPaste));
+    let MustMonthly = Math.abs(mustMonthlyIncome(payment));
+
+    //  payment /= 10;
+    //  MustMonthly /= 10;
+    $("#post_period").html(payment.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
+    $("#must_payment").html(MustMonthly.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
+};
 
 
 let MonthlyPayment = function(summCredit, creditTerm, currentPaste) {
-  console.log(summCredit + "sum");
-  console.log(currentPaste  + 'kp');
-  console.log(kVTB);
-    console.log(-creditTerm);
-	return (summCredit * kVTB * currentPaste) / (1 - Math.pow(1 + kVTB * currentPaste), -creditTerm);
+  var creditTermM = creditTerm * 12 ;
+  console.log(creditTermM);
+  let currentCredit = summCredit - parseInt($("#paste").val());
+  var newCurrentPaste = currentPaste / 1200;
+  console.log(currentCredit + 'Текущий размер кредмта')
+  console.log(newCurrentPaste);
+  console.log(summCredit  + "вот оно");
+  console.log(summCredit * (newCurrentPaste / (1 - (Math.pow(1 + newCurrentPaste, -creditTermM)))) + 'число');
+  return (parseInt(currentCredit) * (newCurrentPaste / (1 - (Math.pow(1 + newCurrentPaste, -creditTermM)))));
 }
 
 let mustMonthlyIncome = function(monthlyPayment) {

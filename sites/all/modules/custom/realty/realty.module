@@ -2743,16 +2743,17 @@ function realty_get_appartment_info($nid = NULL)
 
     }
 
-    $get_pdf = file_get_contents(REALTY_FRONT_THEME_PATH . '/images/get_pdf.svg');
+    $calculator = file_get_contents(REALTY_FRONT_THEME_PATH . '/images/calculator-modal.svg');
 
-    $out['get_id'] = l($get_pdf . '<p>' . t('Версия для<br> печати') . '</p>',
-        '#href', array(
+    $out['get_id'] = l("<div>$calculator</div> <p class='s-label-small'>Рассчитать<br>Ипотеку</p>",
+        '/calculator', array(
             'external' => TRUE,
             'html' => TRUE,
             'attributes' => array(
-                'id' => 'download-id-apartment',
-                'data-nid-apartment' => $nid,
+                //'id' => 'download-id-apartment',
+                //'data-nid-apartment' => $nid,
                 'class' => array(),
+                'target' => '_blank'
             )
         )
     );

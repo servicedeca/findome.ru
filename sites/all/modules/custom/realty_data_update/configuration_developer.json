@@ -4,8 +4,8 @@
     "tid_developer": ["71"],
     "method": "FTP",
     "format": "XML",
-    "ftp_dir": "/user003/files",
-    "config_dir": "/user003/config",
+    "ftp_dir": "user003/files",
+    "config_dir": "user003/config",
     "unsold_apartments": false
   },
 
@@ -14,8 +14,8 @@
     "tid_developer": ["74"],
     "method": "FTP",
     "format": "XML",
-    "ftp_dir": "/user004/files",
-    "config_dir": "/user004/config",
+    "ftp_dir": "user004/files",
+    "config_dir": "user004/config",
     "unsold_apartments": true
   },
 
@@ -25,8 +25,8 @@
     "complex": ["ЖК Ясный Берег"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user005/files",
-    "config_dir": "/user005/config",
+    "ftp_dir": "user005/files",
+    "config_dir": "user005/config",
     "unsold_apartments": false
   },
 
@@ -36,8 +36,8 @@
     "complex": ["Микрорайон «Европейский берег»"],
     "method": "FTP",
     "format": "XML",
-    "ftp_dir": "/user006/files",
-    "config_dir": "/user006/config",
+    "ftp_dir": "user006/files",
+    "config_dir": "user006/config",
     "unsold_apartments": false
   },
 
@@ -47,8 +47,8 @@
     "complex": ["ЖК КРОПОТКИНСКИЙ"],
     "method": "FTP",
     "format": "XML",
-    "ftp_dir": "/user007/files",
-    "config_dir": "/user007/config",
+    "ftp_dir": "user007/files",
+    "config_dir": "user007/config",
     "unsold_apartments": false
   },
 
@@ -58,8 +58,8 @@
     "complex": ["ЖК ЧЕРЕМУШКИ"],
     "method": "FTP",
     "format": "XML",
-    "ftp_dir": "/user008/files",
-    "config_dir": "/user008/config",
+    "ftp_dir": "user008/files",
+    "config_dir": "user008/config",
     "unsold_apartments": false
   },
 
@@ -69,8 +69,8 @@
     "complex": ["ЖК Заельцовский"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user009/files",
-    "config_dir": "/user009/config",
+    "ftp_dir": "user009/files",
+    "config_dir": "user009/config",
     "unsold_apartments": false
   },
   {
@@ -79,8 +79,8 @@
     "complex": ["ЖК Аксиома"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user010/files",
-    "config_dir": "/user010/config",
+    "ftp_dir": "user010/files",
+    "config_dir": "user010/config",
     "unsold_apartments": false
   },
   {
@@ -89,8 +89,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user011/files",
-    "config_dir": "/user011/config",
+    "ftp_dir": "user011/files",
+    "config_dir": "user011/config",
     "unsold_apartments": false
   },
   {
@@ -99,8 +99,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user012/files",
-    "config_dir": "/user012/config",
+    "ftp_dir": "user012/files",
+    "config_dir": "user012/config",
     "unsold_apartments": false
   },
   {
@@ -109,8 +109,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user013/files",
-    "config_dir": "/user013/config",
+    "ftp_dir": "user013/files",
+    "config_dir": "user013/config",
     "unsold_apartments": false
   },
   {
@@ -119,8 +119,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user014/files",
-    "config_dir": "/user014/config",
+    "ftp_dir": "user014/files",
+    "config_dir": "user014/config",
     "unsold_apartments": false
   },
   {
@@ -129,8 +129,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user015/files",
-    "config_dir": "/user015/config",
+    "ftp_dir": "user015/files",
+    "config_dir": "user015/config",
     "unsold_apartments": false
   },
   {
@@ -139,8 +139,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user016/files",
-    "config_dir": "/user016/config",
+    "ftp_dir": "user016/files",
+    "config_dir": "user016/config",
     "unsold_apartments": false
   },
   {
@@ -149,8 +149,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user017/files",
-    "config_dir": "/user017/config",
+    "ftp_dir": "user017/files",
+    "config_dir": "user017/config",
     "unsold_apartments": false
   },
   {
@@ -159,8 +159,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user018/files",
-    "config_dir": "/user018/config",
+    "ftp_dir": "user018/files",
+    "config_dir": "user018/config",
     "unsold_apartments": false
   },
   {
@@ -169,8 +169,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user019/files",
-    "config_dir": "/user019/config",
+    "ftp_dir": "user019/files",
+    "config_dir": "user019/config",
     "unsold_apartments": false
   },
   {
@@ -179,8 +179,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user020/files",
-    "config_dir": "/user020/config",
+    "ftp_dir": "user020/files",
+    "config_dir": "user020/config",
     "unsold_apartments": false
   },
   {
@@ -189,8 +189,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user021/files",
-    "config_dir": "/user021/config",
+    "ftp_dir": "user021/files",
+    "config_dir": "user021/config",
     "unsold_apartments": false
   },
   {
@@ -199,8 +199,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user022/files",
-    "config_dir": "/user022/config",
+    "ftp_dir": "user022/files",
+    "config_dir": "user022/config",
     "unsold_apartments": false
   },
   {
@@ -209,8 +209,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user023/files",
-    "config_dir": "/user023/config",
+    "ftp_dir": "user023/files",
+    "config_dir": "user023/config",
     "unsold_apartments": false
   },
   {
@@ -219,8 +219,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user024/files",
-    "config_dir": "/user024/config",
+    "ftp_dir": "user024/files",
+    "config_dir": "user024/config",
     "unsold_apartments": false
   },
   {
@@ -229,8 +229,8 @@
     "complex": ["ЖК"],
     "method": "FTP",
     "format": "excel",
-    "ftp_dir": "/user007/excel/files",
-    "config_dir": "/user007/excel/config",
+    "ftp_dir": "user007/excel/files",
+    "config_dir": "user007/excel/config",
     "unsold_apartments": false
   }
 ]

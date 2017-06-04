@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="960px">
+    <meta name="viewport" content="width=960">
     <title>Mortgage</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -41,7 +41,9 @@
 
           <div class="check-line">
             <input id="vtbcard" type="checkbox">
+
             <label title="Ставка по кредиту снижена" for="vtbcard">Я получаю зарплату на карту ВТБ</label><br>
+                <div class="shadow"></div>
           </div>
 
           <div class="check-line">
@@ -86,7 +88,12 @@
 
         </div>
 
-        <div class="col-xs-6 result-issue">
+        <div class="col-xs-6 result-issue" style="padding-top: 30px;">
+          <img style="width: 170px;
+    position: absolute;
+    top: -40px;
+    margin-left: 0px;
+        right: 160px;" src="img/logo.png" alt="">
 
           <label>РАЗМЕР КРЕДИТА:</label>
           <p id="sizeCredit"></p>
@@ -108,13 +115,90 @@
 
           <a href="" class="call-button" data-toggle="modal" data-target=".call-modal">Заполнить заявку</a>
 
-        <div/>
-
-        </div>
-        <div class="footer">
         </div>
       </div>
+
+
+      <div class="container-fluid container-fix" id="footer">
+      		<div class="container">
+      			<div class="col-xs-3 footer-topline">
+      				<a href="http://novosibirsk.findome.ru/">
+      					<img src="img/minilogo.svg">
+      				</a>
+      			</div>
+      			<div class="col-xs-9 footer-topline">
+      					<p>
+Findome – единая база актуальных квартир и цен в новостройках от застройщиков Новосибирска. Простой и удобный сервис поможет вам получить наиболее полную информацию о существующих новостройках в городе, самостоятельно подобрать подходящий именно Вам вариант квартиры, а также напрямую связаться с отделом продаж застройщика, забронировать квартиру, оформить ипотеку или получить исчерпывающую online консультацию по вопросам покупки жилья в новостройке. Сервис Findomeявляется абсолютно бесплатным для пользователей: мы не взимаем комиссий и не устанавливаем наценок - все квартиры в базе напрямую от застройщиков. Полнота, достоверность и актуальность информации являются основными принципами сервиса Findome - база квартир обновляется ежедневно.
+      					</p>
+      			</div>
+
+      			<div class="row">
+      				<div class="col-xs-4 footer-item-list">
+      					<h2>Findome</h2>
+      					<ul>
+      						<li>
+      							<a href="http://novosibirsk.findome.ru/about">О проекте</a>
+      						</li>
+      						<li>
+      							<a href="http://tradein.findome.ru/">Вторичные квартиры</a>
+      						</li>
+      						<li>
+      							<a href="http://novosel.findome.ru/">Novosel</a>
+      						</li>
+      						<li>
+      							<a href="http://novosibirsk.findome.ru/analytics">Аналитика</a>
+      						</li>
+      					</ul>
+      				</div>
+      				<div class="col-xs-6 footer-item-list">
+      					<h2>Важно</h2>
+      						<ul>
+      							<li>
+      								<a href="http://novosibirsk.findome.ru/policy?p=114">Пользовательское соглашение</a>
+      							</li>
+      							<li>
+      								<a href="http://novosibirsk.findome.ru/policy?p=113">Политика конфиденциальности</a>
+      							</li>
+      							<li>
+      								<a href="http://novosibirsk.findome.ru/policy?p=112">Политика использования файлов cookie
+      								</a>
+      							</li>
+      						</ul>
+      				</div>
+      				<div class="col-xs-2 footer-item-list">
+      					<h2>Сотрудничество</h2>
+      						<ul>
+      							<li>
+      								<a href="http://novosibirsk.findome.ru/cooperation?p=118">Банкам</a>
+      							</li>
+      							<li>
+      								<a href="http://novosibirsk.findome.ru/cooperation?p=119">Застройщикам</a>
+      							</li>
+      							<li>
+      								<a href="http://novosibirsk.findome.ru/cooperation?p=249">Партнеры
+      								</a>
+      							</li>
+      							<li>
+      								<a href="http://affiliate.findome.ru/">Партнерская программа FinAff
+      								</a>
+      							</li>
+      						</ul>
+      				</div>
+
+              <div class="col-xs-12 footer-topline" style="margin-bottom:25px;">
+        					<p style="margin-bottom:0px;">© 2015 findome.ru При использовании материалов гиперссылка на <a href="/">findome.ru</a> обязательна. обязательна. Материалы предоставлены в информационных целях и не являются публичной офертой. Все права на изображения и тексты принадлежат их правообладателям.</p>
+        				</div>
+
+      			</div>
+
+      		</div>
+      	</div>
+
+
+
+
     </div>
+  </div>
 
 
     <div class="modal fade call-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="myModal">
@@ -123,30 +207,30 @@
           <img src="img/closem.svg">
         </button>
         <h2>Заявка на ипотечный кредит</h2>
-        <form id="callform">
+        <form id="callform" method="POST" action="cgi-bin/forms.php">
           <div class="col-xs-12 modal-box">
             <div class="row">
               <label for="surname">Фамилия*</label>
-              <input type="text" id="surname" name="Фамилия" value="" required>
+              <input type="text" id="surname" name="family" value="" required>
             </div>
             <div class="row">
               <label for="name">Имя*</label>
-              <input type="text" id="name" name="Имя" required>
+              <input type="text" id="name" name="name" required>
             </div>
             <div class="row">
               <label for="patronymic">Отчество</label>
-              <input type="text" id="patronymic" name="Отчество">
+              <input type="text" id="patronymic" name="patronymic">
             </div>
             <div class="row">
               <label for="phone">Мобильный телефон*</label>
-              <input type="text" id="phone" name="Телефон" required>
+              <input type="text" id="phone" name="phone" required>
             </div>
             <div class="row">
               <label for="email">E-mail</label>
-              <input type="text" id="email" name="Почта">
+              <input type="text" id="email" name="mail">
             </div>
 
-						<input type="hidden" name="admin_email" value="kisarinnikita@yandex.ru">
+						<input type="hidden" name="admin_email" value="findome@mail.ru">
 						<input type="hidden" name="Форма" value="Запись на ипотеку">
 
             <div class="row">

@@ -1,6 +1,6 @@
 <?php
 
-define('FTP_HOST', '62.109.22.209');
+define('FTP_HOST', '185.48.239.1');
 define('FTP_USER', 'ftpadmin');
 define('FTP_PASSWORD', 'password1');
 
@@ -1098,21 +1098,21 @@ function realty_data_update_connect_ftp($method_dir, $config_dir) {
     }
 
     ftp_login($connect, FTP_USER, FTP_PASSWORD);
-    $config_files =  ftp_nlist($connect, $config_dir);
+    $config_files = ftp_nlist($connect, $config_dir);
     $name_file = explode('/', $config_files[0]);
-    $fp = fopen(realty_file_directory_path(). '/ftpfiles/' . $name_file[3], "w");
+    $fp = fopen(realty_file_directory_path(). '/ftpfiles/' . $name_file[2], "w");
     fclose($fp);
-    ftp_get($connect, realty_file_directory_path(). '/ftpfiles/' . $name_file[3], $config_files[0], FTP_BINARY);
+    ftp_get($connect, realty_file_directory_path(). '/ftpfiles/' . $name_file[2], $config_files[0], FTP_BINARY);
 
-    $local_files['config'][] =  $name_file[3];
+    $local_files['config'][] =  $name_file[2];
 
     $files = ftp_nlist($connect, $method_dir);
     foreach ($files as $file) {
         $name_file = explode('/', $file);
-        $fp = fopen(realty_file_directory_path(). '/ftpfiles/' . $name_file[3], "w");
+        $fp = fopen(realty_file_directory_path(). '/ftpfiles/' . $name_file[2], "w");
         fclose($fp);
-        ftp_get($connect, realty_file_directory_path(). '/ftpfiles/' . $name_file[3], $file, FTP_BINARY);
-        $local_files['files'][] =  $name_file[3];
+        ftp_get($connect, realty_file_directory_path(). '/ftpfiles/' . $name_file[2], $file, FTP_BINARY);
+        $local_files['files'][] =  $name_file[2];
     }
 
     $local_files['connect'] = $connect;
