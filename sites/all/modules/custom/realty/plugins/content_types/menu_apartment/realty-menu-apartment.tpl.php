@@ -22,7 +22,7 @@
                     Рассчитать<br>Ипотеку
                 </p>
             </div>
-
+        </div>
     <div class="contact-block contact-block-ap col-xs-3">
         <h3>Понравилась квартира?</h3>
 
