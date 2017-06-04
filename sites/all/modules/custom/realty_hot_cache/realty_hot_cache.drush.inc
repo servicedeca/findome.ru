@@ -16,6 +16,18 @@ function realty_hot_cache_drush_command(){
  * Callback for 'apartment-update'drush command.
  */
 function realty_hot_cache_run() {
+    //all
+    $pages = [
+        "http://novosibirsk.findome.ru/",
+        "http://novosibirsk.findome.ru/",
+        "http://novosibirsk.findome.ru/complexes/city/1",
+        "http://novosibirsk.findome.ru/developers/city/1",
+        "http://novosibirsk.findome.ru/stock/city/1",
+        "http://novosibirsk.findome.ru/search/1",
+        "http://novosibirsk.findome.ru/policy?p=114",
+        "http://novosibirsk.findome.ru/about",
+    ];
+
     //ЖК
     print "ЖК\n\n\n\n";
     $complexes = db_query("SELECT node.nid, node.title FROM node WHERE node.type = 'complex'")->fetchAll();

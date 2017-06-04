@@ -7,14 +7,14 @@
     </div>
     <div id="ajax-div-modal-booking-form">
       <div id="ajax-div-modal-booking-form">
-        <div class="col-xs-12 modal-search">
-          <div class="col-xs-2 input-modal-icon">
-            <?php print $image_mail; ?>
-          </div>
-          <div class="col-xs-8">
-            <?php print render($form['email'])?>
-          </div>
-        </div>
+<!--        <div class="col-xs-12 modal-search">-->
+<!--          <div class="col-xs-2 input-modal-icon">-->
+<!--            --><?php //print $image_mail; ?>
+<!--          </div>-->
+<!--          <div class="col-xs-8">-->
+<!--            --><?php //print render($form['email'])?>
+<!--          </div>-->
+<!--        </div>-->
         <div class="col-xs-12 modal-search">
           <div class="col-xs-2 input-modal-icon">
             <?php print $image_man; ?>
@@ -87,11 +87,11 @@
           </label>
         </div>
 
-        <div class="col-xs-7 col-xs-offset-3 zero-padding modal-confitm mb35">
-          <label>
-            <?php print render($form['correct']); ?>
-          </label>
-        </div>
+<!--        <div class="col-xs-7 col-xs-offset-3 zero-padding modal-confitm mb35">-->
+<!--          <label>-->
+<!--            --><?php //print render($form['correct']); ?>
+<!--          </label>-->
+<!--        </div>-->
         <div class="col-xs-12 credit-modal-button">
           <?php print render($form['submit']);?>
         </div>

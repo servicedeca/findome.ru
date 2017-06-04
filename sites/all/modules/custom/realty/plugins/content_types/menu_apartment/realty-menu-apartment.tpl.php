@@ -14,17 +14,14 @@
             <div class="col-xs-4 ap-button" id="id_comparison" data-nid-apartment="<?php print $nid;?>">
                 <?php print $button_comparsion; ?>
             </div>
-            <div class="col-xs-4 ap-button"">
-            <a href="/calculator" target="_blank">
+            <div class="col-xs-4 ap-button" onclick="location.href='/calculator' ">
                 <div>
                     <?php print $img_pdf; ?>
                 </div>
                 <p class="s-label-small">
                     Рассчитать<br>Ипотеку
                 </p>
-            </a>
-        </div>
-    </div>
+            </div>
 
     <div class="contact-block contact-block-ap col-xs-3">
         <h3>Понравилась квартира?</h3>
