@@ -31,6 +31,7 @@ a:focus {
 }
 .container {
   margin-bottom: 50px;
+  position: relative;
 }
 @media (max-width: 1000px) {
   .container {
@@ -204,8 +205,9 @@ header .logo {
   width: 140px;
   margin-top: 0px;
   cursor: pointer;
-  margin-top: 10px;
+  top: 12px;
   position: absolute;
+  left: 15px;
 }
 header .menu-list {
   width: 100%;

@@ -1,0 +1,59 @@
+/**
+ * This was copied from twitter bootstrap's mixins.less and given a slight
+ * modification to make it a parametric mixin to hide from CSS output.
+ * 
+ * Look at these locations for more information:
+ *   http://lesscss.org/#-parametric-mixins
+ */
+/**
+ * The following variables defined in less_demo.info:
+ *   @gradient_start
+ *   @gradient_end
+ *   @text_glow
+ */
+#less_demo_gradient {
+  *zoom: 1;
+  background-color: #000000;
+  background-image: -moz-linear-gradient(top, #0000ff 0%, #000000 100%);
+  background-image: -ms-linear-gradient(top, #0000ff 0%, #000000 100%);
+  background-image: -o-linear-gradient(top, #0000ff 0%, #000000 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #0000ff), color-stop(1, #000000));
+  background-image: -webkit-linear-gradient(top, #0000ff 0%, #000000 100%);
+  background-image: linear-gradient(top, #0000ff 0%, #000000 100%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 80px;
+  text-shadow: 0 0 0 transparent, 0 0 10px #008000;
+  text-align: center;
+}
+#less_demo_gradient:before,
+#less_demo_gradient:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+#less_demo_gradient:after {
+  clear: both;
+}
+#less_demo_gradient a {
+  color: #ff0000;
+}
+#less_demo_gradient .less_demo_logo {
+  background: transparent url(../images/logo.png) center center no-repeat;
+  height: 200px;
+}
+@media only screen and (max-width: 960px) {
+  #less_demo_gradient .less_demo_logo {
+    float: left;
+    width: 199px;
+  }
+}
+@media only screen and (max-width: 960px) {
+  #less_demo_gradient p {
+    float: left;
+  }
+}
+#less_demo_gradient .less_demo_logo:after {
+  display: block;
+  content: token("Site name from token in .less file: [site:name]");
+  font-size: 20px;
+}

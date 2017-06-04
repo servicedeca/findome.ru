@@ -18,7 +18,7 @@ $(document).ready(function() {
   var th = $(this);
   $.ajax({
     type: "POST",
-    url: "/cgi-bin/forms.php",
+    url: "/calculator/cgi-bin/forms.php",
     data: th.serialize()
   }).done(function() {
     $("#myModal").modal('hide');
