@@ -359,7 +359,7 @@
           sqMin = $('#edit-field-gross-area-value-min').val() ? $('#edit-field-gross-area-value-min').val() : 0,
           sqMax = $('#edit-field-gross-area-value-max').val() ? $('#edit-field-gross-area-value-max').val() : 5,
           priceMin = $('#edit-field-price-value-min').val() ? $('#edit-field-price-value-min').val() / 1000 : 0,
-          priceMax = $('#edit-field-price-value-max') ? $('#edit-field-price-value-max').val() / 1000 : 100,
+          priceMax = $('#edit-field-price-value-max').val() ? $('#edit-field-price-value-max').val() / 1000 : 100,
           coastMin = $('#edit-field-full-cost-value-min').val() ? $('#edit-field-full-cost-value-min').val() / 1000000 : 0,
           coastMax = $('#edit-field-full-cost-value-max').val() ? $('#edit-field-full-cost-value-max').val() / 1000000: 5,
           ceilingMin = $('#edit-field-apartment-ceiling-height-value-min').val() ? $('#edit-field-apartment-ceiling-height-value-min').val() : 0,
