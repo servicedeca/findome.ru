@@ -261,7 +261,7 @@ function template_preprocess_realty_main_header(&$vars) {
     $vars['link_mortgage'] = l(t('Ипотека'), 'mortgage/city/' . $city->tid);
   } else if ($_GET['q'] == "node/4629") {*/
     // Статические ссылки
-    $vars['link_search'] = l(t('Подбор квартир'), 'search/1');
+    $vars['link_search'] = l(t('Подбор квартир'), '#href', ['external' => TRUE, 'attributes' => ['id' => 'link-but-search']]);
     $vars['link_complexes'] = l(t('Новостройки'), 'complexes/city/1');
     $vars['link_developers'] = l(t('Застройщики'), 'developers/city/1');
     $vars['link_mortgage'] = l(t('Ипотека'), 'mortgage/city/1');

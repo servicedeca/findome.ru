@@ -1,5 +1,8 @@
 <?php// print $feedback_block; ?>
 
+<form action="/search/1" method="post" style="display: none"> <button id="hidden-but-search"></button></form>
+
+
 <div class="notification-body">
   <div class="container fin">
     <p id="apt-info"></p>
