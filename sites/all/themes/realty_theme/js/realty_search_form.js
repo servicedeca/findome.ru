@@ -340,6 +340,7 @@
       }
 
       var realtyInitValueForm = function () {
+
         var i,
           n,
           areas = $('#edit-field-area-tid').val(),
@@ -347,8 +348,8 @@
           deadline = $('#edit-field-deadline-value').val(),
           complexes = $('#edit-field-home-complex-target-id').val(),
           rooms = $('#edit-field-number-rooms-value').val(),
-          floorMin = $('#edit-field-apartment-floor-value-min').val(),
-          floorMax = $('#edit-field-apartment-floor-value-max').val(),
+          floorMin = $('#edit-field-apartment-floor-value-min').val() ? $('#edit-field-apartment-floor-value-min').val() : 1,
+          floorMax = $('#edit-field-apartment-floor-value-max').val() ? $('#edit-field-apartment-floor-value-max').val() : 30,
           material = $('#edit-field-material-tid').val(),
           category = $('#edit-field-home-category-tid').val(),
           quarter = $('#edit-field-home-deadline-quarter-value').val(),
@@ -356,19 +357,29 @@
           balcony = $('#edit-field-balcony-value').val(),
           balcony_loggia = $('#edit-field-balcony-loggia-value').val(),
           year = $('#edit-field-home-deadline-year-value').val(),
-          sqMin = $('#edit-field-gross-area-value-min').val(),
-          sqMax = $('#edit-field-gross-area-value-max').val(),
-          priceMin = $('#edit-field-price-value-min').val() / 1000,
-          priceMax = $('#edit-field-price-value-max').val() / 1000,
-          coastMin = $('#edit-field-full-cost-value-min').val() / 1000000,
-          coastMax = $('#edit-field-full-cost-value-max').val() / 1000000,
-          ceilingMin = $('#edit-field-apartment-ceiling-height-value-min').val(),
-          ceilingMax = $('#edit-field-apartment-ceiling-height-value-max').val(),
+          sqMin = $('#edit-field-gross-area-value-min').val() ? $('#edit-field-gross-area-value-min').val() : 0,
+          sqMax = $('#edit-field-gross-area-value-max').val() ? $('#edit-field-gross-area-value-max').val() : 5,
+          priceMin = $('#edit-field-price-value-min').val() ? $('#edit-field-price-value-min').val() / 1000 : 0,
+          priceMax = $('#edit-field-price-value-max').val() ? $('#edit-field-price-value-max').val() / 1000 : 100,
+          coastMin = $('#edit-field-full-cost-value-min').val() ? $('#edit-field-full-cost-value-min').val() / 1000000 : 0,
+          coastMax = $('#edit-field-full-cost-value-max').val() ? $('#edit-field-full-cost-value-max').val() / 1000000: 5,
+          ceilingMin = $('#edit-field-apartment-ceiling-height-value-min').val() ? $('#edit-field-apartment-ceiling-height-value-min').val() : 0,
+          ceilingMax = $('#edit-field-apartment-ceiling-height-value-max').val() ? $('#edit-field-apartment-ceiling-height-value-max').val() : 5,
           parking = $('#edit-field-parking-value').val(),
           metro = $('#edit-field-complex-metro-tid').val();
 
-        console.log(sqMax); console.log(priceMax); console.log(coastMax);
+          if($('#edit-field-gross-area-value-max').val() == 200) {
+              $('#edit-field-gross-area-value-max').val(2000000);
+          }
 
+          if ($('#edit-field-price-value-max').val() == 100000) {
+              $('#edit-field-price-value-max').val(100000000)
+          }
+
+          if ($('#edit-field-full-cost-value-max').val() == 5000000 ) {
+              $('#edit-field-full-cost-value-max').val(500000000)
+          }
+          
         sqMax == '110000' ? sqMax = 200 : sqMax;
         priceMax == 125000 ? priceMax = 100 : priceMax;
         coastMax == 45000 ? coastMax = 5 : coastMax;
@@ -529,7 +540,6 @@
 
         //Заполняем модальное окно и кнопку фильтра материал стен
         for (i in material) {
-
           $('#id-modal_material-'+material[i]).trigger('click');
         }
 

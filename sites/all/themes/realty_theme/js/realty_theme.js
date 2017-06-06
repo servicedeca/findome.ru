@@ -2586,6 +2586,9 @@
         $('div.download-container').hide();
     })
 
+    $(document).on('click', '#link-but-search' , function () {
+       $('#hidden-but-search').trigger('click');
+    });
 
     $('#download-container-dev').show();
     //end.
