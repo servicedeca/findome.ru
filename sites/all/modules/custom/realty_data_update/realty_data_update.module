@@ -966,6 +966,7 @@ function realty_data_update_ftp_excel($method) {
         $excel = realty_file_directory_path() . '/ftpfiles/' . $file;
         $excel_array = realty_data_update_array_from_file($excel);
 
+        $complexes = array();
         //Пребор файла
         foreach ($excel_array as $key => $exc) {
             //если поиск квартир будет происходить по жилому комплексу и по дому
@@ -973,6 +974,7 @@ function realty_data_update_ftp_excel($method) {
                 $complex = $method->complex[0];
                 if (isset($config[0]->complex)) {
                     $complex = $exc[$config[0]->complex];
+                    $complexes[$complex] = "'$complex'";
                 }
                 $home = '';
                 if ($config[0]->str_home == 'true') {
@@ -1080,7 +1082,7 @@ function realty_data_update_ftp_excel($method) {
             }
         }
         //выборка квартир не найденых в файле
-        realty_data_update_select_unfound_apartment_complex_home($complex);
+        realty_data_update_select_unfound_apartment_complex_home($complexes);
 
         return;
     }
@@ -1247,7 +1249,8 @@ function realty_data_update_select_apartment_complex_home($complex, $home, $appt
 /**
  *  Selection unfound of apartments for complexes and home in complex
  */
-function realty_data_update_select_unfound_apartment_complex_home($complex) {
+function realty_data_update_select_unfound_apartment_complex_home($complexes) {
+    $complexes = join(", ",$complexes);
     //поиск кватир не найденых в файле по текущему жк
     $result_ap = db_query("SELECT node.nid
         FROM node
@@ -1260,10 +1263,10 @@ function realty_data_update_select_unfound_apartment_complex_home($complex) {
             LEFT JOIN field_data_field_home_complex ON taxonomy_term_data.tid = field_data_field_home_complex.entity_id
             LEFT JOIN field_data_field_number_home ON taxonomy_term_data.tid = field_data_field_number_home.entity_id
             LEFT JOIN node ON field_data_field_home_complex.field_home_complex_target_id = node.nid
-            WHERE node.title = :complex)
-        AND field_data_field_status_update.field_status_update_value = '0'
+            WHERE node.title IN ($complexes))
+            AND field_data_field_status_update.field_status_update_value = '0'
         AND node.status = '1'
-        ", array(':complex' => $complex,))->fetchAll();
+        ")->fetchAll();
     //если нашлись то устанавлdru иваем статус продано
     if ($result_ap) {
         foreach($result_ap as $app) {
@@ -1285,8 +1288,8 @@ function realty_data_update_select_unfound_apartment_complex_home($complex) {
               LEFT JOIN field_data_field_home_complex ON taxonomy_term_data.tid = field_data_field_home_complex.entity_id
               LEFT JOIN field_data_field_number_home ON taxonomy_term_data.tid = field_data_field_number_home.entity_id
               LEFT JOIN node ON field_data_field_home_complex.field_home_complex_target_id = node.nid
-              WHERE node.title = :complex)
-          ", array(':complex' => $complex,));
+              WHERE node.title IN ($complexes))
+          ");
 
     return;
 }

@@ -340,6 +340,7 @@
       }
 
       var realtyInitValueForm = function () {
+
         var i,
           n,
           areas = $('#edit-field-area-tid').val(),
@@ -367,8 +368,18 @@
           parking = $('#edit-field-parking-value').val(),
           metro = $('#edit-field-complex-metro-tid').val();
 
-        console.log(sqMax); console.log(priceMax); console.log(coastMax);
+          if($('#edit-field-gross-area-value-max').val() == 200) {
+              $('#edit-field-gross-area-value-max').val(2000000);
+          }
 
+          if ($('#edit-field-price-value-max').val() == 100000) {
+              $('#edit-field-price-value-max').val(100000000)
+          }
+
+          if ($('#edit-field-full-cost-value-max').val() == 5000000 ) {
+              $('#edit-field-full-cost-value-max').val(500000000)
+          }
+          
         sqMax == '110000' ? sqMax = 200 : sqMax;
         priceMax == 125000 ? priceMax = 100 : priceMax;
         coastMax == 45000 ? coastMax = 5 : coastMax;
