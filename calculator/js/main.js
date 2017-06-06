@@ -22,7 +22,7 @@ $(document).ready(function() {
     data: th.serialize()
   }).done(function() {
     $("#myModal").modal('hide');
-    alert("Заявка отправлена!")
+    alert("Заявка отправлена! В ближайшее время с вами свяжется специалист банка")
   });
   return false;
 });
@@ -50,10 +50,10 @@ $(document).ready(function() {
   });
 
   $("#paste").ionRangeSlider({
-      min: 600000,
-      max: 3400000,
+      min: 270000,
+      max: 9400000,
       from: pasteFrom,
-      step: 100000,
+      step: 10000,
 			grid: true,
       postfix: "  руб",
 			onStart: function (data) {
@@ -101,6 +101,9 @@ $(document).ready(function() {
           if (currentPaste <= 10.4){
             currentPaste = 10.4;
           }
+          if (($('#vtbcard').is(":checked")) && ($('#twodoc').is(":checked"))){
+            currentPaste += vtb;
+          }
           $("#paste_current").html(currentPaste + " <span>%</span>");
           makeParams();
       }
@@ -137,9 +140,16 @@ $(document).ready(function() {
 
   $("#twodoc").on("click", function() {
     if ($(this).is(":checked")) {
-            $('.shadow').css('display', 'block');
+        $('.shadow').css('display', 'block');
         if (currentPaste >= minPaste && currentPaste + vtb > minPaste) {
           currentPaste += onlyTwoDocs;
+          if ($('#vtbcard').is(":checked")){
+            currentPaste -= currentPast;
+          }
+          if (($('#vtbcard').is(":checked")) && ($('#area').is(":checked"))){
+            currentPaste = 10.9;
+          }
+
           $("#paste_current").html(currentPaste + " <span>%</span>");
           makeParams();
         }
@@ -148,6 +158,9 @@ $(document).ready(function() {
         $('.shadow').css('display', 'block');
       } else {
         $('.shadow').css('display', 'none');
+      }
+      if (($('#vtbcard').is(":checked")) && ($('#twodoc').is(":checked"))){
+        currentPaste -= vtb;
       }
       currentPaste -= onlyTwoDocs;
       $("#paste_current").html(currentPaste + " <span>%</span>");
