@@ -7437,7 +7437,7 @@ function realty_request_callback_form_submit($form, $form_state)
 
 function realty_calculator_submit() {
     $body = $_POST['family'] . ' ' . $_POST['name'] . ' ' . $_POST['patronymic'] . ' ' . $_POST['phone'] . ' ' . $_POST['mail'];
-    realty_send_message('calculator_request', 'usolceww@yandex.ru', $body);
+    realty_send_message('calculator_request', 'findome@mail.ru', $body);
 }
 
 //<input class="col-xs-4 col-xs-offset-4 comment-button margin-bottom-50 show-loader form-submit ajax-processed" type="submit" id="edit-submit--9" name="op" value="Отправить заявку">
