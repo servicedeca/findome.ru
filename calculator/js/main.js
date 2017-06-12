@@ -40,6 +40,7 @@ $(document).ready(function() {
 			},
 			onChange: function (data) {
 					$('#result-app_cost').html(String(data.from).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
+
 			},
 			onFinish: function (data) {
 						$('#result-app_cost').html(String(data.from).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
@@ -58,15 +59,27 @@ $(document).ready(function() {
       postfix: "  руб",
 			onStart: function (data) {
 					$('#result-paste').html(String(data.from).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
+          console.log(data);
 			},
 			onChange: function (data) {
 					$('#result-paste').html(String(data.from).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
 			},
 			onFinish: function (data) {
 						$('#result-paste').html(String(data.from).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
+
+            $(this).ionRangeSlider("update", {
+
+              min: 20,                        // меняем минимальное значение
+              max: 90,                        // меняем максимальное значение
+              from: 40,                       // меняем предустановленное значение ОТ
+              to: 70,                         // меняем предустановленное значение ДО
+              step: 5                         // меняем шаг слайдера
+            });
+
 			},
 			onUpdate:function (data) {
 						$('#result-paste').html(String(data.from).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
+
 			}
   });
 
@@ -174,6 +187,8 @@ $(document).ready(function() {
     $("#sizeCredit").html((String(currentPriceFlat - currentPricePaste).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ')) + " <span>&#8381;</span>");
 
     makeParams();
+
+
   });
 
   $("#paste").bind("change", function(e) {
@@ -229,23 +244,24 @@ let makeParams = function() {
     let payment = Math.abs(MonthlyPayment(summCredit, creditTerm, currentPaste));
     let MustMonthly = Math.abs(mustMonthlyIncome(payment));
 
+
+
+
     //  payment /= 10;
     //  MustMonthly /= 10;
     $("#post_period").html(payment.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
     $("#must_payment").html(MustMonthly.toString().split('.')[0].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + " <span>&#8381;</span>");
+    console.log($('#paste').val()*0.15);
 };
 
 
 let MonthlyPayment = function(summCredit, creditTerm, currentPaste) {
   var creditTermM = creditTerm * 12 ;
-  console.log(creditTermM);
   let currentCredit = summCredit - parseInt($("#paste").val());
   var newCurrentPaste = currentPaste / 1200;
-  console.log(currentCredit + 'Текущий размер кредмта')
-  console.log(newCurrentPaste);
-  console.log(summCredit  + "вот оно");
-  console.log(summCredit * (newCurrentPaste / (1 - (Math.pow(1 + newCurrentPaste, -creditTermM)))) + 'число');
   return (parseInt(currentCredit) * (newCurrentPaste / (1 - (Math.pow(1 + newCurrentPaste, -creditTermM)))));
+
+
 }
 
 let mustMonthlyIncome = function(monthlyPayment) {
