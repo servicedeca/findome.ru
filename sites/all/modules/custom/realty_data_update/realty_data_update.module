@@ -970,120 +970,122 @@ function realty_data_update_ftp_excel($method) {
         //Пребор файла
         foreach ($excel_array as $key => $exc) {
             //если поиск квартир будет происходить по жилому комплексу и по дому
-            if ((isset($method->complex) || isset($config[0]->complex))&& !empty($exc[$config[0]->complex])) {
-                $complex = $method->complex[0];
-                if (isset($config[0]->complex)) {
-                    $complex = $exc[$config[0]->complex];
-                    $complexes[$complex] = "'$complex'";
+            //if ((isset($method->complex) || isset($config[0]->complex))&& !empty($exc[$config[0]->complex])) {
+            $complex = $method->complex[0];
+            if (isset($config[0]->complex)) {
+                $complex = $exc[$config[0]->complex];
+                $complexes[$complex] = "'$complex'";
+            }
+
+            $home = '';
+            if ($config[0]->str_home == 'true') {
+                $home = $exc[$config[0]->home];
+            } else {
+                for ($i = 0; $i < strlen($exc[$config[0]->home]); $i++) {
+                    is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
                 }
-                $home = '';
-                if ($config[0]->str_home == 'true') {
-                    $home = $exc[$config[0]->home];
-                } else {
-                    for ($i = 0; $i < strlen($exc[$config[0]->home]); $i++) {
-                        is_numeric($exc[$config[0]->home][$i]) ? $home .= $exc[$config[0]->home][$i] : false;
-                    }
+            }
+
+            $appt = $exc[$config[0]->appt];
+            $price = $exc[$config[0]->price];
+            $cost = $exc[$config[0]->cost];
+            $status = $exc[$config[0]->status];
+            $live_sq = $exc[$config[0]->live_sq];
+
+            //поиск квартиры в базе
+            $result = realty_data_update_select_apartment_complex_home($complex, $home, $appt);
+
+            //если квартира существует в базе
+            if ($result) {
+                $node = node_load($result[0]->nid);
+                printf("node:#%s\n", $node->nid);
+
+                if(!empty($node->field_living_space) && $node->field_living_space[LANGUAGE_NONE][0]['value'] != $live_sq) {
+                    $node->field_living_space[LANGUAGE_NONE][0]['value'] = $live_sq;
                 }
 
-                $appt = $exc[$config[0]->appt];
-                $price = $exc[$config[0]->price];
-                $cost = $exc[$config[0]->cost];
-                $status = $exc[$config[0]->status];
-                $live_sq = $exc[$config[0]->live_sq];
+                //если стоимость не совпадает
+                if ($cost != $result[0]->field_full_cost_value) {
+                    $node->field_full_cost[LANGUAGE_NONE][0]['value'] = $cost;
+                }
+                //статус обновления
+                $node->field_status_update[LANGUAGE_NONE][0]['value'] = 1;
 
-                //поиск квартиры в базе
-                $result = realty_data_update_select_apartment_complex_home($complex, $home, $appt);
-
-                //если квартира существует в базе
-                if ($result) {
-                    $node = node_load($result[0]->nid);
-                    printf("node:#%s\n", $node->nid);
-
-                    if(!empty($node->field_living_space) && $node->field_living_space[LANGUAGE_NONE][0]['value'] != $live_sq) {
-                        $node->field_living_space[LANGUAGE_NONE][0]['value'] = $live_sq;
-                    }
-
-                    //если стоимость не совпадает
-                    if ($cost != $result[0]->field_full_cost_value) {
-                        $node->field_full_cost[LANGUAGE_NONE][0]['value'] = $cost;
-                    }
-                    //статус обновления
-                    $node->field_status_update[LANGUAGE_NONE][0]['value'] = 1;
-
-                    //если статус всегда ативный
-                    if($status = 'active') {
-                        $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
-                    }
+                //если статус всегда ативный
+                if($status = 'active') {
+                    $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
+                }
 
 
-                    if($config[0]->status == 'active') {
+                if($config[0]->status == 'active') {
+                    $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
+                    $node->status = 1;
+                } elseif($config[0]->status == 'not_active') {
+                    if ($exc[$config[0]->field_status] == $config[0]->book_status) {
+                        $node->field_status[LANGUAGE_NONE][0]['value'] = 0;
+                        $node->status = 1;
+                    } elseif($exc[$config[0]->field_status] == "") {
                         $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
                         $node->status = 1;
-                    } elseif($config[0]->status == 'not_active') {
-                        if ($exc[$config[0]->field_status] == $config[0]->book_status) {
-                            $node->field_status[LANGUAGE_NONE][0]['value'] = 0;
-                            $node->status = 1;
-                        } elseif($exc[$config[0]->field_status] == "") {
-                            $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
-                            $node->status = 1;
-                        } else {
-                            $node->status = 0;
-                        }
+                    } else {
+                        $node->status = 0;
                     }
-
-                    node_save($node);
                 }
-                //если квартира не найдена в базе
-                else {
-                    //поиск в таблице новые квартиры
-                    $res = db_query("SELECT realty_data_update_new_apartments.id, realty_data_update_new_apartments.status, realty_data_update_new_apartments.coast
+
+                node_save($node);
+            }
+            //если квартира не найдена в базе
+            else {
+                //поиск в таблице новые квартиры
+                $res = db_query("SELECT realty_data_update_new_apartments.id, realty_data_update_new_apartments.status, realty_data_update_new_apartments.coast
             FROM realty_data_update_new_apartments
             WHERE realty_data_update_new_apartments.number_apartment = :apartament_num AND
                   realty_data_update_new_apartments.complex = :complex AND
                   realty_data_update_new_apartments.number_home_complex = :num_home",
-                        array(':apartament_num' => $appt, ':complex' => $complex, ':num_home' => $home))
-                        ->fetchAll();
-                    //если найдена в таблице новые квартиры
-                    if($res) {
-                        //обновление данных в таблице новые квартиры
-                        db_query("UPDATE realty_data_update_new_apartments
+                    array(':apartament_num' => $appt, ':complex' => $complex, ':num_home' => $home))
+                    ->fetchAll();
+                //если найдена в таблице новые квартиры
+                if($res) {
+                    //обновление данных в таблице новые квартиры
+                    db_query("UPDATE realty_data_update_new_apartments
             SET realty_data_update_new_apartments.coast = :cost
             WHERE realty_data_update_new_apartments.number_apartment = :apartament_num AND
                   realty_data_update_new_apartments.complex = :complex AND
                   realty_data_update_new_apartments.number_home_complex = :num_home
             ", array(':apartament_num' => $appt, ':complex' => $complex, ':num_home' => $home, ':cost' => $cost));
-                    }
-                    //если не найдена в таблице новые квартиры
-                    else {
-                        //поиск комплекса по названию
-                        $complex_nid = db_query("SELECT node.nid
+                }
+                //если не найдена в таблице новые квартиры
+                else {
+                    //поиск комплекса по названию
+                    $complex_nid = db_query("SELECT node.nid
             FROM node
             WHERE node.title = :complex_name", array(':complex_name' => $complex))->fetchAll();
 
-                        //поиск щастройщика по жк
-                        $developer = db_query("SELECT taxonomy_term_data.name
+                    //поиск щастройщика по жк
+                    $developer = db_query("SELECT taxonomy_term_data.name
             FROM taxonomy_term_data
             WHERE taxonomy_term_data.tid IN (
               SELECT field_data_field_complex_developer.field_complex_developer_tid
               FROM field_data_field_complex_developer
               WHERE field_data_field_complex_developer.entity_id = :complex_nid
             )", array(':complex_nid' => $complex_nid[0]->nid))->fetchAll();
-                        $developer_name = $developer[0]->name;
+                    $developer_name = $developer[0]->name;
 
-                        //добавление записи о новой квартире в таблицу новые квартиры
-                        db_query("INSERT INTO realty_data_update_new_apartments
+                    //добавление записи о новой квартире в таблицу новые квартиры
+                    db_query("INSERT INTO realty_data_update_new_apartments
               (number_apartment, complex, developer, number_home_complex, coast)
               VALUES (:apartament_num, :complex, :developer, :num_home, :coast)",
-                            array(':apartament_num' => $appt, ':developer' => $developer_name, ':complex' => $complex, ':num_home' => $home, ':coast' => $cost));
-
-                    }
+                        array(':apartament_num' => $appt, ':developer' => $developer_name, ':complex' => $complex, ':num_home' => $home, ':coast' => $cost));
 
                 }
-            }
-        }
-        //выборка квартир не найденых в файле
-        realty_data_update_select_unfound_apartment_complex_home($complexes);
 
+            }
+            //}
+        }
+        if (!empty($complexes)) {
+            //выборка квартир не найденых в файле
+            realty_data_update_select_unfound_apartment_complex_home($complexes);
+        }
         return;
     }
 

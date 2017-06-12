@@ -523,6 +523,11 @@ function realty_menu()
         'type' => MENU_CALLBACK,
     );
 
+    $item['realty_calculator_submit'] = array(
+        'page callback' => 'realty_calculator_submit',
+        'access callback' => TRUE,
+    );
+
     return $item;
 }
 
@@ -6299,6 +6304,25 @@ function realty_send_message($type, $recipient, $options = NULL, $files = NULL)
             break;
         }
 
+
+        case 'calculator_request': {
+            $message['params'] = array(
+                'id' => 'mortgage',
+                'to' => $recipient,
+                'subject' => 'Заявка на ипотеку',
+                'body' => $options,
+                'headers' => array(
+                    'From' => $from,
+                    'Sender' => $from,
+                    'Return-Path' => $from,
+                    'MIME-Version' => '1.0',
+                    'Content-Type' => 'text/html; charset="UTF-8"',
+                ),
+            );
+            break;
+        }
+
+
         case 'booking_request': {
             $message['params'] = array(
                 'id' => 'booking',
@@ -7409,6 +7433,11 @@ function realty_request_callback_form_submit($form, $form_state)
     ajax_deliver(array('#type' => 'ajax', '#commands' => $commands));
 
     drupal_exit();
+}
+
+function realty_calculator_submit() {
+    $body = $_POST['family'] . ' ' . $_POST['name'] . ' ' . $_POST['patronymic'] . ' ' . $_POST['phone'] . ' ' . $_POST['mail'];
+    realty_send_message('calculator_request', 'usolceww@yandex.ru', $body);
 }
 
 //<input class="col-xs-4 col-xs-offset-4 comment-button margin-bottom-50 show-loader form-submit ajax-processed" type="submit" id="edit-submit--9" name="op" value="Отправить заявку">

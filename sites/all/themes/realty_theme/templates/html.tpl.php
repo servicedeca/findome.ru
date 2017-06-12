@@ -13,7 +13,7 @@
   <?php print $styles; ?>
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
-<div class="download-container">
+<div class="download-container" style="opacity: 1">
     <img src="http://novosibirsk.findome.ru/sites/all/themes/realty_theme/images/minilogo.svg">
     <p>Квартира в клике от вас</p>
     <div id="fountainG">

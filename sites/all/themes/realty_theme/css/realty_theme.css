@@ -447,3 +447,7 @@ form .error-input-bottom {
   padding-left:15px;
   padding-right:15px
 }
+
+.download-container {
+  opacity: 1;
+}

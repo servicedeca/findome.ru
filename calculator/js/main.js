@@ -18,7 +18,7 @@ $(document).ready(function() {
   var th = $(this);
   $.ajax({
     type: "POST",
-    url: "/calculator/cgi-bin/forms.php",
+    url: "/realty_calculator_submit",
     data: th.serialize()
   }).done(function() {
     $("#myModal").modal('hide');
