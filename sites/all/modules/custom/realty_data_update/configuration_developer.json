@@ -46,7 +46,7 @@
     "tid_developer": ["177"],
     "complex": ["ЖК КРОПОТКИНСКИЙ"],
     "method": "FTP",
-    "format": "XML",
+    "format": "excel",
     "ftp_dir": "user007/files",
     "config_dir": "user007/config",
     "unsold_apartments": false
@@ -57,7 +57,7 @@
     "tid_developer": ["188"],
     "complex": ["ЖК ЧЕРЕМУШКИ"],
     "method": "FTP",
-    "format": "XML",
+    "format": "excel",
     "ftp_dir": "user008/files",
     "config_dir": "user008/config",
     "unsold_apartments": false
