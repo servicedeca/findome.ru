@@ -975,6 +975,9 @@ function realty_data_update_ftp_excel($method) {
             if (isset($config[0]->complex)) {
                 $complex = $exc[$config[0]->complex];
                 $complexes[$complex] = "'$complex'";
+
+            } elseif(!isset($config[0]->complex) && isset($config[0]->home)) {
+                $complexes[$complex] = "'$complex'";
             }
 
             $home = '';
