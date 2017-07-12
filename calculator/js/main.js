@@ -1,4 +1,4 @@
-const basePaste = 11.4; //базовая ставка
+const basePaste = 11; //базовая ставка
 const squareDiscount = 1; // Зависимость от площади квартиры
 const vtb = 0.5; // Завсимость от зп в ВТБ
 const onlyTwoDocs = 0.5; // Зависимость от количесва документов
@@ -121,8 +121,8 @@ $(document).ready(function () {
             $('.shadow').css('display', 'block');
             if (currentPaste > minPaste && currentPaste + squareDiscount > minPaste) {
                 currentPaste -= squareDiscount;
-                if (currentPaste <= 10.4) {
-                    currentPaste = 10.4;
+                if (currentPaste <= 10) {
+                    currentPaste = 10;
                 }
                 if (($('#vtbcard').is(":checked")) && ($('#twodoc').is(":checked"))) {
                     currentPaste += vtb;
@@ -170,7 +170,7 @@ $(document).ready(function () {
                     currentPaste -= currentPast;
                 }
                 if (($('#vtbcard').is(":checked")) && ($('#area').is(":checked"))) {
-                    currentPaste = 10.9;
+                    currentPaste = 10;
                 }
 
                 $("#paste_current").html(currentPaste + " <span>%</span>");
@@ -183,9 +183,9 @@ $(document).ready(function () {
                 $('.shadow').css('display', 'none');
             }
             if (($('#vtbcard').is(":checked")) && ($('#twodoc').is(":checked"))) {
-                currentPaste -= vtb;
+                currentPaste += vtb;
             }
-            currentPaste -= onlyTwoDocs;
+            currentPaste += onlyTwoDocs;
             $("#paste_current").html(currentPaste + " <span>%</span>");
             makeParams();
         }
